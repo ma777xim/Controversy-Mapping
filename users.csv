@@ -1,0 +1,4 @@
+Source,Target,Value
+Node1,Node2,1
+Node2,Node3,2
+Node3,Node1,3
