@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Register</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="text/javascript" src="validation.js" defer></script>
+    <script type="module" src="register.js" defer></script>
+</head>
+
+<body>
+    <div class="main">
+        <h1>Register</h1>
+        <h2>Become a mapper today.</h2>
+        <p id="error-message"></p>
+
+    <br>
+
+        <form id="form">
+
+        <div class="incorrect">
+            <label for="email"></label>
+            <input type="email" id="email" name="email" placeholder="E-Mail" required />
+        </div>
+        <div class="incorrect">
+            <label for="username"></label>
+            <input type="text" id="username" name="username" placeholder="Username" required />
+        </div>
+        <div class="incorrect">
+            <label for="password"></label>
+            <input type="password" id="password" name="password" placeholder="Password" required />
+        </div>
+
+
+
+            <div class="wrap">
+                <button id="submit" type="submit">Sign Up</button>
+            </div>
+
+        </form>
+
+        <div>
+                <h3>
+                    Already have an acc? <a href="index.html">Login</a>
+                </h3>
+        </div>
+
+    </div>
+
+
+</body>
+
+</html>
