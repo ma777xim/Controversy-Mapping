@@ -33,6 +33,7 @@ form.addEventListener("submit", async function (event) {
         const user = userCredential.user;
         alert("Mhm nice it's working");
         console.log("User created:", user);
+        window.location.href = "https://ma777xim.github.io/Controversy-Mapping/";
     } catch (error) {
         console.error("Error creating user:", error.code, error.message);
         alert(`Error: ${error.message}`);
