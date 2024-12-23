@@ -55,7 +55,7 @@ loginForm.addEventListener('submit', async (event) => {
         }
         // Redirect on successful login
         alert("Yay!");
-        window.location.href = "index.html"; // Replace with your desired page
+        window.location.href = "dashboard.html"; // Replace with your desired page
     }
 
     catch (error) {

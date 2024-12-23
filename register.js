@@ -32,6 +32,8 @@ form.addEventListener('submit', async (event) => {
     try {
         // Create user with email and password
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const signedInUser = userCredential.user; // This is the signed-in user
+        console.log("Signed-in user:", signedInUser);
         const user = userCredential.user;
 
         // Save additional user data in Firestore
@@ -45,7 +47,7 @@ form.addEventListener('submit', async (event) => {
         // Redirect to another page
         localStorage.setItem('username', username);
         alert("Cool. Log in pls");
-        window.location.href = "index.html";
+        window.location.href = "login.html";
     } catch (error) {
         console.error("Error creating user:", error.code, error.message);
         alert(`Error: ${error.message}`);

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapping Controversies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">    <link rel="stylesheet" href="styles.css">
+<script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>Mapping Controversies</h1>
+        <div>
+            <a href="signup.html">
+            <button id=logout>Logout</button>
+            </a>
+        </div>
+    </header>
+
+    <div>
+        <h2> <b>Salut, <span id=loggedUserUsername></span></b> </h2>
+    </div>
+
+    <div>
+        <h4>Select scheme</h4>
+        <label for="color-switch">Color By:</label>
+        <select id="color-switch">
+            <option value="gender">By Gender</option>
+            <option value="age">By Age</option>
+        </select>
+
+        <label for="connection-filter">Filter Connections:</label>
+        <select id="connection-filter">
+            <option value="all">All Connections</option>
+            <option value="job">By Job</option>
+            <option value="age">By Age</option>
+            <option value="gender">By Gender</option>
+        </select>
+    </div>
+
+    <div id="diagram-container">
+        <div id="controversymap"></div>
+    </div>
+
+    <div id="main-container">
+    <div id="icons-container">
+        <button class="icon" data-topic="ecommerce_traditional" onclick="showForm('ecommerceForm')">
+            <img src="images/mariocoin.png" alt="E-Commerce Icon" width="80">
+            <span></span>
+        </button>
+            <div id="forms-container">
+            <form id="ecommerceForm" class="hidden" onsubmit="submitForm(event, 'ecommerce')">
+            <label for="ecommerceQuestion">What do you think about e-commerce?</label>
+            <input type="text" id="ecommerceQuestion" name="answer" required>
+        <button type="submit">Submit</button>
+    </form>
+    </div>
+        <button class="icon" data-topic="sustainability" onclick="showForm('sustainabilityForm')">
+            <img src="images/rb_29621.png" alt="Sustainability Icon" width="80">
+            <span></span>
+        </button>
+        <div>
+            <form id="sustainabilityForm" class="hidden" onsubmit="submitForm(event, 'sustainability')">
+                <label for="sustainabilityQuestion">How can we improve sustainability?</label>
+                <input type="text" id="sustainabilityQuestion" name="answer" required>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+        <!-- Add more buttons if needed -->
+    </div>
+</div>
+
+
+<script>
+    function showForm(formId) {
+        document.querySelectorAll('form').forEach(form => form.classList.add('hidden'));
+        document.getElementById(formId).classList.remove('hidden');
+    }
+
+    function submitForm(event, topic) {
+        event.preventDefault();
+        const form = event.target;
+        const data = new FormData(form);
+        data.append('topic', topic);
+
+        fetch('http://localhost:3000/submit', {
+            method: 'POST',
+            body: data,
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Submission successful!');
+                form.reset();
+                form.classList.add('hidden');
+            } else {
+                alert('Submission failed.');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+</script>
+
+
+    <footer>
+        <p>TUM Chair of Architectural Informatics</p>
+        <p><a href="mailto:maxim@yurin.de">maxim@yurin.de</a></p>
+    </footer>
+
+    <script>
+        // Prevent default behavior for the signup button
+        document.getElementById('signup-button').addEventListener('click', (e) => {
+            e.preventDefault();
+            alert('Signup button clicked!');
+        });
+
+        // Prevent default behavior for any button that might reload the page
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+            });
+        });
+    </script>
+    <script src="forcegraph1.js"></script>
+</body>
+</html>
