@@ -124,6 +124,18 @@
             });
         });
     </script>
-    <script src="forcegraph1.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+        const username = localStorage.getItem('username');
+        if (username) {
+            document.getElementById('loggedUserUsername').textContent = username;
+        }
+        else {
+            alert("There is nobody here");
+            window.location.href = "login.html"; // Redirect if no user is logged in
+        }
+    });
+</script>
+<script src="forcegraph1.js"></script>
 </body>
 </html>
