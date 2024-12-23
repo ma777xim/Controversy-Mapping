@@ -1,11 +1,12 @@
 // Initialize Firebase
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyB3Vn9jXSJnQ0XC8JM64OszHpNEkvViBxA",
+    authDomain: "mapping-controversies.firebaseapp.com",
+    projectId: "mapping-controversies",
+    storageBucket: "mapping-controversies.appspot.com",
+    messagingSenderId: "259825186402",
+    appId: "1:259825186402:web:7c38048d67546fbe9b833b",
+    measurementId: "G-Q0WM4CNVM4"
 };
 
 // Initialize Firebase
@@ -23,7 +24,7 @@ db.collection("comments-mariocoin").get().then(querySnapshot => {
         data.push(entry);
     });
 
-    const container = d3.select("#controversymap");
+    const container = d3.select("#mariocoinmap");
 
     function updateVisualization(columnForColor, columnForConnections) {
         // Clear the previous content
@@ -69,11 +70,11 @@ db.collection("comments-mariocoin").get().then(querySnapshot => {
     }
 
     function createGraph(data, columnForColor) {
-        const container = document.getElementById("controversymap");
+        const container = document.getElementById("mariocoinmap");
         const width = container.offsetWidth;
         const height = container.offsetHeight;
 
-        const svg = d3.select("#controversymap").append("svg")
+        const svg = d3.select("#mariocoinmap").append("svg")
             .attr("width", "100%")
             .attr("height", "100%");
 
