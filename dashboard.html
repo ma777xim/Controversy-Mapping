@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mapping Controversies</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">    <link rel="stylesheet" href="styles.css">
-<script src="https://d3js.org/d3.v7.min.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapping Controversies</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js"></script>
 </head>
 
 <body>
@@ -17,13 +18,13 @@
         <h1>Mapping Controversies</h1>
         <div>
             <a href="signup.html">
-            <button id=logout>Logout</button>
+                <button id="logout">Logout</button>
             </a>
         </div>
     </header>
 
     <div>
-        <h2> Hey, <b><span id=loggedUserUsername></span></b> <3</h2>
+        <h2>Hey, <b><span id="loggedUserUsername"></span></b> <3</h2>
     </div>
 
     <div>
@@ -48,65 +49,30 @@
     </div>
 
     <div id="main-container">
-    <div id="icons-container">
-        <button class="icon" data-topic="ecommerce_traditional" onclick="showForm('ecommerceForm')">
-            <img src="images/mariocoin.png" alt="E-Commerce Icon" width="80">
-            <span></span>
-        </button>
+        <div id="icons-container">
+            <button class="icon" data-topic="ecommerce_traditional" onclick="showForm('ecommerceForm')">
+                <img src="images/mariocoin.png" alt="E-Commerce Icon" width="80">
+                <span></span>
+            </button>
             <div id="forms-container">
-            <form id="comments-mariocoin">How are department stores related to currency?
-    <input type="text" name="answer" placeholder="What do you think?" required>
-    <button type="submit">Add</button>
-</form>
-
-<div id="mariocoinmap"></div>
-
-    </div>
-        <button class="icon" data-topic="sustainability" onclick="showForm('sustainabilityForm')">
-            <img src="images/rb_29621.png" alt="Sustainability Icon" width="80">
-            <span></span>
-        </button>
-        <div>
-            <form id="sustainabilityForm" class="hidden" onsubmit="submitForm(event, 'sustainability')">
-                <label for="sustainabilityQuestion">How can depstores improve sustainability?</label>
-                <input type="text" id="sustainabilityQuestion" name="answer" required>
-                <button type="submit">Submit</button>
-            </form>
+                <form id="answerForm">
+                    <input type="text" name="answer" placeholder="Type your answer..." required>
+                    <button type="submit">Add</button>
+                </form>
+            </div>
+            <button class="icon" data-topic="sustainability" onclick="showForm('sustainabilityForm')">
+                <img src="images/rb_29621.png" alt="Sustainability Icon" width="80">
+                <span></span>
+            </button>
+            <div>
+                <form id="sustainabilityForm" class="hidden" onsubmit="submitForm(event, 'sustainability')">
+                    <label for="sustainabilityQuestion">How can department stores improve sustainability?</label>
+                    <input type="text" id="sustainabilityQuestion" name="answer" required>
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
         </div>
-        <!-- Add more buttons if needed -->
     </div>
-</div>
-
-
-<script>
-    function showForm(formId) {
-        document.querySelectorAll('form').forEach(form => form.classList.add('hidden'));
-        document.getElementById(formId).classList.remove('hidden');
-    }
-
-    function submitForm(event, topic) {
-        event.preventDefault();
-        const form = event.target;
-        const data = new FormData(form);
-        data.append('topic', topic);
-
-        fetch('http://localhost:3000/submit', {
-            method: 'POST',
-            body: data,
-        })
-        .then(response => {
-            if (response.ok) {
-                alert('Submission successful!');
-                form.reset();
-                form.classList.add('hidden');
-            } else {
-                alert('Submission failed.');
-            }
-        })
-        .catch(error => console.error('Error:', error));
-    }
-</script>
-
 
     <footer>
         <p>TUM Chair of Architectural Informatics</p>
@@ -114,32 +80,53 @@
     </footer>
 
     <script>
-        // Prevent default behavior for the signup button
-        document.getElementById('signup-button').addEventListener('click', (e) => {
-            e.preventDefault();
-            alert('Signup button clicked!');
-        });
+        function showForm(formId) {
+            document.querySelectorAll('form').forEach(form => form.classList.add('hidden'));
+            document.getElementById(formId).classList.remove('hidden');
+        }
 
-        // Prevent default behavior for any button that might reload the page
-        const buttons = document.querySelectorAll('button');
-        buttons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                e.preventDefault();
-            });
+        function submitForm(event, topic) {
+            event.preventDefault();
+            const form = event.target;
+            const data = new FormData(form);
+            data.append('topic', topic);
+
+            fetch('http://localhost:3000/submit', {
+                method: 'POST',
+                body: data,
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Submission successful!');
+                        form.reset();
+                        form.classList.add('hidden');
+                    } else {
+                        alert('Submission failed.');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const username = localStorage.getItem('username');
+            if (username) {
+                document.getElementById('loggedUserUsername').textContent = username;
+            } else {
+                alert("There is nobody here");
+                window.location.href = "login.html"; // Redirect if no user is logged in
+            }
         });
     </script>
+
     <script>
+        // Ensure the diagram container has dimensions
         document.addEventListener('DOMContentLoaded', () => {
-        const username = localStorage.getItem('username');
-        if (username) {
-            document.getElementById('loggedUserUsername').textContent = username;
-        }
-        else {
-            alert("There is nobody here");
-            window.location.href = "login.html"; // Redirect if no user is logged in
-        }
-    });
-</script>
-<script src="forcegraph3.js"></script>
+            const container = document.getElementById('controversymap');
+            container.style.width = '100%';
+            container.style.height = '500px';
+        });
+    </script>
+
+    <script src="forcegraph3.js"></script>
 </body>
 </html>
