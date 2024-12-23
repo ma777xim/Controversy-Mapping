@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
-import {getFirestore, setDoc, doc} from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+import { getFirestore, getDocs, query, collection, where } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -16,36 +16,43 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const auth = getAuth();
+const db = getFirestore();
 
 // Form submission handling
-const form = document.getElementById('form');
-form.addEventListener("submit", async function (event) {
-    event.preventDefault(); // Prevent form refresh
+const loginForm = document.getElementById('loginForm');
+loginForm.addEventListener('submit', async (event) => {
+    event.preventDefault(); // Prevent page refresh
 
     // Inputs
-    const email = document.getElementById('email').value;
-    const username = document.getElementById('username').value; // Currently unused, but can be stored in Firestore
+    const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
-    const auth=getAuth();
-    const db=getFirestore();
-
     try {
+        // Find user by username in Firestore
+        const usersQuery = query(
+            collection(db, "mappers"),
+            where("username", "==", username)
+        );
+        const querySnapshot = await getDocs(usersQuery);
+
+        if (querySnapshot.empty) {
+            throw new Error("check username pls");
+        }
+
+        // Get user's email
+        const userDoc = querySnapshot.docs[0]; // Assuming usernames are unique
+        const userData = userDoc.data();
+        const email = userData.email;
+
+        // Sign in with email and password
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        .then((userCredential)=>{
-            const user=userCredential.user;
-            const userData={
-                email: email,
-                username: username,
-                password: password
-            };
-        })
-        const user = userCredential.user;
-        alert("Mhm nice it's working");
-        console.log("User created. Hi,", user);
-        window.location.href = "https://ma777xim.github.io/Controversy-Mapping/";
+
+        // Redirect on successful login
+        alert("Yay!");
+        window.location.href = "index.html"; // Replace with your desired page
     } catch (error) {
-        console.error("Oops:", error.code, error.message);
+        console.error("Nope.", error.code, error.message);
         alert(`Error: ${error.message}`);
     }
 });

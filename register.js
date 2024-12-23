@@ -43,8 +43,9 @@ form.addEventListener('submit', async (event) => {
         await setDoc(doc(db, "mappers", user.uid), userData);
 
         // Redirect to another page
-        alert("´sup,", username);
-        window.location.href = "login.html";
+        alert("Cool. Log in pls");
+        localStorage.setItem('username', username);
+        window.location.href = "index.html";
     } catch (error) {
         console.error("Error creating user:", error.code, error.message);
         alert(`Error: ${error.message}`);

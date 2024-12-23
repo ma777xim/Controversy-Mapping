@@ -19,6 +19,15 @@
     </header>
 
     <div>
+        <script>
+            const username = localStorage.getItem('username');
+            if (username) {
+                alert(`Hi, ${username}`);
+            }
+        </script>
+    </div>
+
+    <div>
         <h4>Select scheme</h4>
         <label for="color-switch">Color By:</label>
         <select id="color-switch">
