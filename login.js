@@ -48,10 +48,17 @@ loginForm.addEventListener('submit', async (event) => {
         // Sign in with email and password
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
 
+        //Store username
+        const username = localStorage.getItem('username');
+        if (username) {
+        alert(`Sup, ${username}`);
+        }
         // Redirect on successful login
         alert("Yay!");
         window.location.href = "index.html"; // Replace with your desired page
-    } catch (error) {
+    }
+
+    catch (error) {
         console.error("Nope.", error.code, error.message);
         alert(`Error: ${error.message}`);
     }
