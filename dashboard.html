@@ -21,7 +21,7 @@
     </header>
 
     <div>
-        <h2> <b>Salut, <span id=loggedUserUsername></span></b> </h2>
+        <h2> Hey, <b><span id=loggedUserUsername></span></b> <3</h2>
     </div>
 
     <div>
@@ -52,11 +52,13 @@
             <span></span>
         </button>
             <div id="forms-container">
-            <form id="ecommerceForm" class="hidden" onsubmit="submitForm(event, 'ecommerce')">
-            <label for="ecommerceQuestion">What do you think about e-commerce?</label>
-            <input type="text" id="ecommerceQuestion" name="answer" required>
-        <button type="submit">Submit</button>
-    </form>
+            <form id="comments-mariocoin">How are department stores related to currency?
+    <input type="text" name="answer" placeholder="What do you think?" required>
+    <button type="submit">Add</button>
+</form>
+
+<div id="mariocoinmap"></div>
+
     </div>
         <button class="icon" data-topic="sustainability" onclick="showForm('sustainabilityForm')">
             <img src="images/rb_29621.png" alt="Sustainability Icon" width="80">
@@ -64,7 +66,7 @@
         </button>
         <div>
             <form id="sustainabilityForm" class="hidden" onsubmit="submitForm(event, 'sustainability')">
-                <label for="sustainabilityQuestion">How can we improve sustainability?</label>
+                <label for="sustainabilityQuestion">How can depstores improve sustainability?</label>
                 <input type="text" id="sustainabilityQuestion" name="answer" required>
                 <button type="submit">Submit</button>
             </form>
@@ -124,7 +126,7 @@
             });
         });
     </script>
-    <script>
+    script>
         document.addEventListener('DOMContentLoaded', () => {
         const username = localStorage.getItem('username');
         if (username) {
@@ -136,6 +138,6 @@
         }
     });
 </script>
-<script src="forcegraph1.js"></script>
+<script src="forcegraph3.js"></script>
 </body>
 </html>
