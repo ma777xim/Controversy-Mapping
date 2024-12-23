@@ -1,6 +1,7 @@
 // Import the functions you need from the SDKs
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -18,7 +19,7 @@ const app = initializeApp(firebaseConfig);
 
 // Form submission handling
 const form = document.getElementById('form');
-form.addEventListener("submit", async function (event) {
+form.addEventListener('click', (event)=>{
     event.preventDefault(); // Prevent form refresh
 
     // Inputs
@@ -26,16 +27,32 @@ form.addEventListener("submit", async function (event) {
     const username = document.getElementById('username').value; // Currently unused, but can be stored in Firestore
     const password = document.getElementById('password').value;
 
-    const auth = getAuth();
+    const auth=getAuth();
+    const db=getFirestore();
+
+    createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential)=>{
+        const user=userCredential.user;
+        const userData={
+            email: email,
+            username: username,
+            password: password
+        };
+        const docRef=doc(db, "mappers", mappers.uid);
+        setDoc(docRef,userData)
+        .then(()=>{
+            window.location.href='index.html'
+        })
+    })
 
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
         alert("Mhm nice it's working");
         console.log("User created:", user);
-        window.location.href = "https://ma777xim.github.io/Controversy-Mapping/";
+        window.location.href = "login.html";
     } catch (error) {
         console.error("Error creating user:", error.code, error.message);
-        alert(`Error: ${error.message}`);
+        alert(Error: ${error.message});
     }
 });
