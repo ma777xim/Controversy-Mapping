@@ -1,23 +1,23 @@
 // Import the functions you need from the SDKs
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
-import { getFirestore, getDocs, query, collection, where } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
 
 // Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyB3Vn9jXSJnQ0XC8JM64OszHpNEkvViBxA",
     authDomain: "mapping-controversies.firebaseapp.com",
+    databaseURL: "https://mapping-controversies-default-rtdb.europe-west1.firebasedatabase.app",
     projectId: "mapping-controversies",
-    storageBucket: "mapping-controversies.appspot.com",
+    storageBucket: "mapping-controversies.firebasestorage.app",
     messagingSenderId: "259825186402",
     appId: "1:259825186402:web:7c38048d67546fbe9b833b",
     measurementId: "G-Q0WM4CNVM4"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 const auth = getAuth();
-const db = getFirestore();
 
 // Form submission handling
 const loginForm = document.getElementById('loginForm');

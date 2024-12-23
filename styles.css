@@ -35,6 +35,16 @@ header {
     overflow: visible; /* Prevent overflow */
 }
 
+#mariocoinmap {
+    flex: 1; /* Fills the remaining space in #diagram-container */
+    position: relative;
+    width: 100%; /* Full width */
+    height: 150%; /* Full height */
+    overflow: visible; /* Prevent overflow */
+}
+
+}
+
 h1 {
     color: #ffffff;
     text-align: center;

@@ -1,3 +1,6 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
+
 // Initialize Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyB3Vn9jXSJnQ0XC8JM64OszHpNEkvViBxA",
@@ -10,8 +13,8 @@ const firebaseConfig = {
     measurementId: "G-Q0WM4CNVM4"
 };
 
-firebase.initializeApp(firebaseConfig);
-const db=firebase.firestore();  // Using Firestore as the database
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 let allData={ nodes: [], links: [] }; // For reloading dynamically
 
@@ -20,17 +23,19 @@ const container=d3.select("#mariocoinmap");
 // Fetch initial nodes and links from Firebase
 function loadFirebaseData() {
     db.collection("comments-mariocoin").get().then(querySnapshot => {
-        const data=querySnapshot.docs.map(doc => doc.data());
+    const data = querySnapshot.docs.map(doc => doc.data()); // Fetching fields of each document
+    console.log(data); // Log data to verify
 
-        // Create nodes and links
-        data.forEach(comment => {
-            addNewNode(comment.text);
-        });
-
-        createGraph(allData, "comments-mariocoin"); // Initial render
-    }).catch(error => {
-        console.error("Error fetching data: ", error);
+    // Assuming data contains an array of comments, each with "text" and "words"
+    data.forEach(comment => {
+        addNewNode(comment.text); // Pass the "text" field to the addNewNode function
     });
+
+    createGraph(allData, "comments-mariocoin"); // Create the graph with the fetched data
+}).catch(error => {
+    console.error("Error fetching data: ", error);
+});
+
 }
 
 // Add a new node (comment) to Firebase and update the graph
@@ -40,11 +45,14 @@ function addNewNode(userInput) {
     const newNode={ id: newId, name: userInput, degree: 0, words: newWords };
 
     // Store the new comment in Firebase
-    db.collection("comments").add({
+    db.collection("comments-mariocoin").add({
         text: userInput,
         words: newWords,
     }).then(docRef => {
-        console.log("New comment added with ID: ", docRef.id);
+        console.log("Thanks, ", docRef.id);
+    }).catch(error => {
+    console.error("Mhh no worko", error);
+});
 
         // Create links to nodes with shared words
         allData.nodes.forEach(existingNode => {
@@ -67,23 +75,25 @@ function addNewNode(userInput) {
 }
 
 function createGraph(data, columnForColor) {
-    const container = document.getElementById("mariocoinmap");
-    const width = container.offsetWidth;
-    const height = container.offsetHeight;
+const container = document.getElementById("mariocoinmap");
+const width = container.offsetWidth;
+const height = container.offsetHeight;
 
-    const svg = d3.select("#mariocoinmap").append("svg")
+const svg = d3.select("#mariocoinmap").append("svg")
         .attr("width", "100%")
         .attr("height", "100%");
 
-    const color = d3.scaleOrdinal(d3.schemeCategory10)
+const color = d3.scaleOrdinal(d3.schemeCategory10)
         .domain(data.nodes.map(d => d[columnForColor]));
 
-    const simulation = d3.forceSimulation(data.nodes)
-        .force("link", d3.forceLink(data.links).id(d => d.id).distance(400))
-        .force("charge", d3.forceManyBody().strength(-100))
-        .force("center", d3.forceCenter(width / 2, height / 2));
+const simulation = d3.forceSimulation(data.nodes)
+    .force("link", d3.forceLink(data.links).id(d => d.id).distance(700))
+    .force("charge", d3.forceManyBody().strength(-150))
+    .force("center", d3.forceCenter(width / 2, height / 2));
 
-    const link = svg.append("g")
+d3.select("#mariocoinmap").selectAll("*").remove(); // Clears previous graph before rendering
+
+const link = svg.append("g")
         .attr("stroke", "#999")
         .attr("stroke-opacity", 0.6)
         .selectAll("line")
@@ -91,7 +101,7 @@ function createGraph(data, columnForColor) {
         .join("line")
         .attr("stroke-width", d => d.value);
 
-    const node = svg.append("g")
+const node = svg.append("g")
         .attr("stroke", "#fff")
         .attr("stroke-width", 1.5)
         .selectAll("circle")
