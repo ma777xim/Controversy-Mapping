@@ -38,7 +38,7 @@ h1 {
     color: #ffffff;
     text-align: center;
     margin: 5%;
-    font-family: Inter, Arial, sans-serif;
+    font-family: Inter, sans-serif;
     padding: 10px;
     font-size: 75px;
     font-weight: 800;
@@ -48,7 +48,7 @@ h2 {
     color: #ffffff;
     text-align: center;
     margin: 5%;
-    font-family: Inter, Arial, sans-serif;
+    font-family: Inter, sans-serif;
     font-size: 25px;
     font-weight: 400;
 }
@@ -57,7 +57,7 @@ h3 {
     color: #666666;
     text-align: center;
     margin: 5%;
-    font-family: Inter, Arial, sans-serif;
+    font-family: Inter, sans-serif;
     font-size: 15px;
     font-weight: 300;
 }
