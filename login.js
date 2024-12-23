@@ -49,10 +49,8 @@ loginForm.addEventListener('submit', async (event) => {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
 
         //Store username
-        const username = localStorage.getItem('username');
-        if (username) {
-        alert(`Sup, ${username}`);
-        }
+localStorage.setItem('username', userData.username);
+
         // Redirect on successful login
         alert("Yay!");
         window.location.href = "dashboard.html"; // Replace with your desired page
