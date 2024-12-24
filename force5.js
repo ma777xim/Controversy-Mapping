@@ -1,14 +1,10 @@
-// Import the necessary Firebase and D3 functions
+// Firebase configuration
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
-import { select, scaleOrdinal, schemeAccent, forceSimulation, forceLink, forceManyBody, forceCenter, drag } from "https://d3js.org/d3.v7.min.js";
 
-// Create a color scale with d3.schemeAccent
-const colorScale = scaleOrdinal(schemeAccent);
-
-// Firebase configuration (replace with your actual config)
+// Initialize Firebase
 const firebaseConfig = {
-    apiKey: "AIzaSyB3Vn9jXSJnQ0XC8JM64OszHpNEkvViBxA",
+    apiKey: "AIzaSyB3VnQ0XC8JM64OszHpNEkvViBxA",
     authDomain: "mapping-controversies.firebaseapp.com",
     databaseURL: "https://mapping-controversies-default-rtdb.europe-west1.firebasedatabase.app",
     projectId: "mapping-controversies",
@@ -17,17 +13,15 @@ const firebaseConfig = {
     appId: "1:259825186402:web:7c38048d67546fbe9b833b",
     measurementId: "G-Q0WM4CNVM4"
 };
-
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // D3 setup
-const svg = select("#contromap"); // Ensure there's an element with id="contromap"
+const svg = d3.select("#contromap");
 const width = +svg.attr("width");
 const height = +svg.attr("height");
 
-// Function to fetch data from Firestore
+// Fetch data from Firestore
 async function fetchNetworkData() {
     const nodes = [];
     const links = [];
@@ -48,7 +42,6 @@ async function fetchNetworkData() {
                 }
             }
         }
-
     } catch (error) {
         console.error("Error fetching data: ", error);
     }
@@ -56,28 +49,26 @@ async function fetchNetworkData() {
     return { nodes, links };
 }
 
-// Function to check if two nodes (users) share common words in their email or username
+// Check for common words
 function hasCommonWords(nodeA, nodeB) {
     const commonWords = getWords(nodeA.email).filter(word => getWords(nodeB.email).includes(word));
     const commonUsername = getWords(nodeA.username).filter(word => getWords(nodeB.username).includes(word));
-
-    // If there's a common word in either email or username, return true
     return commonWords.length > 0 || commonUsername.length > 0;
 }
 
-// Function to split a string into words (lowercased and stripped of special characters)
+// Helper: split string into words
 function getWords(str) {
     return str.toLowerCase().replace(/[^a-z0-9\s]/g, "").split(/\s+/);
 }
 
-// Function to update the D3 force-directed graph
+// Update the graph
 async function updateNetwork() {
     const { nodes, links } = await fetchNetworkData();
 
-    const simulation = forceSimulation(nodes)
-        .force("link", forceLink(links).id(d => d.id))
-        .force("charge", forceManyBody().strength(-200))
-        .force("center", forceCenter(width / 2, height / 2));
+    const simulation = d3.forceSimulation(nodes)
+        .force("link", d3.forceLink(links).id(d => d.id))
+        .force("charge", d3.forceManyBody().strength(-200))
+        .force("center", d3.forceCenter(width / 2, height / 2));
 
     const link = svg.append("g")
         .attr("stroke", "#aaa")
@@ -92,29 +83,9 @@ async function updateNetwork() {
         .data(nodes)
         .join("circle")
         .attr("r", 10)
-        .attr("fill", (d, i) => colorScale(d.group || i)); // This uses the colorScale
+        .attr("fill", (d, i) => d3.schemeCategory10[i % 10]);
 
     node.append("title").text(d => d.id);
-
-    // Define drag behavior
-    const dragBehavior = drag()
-        .on("start", (event, d) => {
-            if (!event.active) simulation.alphaTarget(0.3).restart();
-            d.fx = d.x;
-            d.fy = d.y;
-        })
-        .on("drag", (event, d) => {
-            d.fx = event.x;
-            d.fy = event.y;
-        })
-        .on("end", (event, d) => {
-            if (!event.active) simulation.alphaTarget(0);
-            d.fx = null;
-            d.fy = null;
-        });
-
-    // Apply drag behavior to nodes
-    node.call(dragBehavior);
 
     simulation.on("tick", () => {
         link
