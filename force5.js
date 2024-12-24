@@ -61,6 +61,31 @@ function getWords(str) {
     return str.toLowerCase().replace(/[^a-z0-9\s]/g, "").split(/\s+/);
 }
 
+// Add drag behavior
+function drag(simulation) {
+    function dragstarted(event, d) {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+    }
+
+    function dragged(event, d) {
+        d.fx = event.x;
+        d.fy = event.y;
+    }
+
+    function dragended(event, d) {
+        if (!event.active) simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+    }
+
+    return d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended);
+}
+
 // Update the graph
 async function updateNetwork() {
     const { nodes, links } = await fetchNetworkData();
@@ -83,7 +108,8 @@ async function updateNetwork() {
         .data(nodes)
         .join("circle")
         .attr("r", 10)
-        .attr("fill", (d, i) => d3.schemeCategory10[i % 10]);
+        .attr("fill", (d, i) => d3.schemeCategory10[i % 10])
+        .call(drag(simulation)); // Add drag behavior to nodes
 
     node.append("title").text(d => d.id);
 
