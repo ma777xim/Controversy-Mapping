@@ -3,27 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Network Diagram Test</title>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <style>
-        #diagram-container {
-                flex: 2;
-                border: 1px solid #ccc;
-                border-radius: 8px;
-                background-color: blue;
-                margin: 20px;
-                height: 500px;
-        }
-    </style>
+    <title>Firebase Example</title>
+    <script src="https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js"></script>
 </head>
 <body>
-    <div id="diagram-container">
-        <svg id="contromap" width="1000" height="1000"></svg>
-    </div>
+    <h1>Firebase Integration Test</h1>
 
-<script type="module" src="https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js"></script>
-<script type="module" src="https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js"></script>
-<script type="module" src="force5.js"></script>
+    <script>
+        // Your Firebase configuration
+        const firebaseConfig = {
+        apiKey: "AIzaSyB3Vn9jXSJnQ0XC8JM64OszHpNEkvViBxA",
+        authDomain: "mapping-controversies.firebaseapp.com",
+        databaseURL: "https://mapping-controversies-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "mapping-controversies",
+        storageBucket: "mapping-controversies.firebasestorage.app",
+        messagingSenderId: "259825186402",
+        appId: "1:259825186402:web:7c38048d67546fbe9b833b",
+        measurementId: "G-Q0WM4CNVM4"
+    };
 
+        // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+        // Firestore example
+    const db = firebase.firestore();
+        db.collection("test").add({ name: "Maxim", date: new Date() })
+        .then(() => console.log("Document written!"))
+    .catch((error) => console.error("Error adding document: ", error));
+    </script>
 </body>
 </html>
