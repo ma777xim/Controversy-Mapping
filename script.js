@@ -1,4 +1,4 @@
-// Network Diagram Setup
+// Nnetwork Diagram Setup
 const colorMap = {
     1: "#0000ff", // Blue - Architects
     2: "#ff0000", // Red - Green activists
@@ -8,14 +8,9 @@ const colorMap = {
     6: "#00ffff"  // Cyan
 };
 
-const svg = d3.select("#network-diagram");
+const svg = d3.select("#controversymap");
 const width = +svg.attr("width");
 const height = +svg.attr("height");
-
-document.getElementById("login-btn").addEventListener("click", function() {
-    // Redirect to a login page
-    window.location.href = "login.html"; // Make sure you have a login.html page
-});
 
 // Sample data for nodes and links
 const nodes = [
