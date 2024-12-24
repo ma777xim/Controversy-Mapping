@@ -10,11 +10,10 @@ const firebaseConfig = {
     measurementId: "G-Q0WM4CNVM4",
 };
 
-// Initialize Firebase
+// Initialize Firebase (CDN syntax)
 const app = firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
-//Initialize FireStore
-const db = firebase.firestore(app);
 
 // Access data in the Mappers collection
 const mappersCollection = db.collection("mappers");
