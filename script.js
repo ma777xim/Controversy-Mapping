@@ -8,7 +8,7 @@ const colorMap = {
     6: "#00ffff"  // Cyan
 };
 
-const svg = d3.select("#controversymap");
+const svg = d3.select("#network-diagram");
 const width = +svg.attr("width");
 const height = +svg.attr("height");
 
