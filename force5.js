@@ -7,17 +7,16 @@ const firebaseConfig = {
     storageBucket: "mapping-controversies.appspot.com",
     messagingSenderId: "259825186402",
     appId: "1:259825186402:web:7c38048d67546fbe9b833b",
-    measurementId: "G-Q0WM4CNVM4"
+    measurementId: "G-Q0WM4CNVM4",
 };
 
 // Initialize Firebase
 const app = firebase.initializeApp(firebaseConfig);
 
 //Initialize FireStore
-const db = firebase.firestore();
+const db = firebase.firestore(app);
 
 // Access data in the Mappers collection
-
 const mappersCollection = db.collection("mappers");
 
 //Naming and Positioning
