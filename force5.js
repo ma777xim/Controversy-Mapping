@@ -1,9 +1,9 @@
-// Import the functions you need from Firebase and D3
+// Import the necessary Firebase and D3 functions
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js";
-import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
 import { scaleOrdinal, schemeCategory10 } from "https://d3js.org/d3.v7.min.js";
 
-// Firebase configuration
+// Firebase configuration (replace with your actual config)
 const firebaseConfig = {
     apiKey: "AIzaSyB3Vn9jXSJnQ0XC8JM64OszHpNEkvViBxA",
     authDomain: "mapping-controversies.firebaseapp.com",
@@ -19,27 +19,16 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Example: Write a test document to Firestore
-async function writeTestDocument() {
-    try {
-        await addDoc(collection(db, "test"), { name: "Maxim", date: new Date() });
-        console.log("Document written!");
-    } catch (error) {
-        console.error("Error adding document: ", error);
-    }
-}
-writeTestDocument();
-
 // D3 setup
 const svg = d3.select("#contromap");
 const width = +svg.attr("width");
 const height = +svg.attr("height");
 const colorScale = scaleOrdinal(schemeCategory10);
 
+// Function to fetch data from Firestore
 async function fetchNetworkData() {
     const nodes = [];
     const links = [];
-    const data = {};
 
     try {
         const snapshot = await getDocs(collection(db, "mappers"));
@@ -47,26 +36,39 @@ async function fetchNetworkData() {
             const node = doc.data();
             node.id = doc.id;
             nodes.push(node);
-
-            if (!data[node.username]) data[node.username] = [];
-            data[node.username].push(node.id);
         });
 
-        Object.values(data).forEach(group => {
-            for (let i = 0; i < group.length; i++) {
-                for (let j = i + 1; j < group.length; j++) {
-                    links.push({ source: group[i], target: group[j] });
+        // Create links between nodes with common words in email or username
+        for (let i = 0; i < nodes.length; i++) {
+            for (let j = i + 1; j < nodes.length; j++) {
+                if (hasCommonWords(nodes[i], nodes[j])) {
+                    links.push({ source: nodes[i].id, target: nodes[j].id });
                 }
             }
-        });
+        }
 
-        return { nodes, links };
     } catch (error) {
         console.error("Error fetching data: ", error);
-        return { nodes: [], links: [] };
     }
+
+    return { nodes, links };
 }
 
+// Function to check if two nodes (users) share common words in their email or username
+function hasCommonWords(nodeA, nodeB) {
+    const commonWords = getWords(nodeA.email).filter(word => getWords(nodeB.email).includes(word));
+    const commonUsername = getWords(nodeA.username).filter(word => getWords(nodeB.username).includes(word));
+
+    // If there's a common word in either email or username, return true
+    return commonWords.length > 0 || commonUsername.length > 0;
+}
+
+// Function to split a string into words (lowercased and stripped of special characters)
+function getWords(str) {
+    return str.toLowerCase().replace(/[^a-z0-9\s]/g, "").split(/\s+/);
+}
+
+// Function to update the D3 force-directed graph
 async function updateNetwork() {
     const { nodes, links } = await fetchNetworkData();
 
@@ -87,8 +89,8 @@ async function updateNetwork() {
         .selectAll("circle")
         .data(nodes)
         .join("circle")
-        .attr("r", d => getNodeSize(d.id, links))
-        .attr("fill", (d, i) => colorScale(d.group || i))
+        .attr("r", 10)
+        .attr("fill", (d, i) => colorScale(i))
         .call(drag(simulation));
 
     node.append("title").text(d => d.id);
@@ -106,11 +108,7 @@ async function updateNetwork() {
     });
 }
 
-function getNodeSize(nodeId, links) {
-    const numConnections = links.filter(link => link.source.id === nodeId || link.target.id === nodeId).length;
-    return Math.min(10 + numConnections * 2, 50);
-}
-
+// Function to handle dragging behavior
 function drag(simulation) {
     function dragstarted(event, d) {
         if (!event.active) simulation.alphaTarget(0.2).restart();
@@ -135,4 +133,5 @@ function drag(simulation) {
         .on("end", dragended);
 }
 
+// Initialize the graph
 updateNetwork();
