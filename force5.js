@@ -1,7 +1,7 @@
 // Import the necessary Firebase and D3 functions
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
-import { scaleOrdinal, schemeCategory10 } from "https://d3js.org/d3.v7.min.js";
+import { schemeCategory10 } from "https://d3js.org/d3.v7.min.js";
 
 // Firebase configuration (replace with your actual config)
 const firebaseConfig = {
