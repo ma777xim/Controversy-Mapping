@@ -3,27 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Network Diagram Test</title>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <style>
-        #diagram-container {
-                flex: 2;
-                border: 1px solid #ccc;
-                border-radius: 8px;
-                background-color: blue;
-                margin: 20px;
-                height: 500px;
-        }
-    </style>
+    <title>Controversy Mapping</title>
 </head>
 <body>
-    <div id="diagram-container">
-        <svg id="contromap" width="auto" height="1000"></svg>
-    </div>
+    <!-- Include Firebase libraries -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js"></script>
 
-<script type="module" src="https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js"></script>
-<script type="module" src="https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js"></script>
-<script type="module" src="force5.js"></script>
+    <!-- Your script -->
+    <script type="module">
+        // Your web app's Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyB3Vn9jXSJnQ0XC8JM64OszHpNEkvViBxA",
+    authDomain: "mapping-controversies.firebaseapp.com",
+    databaseURL: "https://mapping-controversies-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "mapping-controversies",
+    storageBucket: "mapping-controversies.appspot.com",
+    messagingSenderId: "259825186402",
+    appId: "1:259825186402:web:7c38048d67546fbe9b833b",
+    measurementId: "G-Q0WM4CNVM4",
+};
 
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+
+        // Initialize Firestore
+        const db = firebase.firestore();
+
+        // Access the "mappers" collection
+        const mappersCollection = db.collection("mappers");
+
+        // Example of using the mappersCollection
+        mappersCollection.get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                console.log(`${doc.id} => ${doc.data()}`);
+            });
+        }).catch((error) => {
+            console.error("Error getting documents: ", error);
+        });
+    </script>
 </body>
 </html>
