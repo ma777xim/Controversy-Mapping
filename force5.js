@@ -5,7 +5,7 @@ import { getFirestore, collection, getDocs } from "https://www.gstatic.com/fireb
 import { select, scaleOrdinal, schemeAccent, forceSimulation, forceLink, forceManyBody, forceCenter, drag } from "https://d3js.org/d3.v7.min.js";
 
 // Create a color scale with d3.schemeAccent
-const colorScale = scaleOrdinal(schemeAccent);
+const colorScale = scaleOrdinal(schemeCategory10);  // Or switch to d3.schemeAccent if needed
 
 // Firebase configuration (replace with your actual config)
 const firebaseConfig = {
@@ -27,7 +27,6 @@ const db = getFirestore(app);
 const svg = select("#contromap");  // This should now work because d3.select is imported
 const width = +svg.attr("width");
 const height = +svg.attr("height");
-const colorScale = scaleOrdinal(schemeCategory10);
 
 // Function to fetch data from Firestore
 async function fetchNetworkData() {
