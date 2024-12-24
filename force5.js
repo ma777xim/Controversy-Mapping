@@ -1,3 +1,8 @@
+// Import the functions you need from Firebase and D3
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js";
+import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
+import { scaleOrdinal, schemeCategory10 } from "https://d3js.org/d3.v7.min.js";
+
 // Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyB3Vn9jXSJnQ0XC8JM64OszHpNEkvViBxA",
@@ -7,51 +12,59 @@ const firebaseConfig = {
     storageBucket: "mapping-controversies.appspot.com",
     messagingSenderId: "259825186402",
     appId: "1:259825186402:web:7c38048d67546fbe9b833b",
-    measurementId: "G-Q0WM4CNVM4",
+    measurementId: "G-Q0WM4CNVM4"
 };
 
-// Initialize Firebase (CDN syntax)
-const app = firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
+// Example: Write a test document to Firestore
+async function writeTestDocument() {
+    try {
+        await addDoc(collection(db, "test"), { name: "Maxim", date: new Date() });
+        console.log("Document written!");
+    } catch (error) {
+        console.error("Error adding document: ", error);
+    }
+}
+writeTestDocument();
 
-// Access data in the Mappers collection
-const mappersCollection = db.collection("mappers");
-
-//Naming and Positioning
-
+// D3 setup
 const svg = d3.select("#contromap");
 const width = +svg.attr("width");
 const height = +svg.attr("height");
+const colorScale = scaleOrdinal(schemeCategory10);
 
-// Use D3's built-in color scheme
-const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
-
-// Fetch and visualize the network
 async function fetchNetworkData() {
     const nodes = [];
     const links = [];
     const data = {};
 
-    const snapshot = await db.collection("mappers").get();
-    snapshot.forEach(doc => {
-        const node = doc.data();
-        node.id = doc.id;
-        nodes.push(node);
+    try {
+        const snapshot = await getDocs(collection(db, "mappers"));
+        snapshot.forEach(doc => {
+            const node = doc.data();
+            node.id = doc.id;
+            nodes.push(node);
 
-        if (!data[node.username]) data[node.username] = [];
-        data[node.username].push(node.id);
-    });
+            if (!data[node.username]) data[node.username] = [];
+            data[node.username].push(node.id);
+        });
 
-    Object.values(data).forEach(group => {
-        for (let i = 0; i < group.length; i++) {
-            for (let j = i + 1; j < group.length; j++) {
-                links.push({ source: group[i], target: group[j] });
+        Object.values(data).forEach(group => {
+            for (let i = 0; i < group.length; i++) {
+                for (let j = i + 1; j < group.length; j++) {
+                    links.push({ source: group[i], target: group[j] });
+                }
             }
-        }
-    });
+        });
 
-    return { nodes, links };
+        return { nodes, links };
+    } catch (error) {
+        console.error("Error fetching data: ", error);
+        return { nodes: [], links: [] };
+    }
 }
 
 async function updateNetwork() {
@@ -75,7 +88,7 @@ async function updateNetwork() {
         .data(nodes)
         .join("circle")
         .attr("r", d => getNodeSize(d.id, links))
-        .attr("fill", (d, i) => colorScale(d.group || i)) // Assign random colors
+        .attr("fill", (d, i) => colorScale(d.group || i))
         .call(drag(simulation));
 
     node.append("title").text(d => d.id);
@@ -100,7 +113,7 @@ function getNodeSize(nodeId, links) {
 
 function drag(simulation) {
     function dragstarted(event, d) {
-        if (!event.active) simulation.alphaTarget(.2).restart();
+        if (!event.active) simulation.alphaTarget(0.2).restart();
         d.fx = d.x;
         d.fy = d.y;
     }
@@ -111,7 +124,7 @@ function drag(simulation) {
     }
 
     function dragended(event, d) {
-        if (!event.active) simulation.alphaTarget(.05);
+        if (!event.active) simulation.alphaTarget(0.05);
         d.fx = null;
         d.fy = null;
     }
