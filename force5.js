@@ -12,9 +12,17 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore(app);
 
-const svg = d3.select("#controversymap");
+//Initialize FireStore
+const db = firebase.firestore();
+
+// Access data in the Mappers collection
+
+const mappersCollection = db.collection("mappers");
+
+//Naming and Positioning
+
+const svg = d3.select("#contromap");
 const width = +svg.attr("width");
 const height = +svg.attr("height");
 
