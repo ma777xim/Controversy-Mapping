@@ -1,11 +1,10 @@
 // Import the necessary Firebase and D3 functions
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
-// Import the necessary D3 functions for your visualization
 import { select, scaleOrdinal, schemeAccent, forceSimulation, forceLink, forceManyBody, forceCenter, drag } from "https://d3js.org/d3.v7.min.js";
 
 // Create a color scale with d3.schemeAccent
-const colorScale = scaleOrdinal(schemeCategory10);  // Or switch to d3.schemeAccent if needed
+const colorScale = scaleOrdinal(schemeAccent);
 
 // Firebase configuration (replace with your actual config)
 const firebaseConfig = {
@@ -24,7 +23,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // D3 setup
-const svg = select("#contromap");  // This should now work because d3.select is imported
+const svg = select("#contromap"); // Ensure there's an element with id="contromap"
 const width = +svg.attr("width");
 const height = +svg.attr("height");
 
@@ -75,10 +74,10 @@ function getWords(str) {
 async function updateNetwork() {
     const { nodes, links } = await fetchNetworkData();
 
-    const simulation = d3.forceSimulation(nodes)
-        .force("link", d3.forceLink(links).id(d => d.id))
-        .force("charge", d3.forceManyBody().strength(-200))
-        .force("center", d3.forceCenter(width / 2, height / 2));
+    const simulation = forceSimulation(nodes)
+        .force("link", forceLink(links).id(d => d.id))
+        .force("charge", forceManyBody().strength(-200))
+        .force("center", forceCenter(width / 2, height / 2));
 
     const link = svg.append("g")
         .attr("stroke", "#aaa")
@@ -93,10 +92,29 @@ async function updateNetwork() {
         .data(nodes)
         .join("circle")
         .attr("r", 10)
-        .attr("fill", (d, i) => colorScale(d.group || i));  // This uses the colorScale
-        .call(drag(simulation));
+        .attr("fill", (d, i) => colorScale(d.group || i)); // This uses the colorScale
 
     node.append("title").text(d => d.id);
+
+    // Define drag behavior
+    const dragBehavior = drag()
+        .on("start", (event, d) => {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+        })
+        .on("drag", (event, d) => {
+            d.fx = event.x;
+            d.fy = event.y;
+        })
+        .on("end", (event, d) => {
+            if (!event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+        });
+
+    // Apply drag behavior to nodes
+    node.call(dragBehavior);
 
     simulation.on("tick", () => {
         link
@@ -109,31 +127,6 @@ async function updateNetwork() {
             .attr("cx", d => d.x)
             .attr("cy", d => d.y);
     });
-}
-
-// Function to handle dragging behavior
-function drag(simulation) {
-    function dragstarted(event, d) {
-        if (!event.active) simulation.alphaTarget(0.2).restart();
-        d.fx = d.x;
-        d.fy = d.y;
-    }
-
-    function dragged(event, d) {
-        d.fx = event.x;
-        d.fy = event.y;
-    }
-
-    function dragended(event, d) {
-        if (!event.active) simulation.alphaTarget(0.05);
-        d.fx = null;
-        d.fy = null;
-    }
-
-    return d3.drag()
-        .on("start", dragstarted)
-        .on("drag", dragged)
-        .on("end", dragended);
 }
 
 // Initialize the graph
