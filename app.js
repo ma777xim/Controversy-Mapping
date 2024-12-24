@@ -1,4 +1,4 @@
-d3.csv("users.csv?v=" + new Date().getTime()).then(data => {
+d3.csv("data.csv").then(data => {
     // Parse links from CSV
     const links = data.map(d => ({
         source: d.Source,
