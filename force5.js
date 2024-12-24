@@ -1,7 +1,11 @@
 // Import the necessary Firebase and D3 functions
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
-import * as d3 from "https://d3js.org/d3.v7.min.js";
+// Import the necessary D3 functions for your visualization
+import { select, scaleOrdinal, schemeAccent, forceSimulation, forceLink, forceManyBody, forceCenter, drag } from "https://d3js.org/d3.v7.min.js";
+
+// Create a color scale with d3.schemeAccent
+const colorScale = scaleOrdinal(schemeAccent);
 
 // Firebase configuration (replace with your actual config)
 const firebaseConfig = {
@@ -20,7 +24,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // D3 setup
-const svg = d3.select("#contromap");
+const svg = select("#contromap");  // This should now work because d3.select is imported
 const width = +svg.attr("width");
 const height = +svg.attr("height");
 const colorScale = scaleOrdinal(schemeCategory10);
@@ -90,7 +94,7 @@ async function updateNetwork() {
         .data(nodes)
         .join("circle")
         .attr("r", 10)
-        .attr("fill", (d, i) => colorScale(i))
+        .attr("fill", (d, i) => colorScale(d.group || i));  // This uses the colorScale
         .call(drag(simulation));
 
     node.append("title").text(d => d.id);
