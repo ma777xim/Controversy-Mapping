@@ -1,7 +1,7 @@
 const form = document.getElementById('form');
-const firstname_input = document.getElementById('firstname-input');
-const email_input = document.getElementById('email-input');
-const password_input = document.getElementById('password-input');
+const email = document.getElementById('firstname-input');
+const username = document.getElementById('email-input');
+const password = document.getElementById('password-input');
 const error_message = document.getElementById('error-message');
 
 form.addEventListener('submit',(e)=>{
@@ -9,11 +9,11 @@ form.addEventListener('submit',(e)=>{
 
     let errors = []
 
-    if(firstname_input){
-    errors = getSignupFormErrors(firstname_input.value, email_input.value, password_input.value)
+    if(firstname){
+    errors = getSignupFormErrors(email.value, username.value, password.value)
     }
     else{
-    errors = getLoginFormErrors(email_input.value, password_input.value)
+    errors = getLoginFormErrors(email.value, password.value)
     }
     if(errors.length>0) {
         e.preventDefault()
@@ -21,14 +21,14 @@ form.addEventListener('submit',(e)=>{
     }
 })
 
-    function getSignupFormErrors(firstname, email, password){
+    function getSignupFormErrors(email, username, password){
     let errors=[]
 
-    if(firstname===''||firstname==null){
+    if(email===''||email==null){
     errors.push('Pls put in first name')
     firstname_input.parentElement.classList.add('incorrect')
     }
-    if(email===''||email==null){
+    if(username===''||username==null){
     errors.push('Pls put in email')
     email_input.parentElement.classList.add('incorrect')
     }
@@ -40,7 +40,7 @@ form.addEventListener('submit',(e)=>{
     return errors;
 }
 
-const allInputs=[firstname_input, email_input, password_input]
+const allInputs=[email, username, password]
 
 allInputs.forEach(input=>{
    input.addEventListener('input',()=>{
@@ -50,12 +50,12 @@ allInputs.forEach(input=>{
    })
 })
 
+
+//Login and signup form buttons
+
 const signUpButton=document.getElementById('signUpButton')
-
 const signInButton=document.getElementById('signInButton')
-
 const signInForm=document.getElementById('signIn')
-
 const signUpForm=document.getElementById('signUp')
 
 signUpButton.addEventListener('click', function() {
