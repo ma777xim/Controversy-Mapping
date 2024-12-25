@@ -92,7 +92,7 @@ async function updateNetwork() {
 
     const simulation = d3.forceSimulation(nodes)
         .force("link", d3.forceLink(links).id(d => d.id))
-        .force("charge", d3.forceManyBody().strength(-200))
+        .force("charge", d3.forceManyBody().strength(-100))
         .force("center", d3.forceCenter(width / 2, height / 2));
 
     const link = svg.append("g")
@@ -107,7 +107,7 @@ async function updateNetwork() {
         .selectAll("circle")
         .data(nodes)
         .join("circle")
-        .attr("r", 10)
+        .attr("r", 20)
         .attr("fill", (d, i) => d3.schemeCategory10[i % 10])
         .call(drag(simulation)); // Add drag behavior to nodes
 

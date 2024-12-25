@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <title>Homepage</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <div>
+            <h1>Contro.Map.</h1>
+            <h2>Hey, <b><span id="loggedUserUsername"></span></b> <3</h2>
+            <h3>Nice to see you.</h3>
+        </div>
+        <div>
+            <a href="index.html">
+                <button id="logout">Logout</button>
+            </a>
+        </div>
+    </header>
+    <div>
+        <h3>Controversy map.</h3>
+    </div>
+
+    <main>
+
+        <div class="content">
+            <svg id="contromap" width="750" height="750"></svg>
+        </div>
+
+        <div class="sidebar">
+
+        <div>
+            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=04GM3va536LJ&format=png&color=000000" alt="Corn">Corn</button>
+        </div>
+
+            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=GeeWqr07j0wV&format=png&color=000000" alt="Dress">Dress</button>
+            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=cyquzyDQApLb&format=png&color=0000000" alt="Closed">Vacancy</button>
+            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=DjtFm0vkHkvo&format=png&color=000000" alt="Toy">Toy</button>
+            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=Zeaw4rsn0eQX&format=png&color=000000" alt="Plant">Plant</button>
+            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=9TghxfVRENeF&format=png&color=000000" alt="Car">Car</button>
+            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=kOx43Y29fqm6&format=png&color=000000" alt="Stats">Stats</button>
+            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=7j3u1nyS3RXT&format=png&color=000000" alt="Tools">Tools</button>
+            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=R9v8TF6MUeVI&format=png&color=000000" alt="CD">CD</button>
+            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=RwjIfAOPmj5C&format=png&color=000000" alt="Needle">Needle</button>
+            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=voX0OBuEQAUR&format=png&color=000000" alt="Web">Web</button>
+            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=11fjR6L6CDE3&format=png&color=000000" alt="Shop">Local Shop</button>
+            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=CO9dLZvBwrax&format=png&color=000000" alt="Basket">Basket</button>
+            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=RHuAUueLuyds&format=png&color=000000" alt="Art">Art</button>
+            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=59VPHq0GnZg2&format=png&color=000000" alt="Bank">Bank</button>
+            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=oVIY4QlHcGyp&format=png&color=0000000" alt="Wreckingball">Wrecking Ball</button>
+            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=DkRYMLkNs6mJ&format=png&color=0000000" alt="CO2-Reduction">Environment</button>
+            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=RaSfksXeBEPt&format=png&color=000000" alt="Lorry">Transport</button>
+            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=5VKlSNjaWyBH&format=png&color=000000" alt="Ruler">Distance</button>
+            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=u2s1FIIaxfQD&format=png&color=000000" alt="Click">Order</button>
+            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=3xYa6spPmTsU&format=png&color=0000000" alt="Sale">Sales</button>
+            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=r5TsdSWSeZkG&format=png&color=000000" alt="Noodles">Food</button>
+            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=6kJnHQIB4H6K&format=png&color=0000000" alt="360degree">VR & AR</button>
+            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=QZVRMHQrfoDa&format=png&color=000000" alt="Aim">Aim</button>
+            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=vtQuEwmsWKN0&format=png&color=000000" alt="Bricks">Building</button>
+            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=SSmstp9CWcGU&format=png&color=000000" alt="Internet">Online-shopping</button>
+            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=l6BnbcAvf8VV&format=png&color=000000" alt="Coin">Money</button>
+            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=m3OYxqjCPokO&format=png&color=000000" alt="Pretzel">Pretzel</button>
+            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=wIbIiPoKWchh&format=png&color=000000" alt="World">Global</button>
+        </div>
+
+        <div class="forms-container" style="display: none;">
+    <!-- Forms that open dynamically -->
+            <div id="form-field1" class="form hidden" >
+                <label for="field1-input">What is a departent store?</label>
+                <input type="text" id="field1-input" placeholder="Type something..."/>
+                <button class="submit" data-field="field1">Mhm</button>
+            </div>
+        </div>
+
+
+    </main>
+    <footer>
+        <h4> <b> &copy; 2025 Controversy Mapping.</b> <br> Technical University of Munich, Chair of Architectural Informatics, Prof. Dipl.-Ing. Frank Petzold. <br><br> Gustave Lahon, Maxim Yurin.<br><br>All Rights Reserved.</h4>
+    </footer>
+
+<script type="module" src="force5.js"></script>
+<script type="module" src="interactive-icons.js"></script>
+
+</body>
+
+</html>
+

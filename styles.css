@@ -1,96 +1,311 @@
-body {
-    font-family: Inter, sans-serif;
-    margin: 5px;
-    padding: 5px;
-    color: #ffffff;
+html, body {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    font-family: Inter, Google Sans, sans-serif;
+    margin: 1px;
+    padding: 1px;
+    color: #f9f9f9;
     font-size: 25px;
     font-weight: 900;
-    align-content: space-between;
-    background:#000000;
-
+    background:#191919;
 }
 
+* {
+    margin: 1%;
+    padding: 5%;
+    box-sizing: border-box;
+    font-family: Inter, Google Sans, sans-serif;
+}
 
 header {
     display: flex;
-    height: 10px;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #000000;
+    justify-content: flex-end;
+    position: relative;
+    margin: 1px;
+    width: 100%;
+    height: auto;
+    background-color: #0000ff;
     color: white;
-    font-family: Inter, sans-serif;
-    padding: 5px 100px;
-    font-size: 300%;
+    font-family: Inter, Google Sans, sans-serif;
+    font-weight: 600;
+    padding: 5px;
+    font-size: 250%;
+    text-align: left;
+}
+
+header button {
+
+    font-family: Inter, Google Sans, sans-serif;
+    width: auto;
+    font-size: 30px;
+    color: #f9f9f9;
+    background-color: transparent;
+    border-color: #f9f9f9;
+    float: right;
+    border: solid;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: 700;
+    border-radius: 28px;
+    transition-duration: .2s;
+}
+
+header button:hover {
+    color: #0000ff;
+    border-color: #f9f9f9;
+    background-color: #f9f9f9;
+    border-radius: 40px;
+    font-size: 30px;
+    transform: scale(105%);
+
+}
+/*Network Diagram v2 (firestore-based)*/
+#contromap {
+    display: flex;
+    flex: 1;
+    align-content: left;
+    width: 90%;
+    height: 90%;
+    border: 1px solid #f9f9f9;
+    background-color: #191919;
+    border-radius: 3px;
+        }
+
+/*Network Diagram v1 (csv-based)*/
+#controversymap {
+    flex: 1; /* Fills the remaining space in #diagram-container */
+    position: relative;
+    width: 100%; /* Full width */
+    height: 150%; /* Full height */
+    overflow: visible; /* Prevent overflow */
 
 }
 
-header h1 {
-    margin: 50%;
-    margin: 10;
-    padding: 10;
-    background-color: #000000;
-    color: #333;
-    font-size: 10px;
+#diagram-container {
+    width: 100%;
+    height: 90vh; /* Adjust height to avoid footer overlap */
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Center content */
+    border: solid;
+    margin: 20px;
+    border-radius: 3px;
 
 }
 
 h1 {
-    color: #ffffff;
+    display: flex;
+    flex: 1;
+    color: #f9f9f9;
     text-align: center;
-    margin: 10%;
-    font-family: Inter, Arial, sans-serif;
+    font-family: Inter, Google Sans, sans-serif;
     padding: 10px;
-    font-size: 75px;
-    font-weight: 900;
+    font-size: 70px;
+    font-weight: 800;
 }
 
 h2 {
-    color: #ffffff;
+    display: flex;
+    flex: 1;
+    color: #f9f9f9;
     text-align: center;
-    margin: 5%;
-    font-family: Inter, Arial, sans-serif;
-    font-size: 25px;
-    font-weight: 400;
+    font-family: Inter, Google Sans , sans-serif;
+    font-size: 35px;
+    font-weight: 500;
 }
 
 h3 {
-    color: #666666;
+    display: flex;
+    flex: 1;
+    color: #f9f9f9;
     text-align: center;
-    margin: 5%;
-    font-family: Inter, Arial, sans-serif;
-    font-size: 15px;
+    font-family: Inter, Google Sans, sans-serif;
+    font-size: 20px;
     font-weight: 300;
+}
+
+h4 {
+    display: flex;
+    flex: 1;
+    color: #454545;
+    text-align: left;
+    font-family: Inter, Google Sans, sans-serif;
+    font-size: 15px;
+    font-weight: 200;
 }
 
 label {
     display: block;
-    font-family: Inter, Arial, sans-serif;
+    font-family: Inter, Google Sans, sans-serif;
     width: 100%;
-    margin-top: 10px;
-    margin-bottom: 5px;
+    margin: 6px;
     text-align: center;
-    border-color: #555;
+    border-color: #f9f9f9;
     font-weight: bold;
+    text-align: center;
+}
 
+main {
+    display: flex;
+    flex: 1;
+    gap: 20px;
+    padding: 20px;
+    margin-top: 50px;
+    font-family: Inter, Google Sans, sans-serif;
+    color: #f9f9f9;
+    font-weight: 700;
+    border-radius: 28px;
+    transition-duration: .4s;
 }
 
 .main {
-
-    background: 50%;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    background-color: #191919;
     border-radius: 5px;
     width: 50%;
-    margin: auto;
-    font-family: Inter, Arial, Sans-serif;
+    font-family: Inter, Google Sans, sans-serif;
+}
+
+.wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    gap: 8px;
+    width: 78px;
+    padding: 8px;
+    background-color: #0000ff;
+    color: #f9f9f9;
+}
+
+.sidebar button img {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    color: #191919;
+    text-align: center;
+}
+
+.sidebar button:hover {
+    color: #f9f9f9;
+    background-color: #191919;
+    border-color: #f9f9f9;
+    transform: scale(130%);
+    border-radius: 25px;
+}
+
+.sidebar button {
+    width: 62px;
+    height: 62px;
+    border: solid;
+    color: #191919;
+    background-color: #191919;
+    cursor: pointer;
+    border-radius: 15px;
+    font-family: Inter, Google Sans, Arial;
+    font-weight: 200;
+    font-size: 10px;
+    vertical-align: middle;
+}
+
+.content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    text-align: center;
 
 }
 
+/*Buttons, Icons on the left*/
+
+.forms-container {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -20%);
+    background: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+.form {
+    margin: 10px 0;
+}
+
+.form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form input {
+    display: flex;
+    text-align: center;
+    flex: 1;
+    width: 100%;
+    font-family: consolas;
+    padding: 10px;
+    border: solid;
+    color: #f9f9f9;
+    border-color: #f9f9f9;
+    background-color: #191919;
+    border-radius: 5px;
+    transition-duration: .2s;
+}
+
+.form input:hover {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    font-family: consolas;
+    padding: 12px;
+    border: solid;
+    color: #f9f9f9;
+    border-color: #f9f9f9;
+    background-color: #191919;
+    border-radius: 20px;
+}
+
+.form .submit {
+    text-align: center;
+    width: auto;
+    font-family: consolas;
+    border: solid;
+    color: #f9f9f9;
+    border-color: #f9f9f9;
+    background-color: #191919;
+    border-radius: 30px;
+    transition-duration: .1s;
+}
+
+.form .submit:hover {
+    border: solid;
+    transform: scale(105%);
+    color: #191919;
+    background-color: #f9f9f9;
+    border-radius: 45px;
+}
+/*Login, Signup, Logout*/
+
 form {
     margin: auto;
-    background-color: #000000;
-    border-color: #ffffff;
+    background-color: #191919;
+    border-color: #f9f9f9;
     border: 1px;
     border-radius: 15px;
     width: 50%;
+    text-align: center;
 
 }
 
@@ -99,13 +314,13 @@ form input {
     padding: 10px 30px;
     margin: 20px 0;
     box-sizing: border-box;
-    border: 1px solid #ffffff;
+    border: solid;
     border-radius: 20px;
-    border-color: #ffffff;
-    color: #ffffff;
-    background-color: #000000;
+    border-color: #f9f9f9;
+    color: #f9f9f9;
+    background-color: #191919;
     font-size: 80%;
-    font-family: Inter, Arial;
+    font-family: Inter, Google Sans, sans-serif;
     font-weight: 400;
     text-align: center;
     transition: .3s;
@@ -120,13 +335,15 @@ div:has(input:focus) > label {
     color: #777777;
     opacity: 1; /* Firefox */
     font-size: 80%;
-    font-family: Inter, Arial, sans-serif;
+    font-family: Inter, Google Sans, sans-serif;
     font-weight: 300;
     text-align: center;
 
 }
 
-
+::-ms-input-placeholder { /* Edge 12 -18 */
+    color: red;
+}
 
 form input:hover {
     opacity: 1; /* Firefox */
@@ -136,92 +353,62 @@ form input:hover {
 
 form div.incorrect label{
     border-color: #ff0000;
-
 }
 
 form div.incorrect input{
-    border-color: #ffffff;
-
-}
-
-::-ms-input-placeholder { /* Edge 12 -18 */
-    color: red;
-}
-
-header button {
-
-    font-family: Helvetica, Arial, sans-serif;
-    width: auto;
-    font-size: 50px;
-    color: #ffffff;
-    background-color: #000000;
-
-    border: none;
-    padding: 5px 25px;
-    cursor: pointer;
-    font-weight: 900;
-    border-radius: 28px;
-    transition-duration: .4s;
-
-}
-
-header button:hover {
-    background-color: #ffffff;
-    color: #0000ff;
-    border-radius: 30px;
-    font-size: 51px;
-    transform: scale(103%);
-
+    border-color: transparent;
 }
 
 button {
-    padding: 15px;
-    border-radius: 10px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    border: inset, 1px;
-    border-color: white;
+    padding: 10px;
+    border-radius: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: solid;
+    border-color: #f9f9f9;
     color: white;
+    background-color: #191919;
     cursor: pointer;
-    background-color: #000000;
     font-size: 20px;
-    font-family: Inter, Arial, Sans-serif;
+    font-family: Inter, Google Sans, Sans-serif;
     font-weight: 400;
     transition-duration: .2s;
-
+    text-align: center;
 }
 
 button:hover {
-    font-weight: 900;
-    background-color: #ffffff;
-    color: #000000;
-    border-radius: 20px;
+    background-color: #f9f9f9;
+    color: #191919;
+    border-radius: 40px;
 
 }
 
-main {
-    display: flex;
-    gap: 20px;
-    padding: 20px;
-    margin-top: 50px;
-    font-family: Helvetica, Arial, sans-serif;
-    font-size: 10px;
-    color: #0000ff;
-    border: none;
-    cursor: pointer;
-    font-weight: 900;
-    border-radius: 28px;
+select {
+    text-align: center;
+    padding: 5px;
+    background: #191919;
+    margin: 5px;
+    font-family: Inter, Google Sans, sans-serif;
+    font-size: 20px;
+    color: #f9f9f9;
+    box-sizing: border-box;
     transition-duration: .4s;
+    border-radius: 20px
 }
 
-#diagram-container {
-    flex: 2;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: blue;
-    margin: 20px;
-    height: 500px;
+select:hover {
+    text-align: center;
+    padding: 5px;
+    background: #f9f9f9;
+    margin: 5px;
+    font-family: Inter, Google Sans, sans-serif;
+    font-size: 20px;
+    color: #191919;
+    box-sizing: border-box;
+    border-radius: 30px
 }
+
+/*Old version of image buttons*/
 
 #icons-container {
     flex: 1;
@@ -231,23 +418,38 @@ main {
 }
 
 .icon {
-    background-color: #000000;
-    color: #000000;
-    border: none;
-    padding: 5px;
+    background-color: #191919;
+    max-width: 90px;
+    height: 20px;
+    color: #191919;
+    border: solid;
+    padding: 10px;
     cursor: pointer;
-    border-radius: 50px;
+    border-radius: 100px;
     text-align: center;
-    transition-duration: .4s;
-    font-family: Helvetica, Arial, Sans-serif;
-    font-size: 40px;
+    transition-duration: .2s;
+    font-family: Inter, Google Sans, sans-serif;
+    font-size: 12px;
+    border-color: black;
+    border: solid;
 }
 
 .icon:hover {
-    background-color: #000000;
-    color: white;
-    transform: scale(101%);
+    background-color: #0000ff;
+    border-color: white;
+    border: solid;
+    transform: scale(125%);
+}
 
+/*All D3 Diagrams*/
+svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+svg:active {
+    cursor: grabbing;
 }
 
 #popup {
@@ -256,11 +458,13 @@ main {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: #191919;
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 10;
+    font-family: Inter, Google Sans, sans-serif;
+
 }
 
 .popup-content {
@@ -276,12 +480,6 @@ main {
     display: none;
 }
 
-.wrap {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 #close-popup {
     position: absolute;
     top: 10px;
@@ -289,5 +487,12 @@ main {
     cursor: pointer;
     font-size: 20px;
     font-weight: bold;
-    color: #333;
+    color: #f9f9f9;
 }
+
+footer {
+            background-color: #0000ff;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }

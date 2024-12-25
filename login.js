@@ -25,19 +25,19 @@ loginForm.addEventListener('submit', async (event) => {
     event.preventDefault(); // Prevent page refresh
 
     // Inputs
-    const username = document.getElementById('username').value;
+    const username = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
     try {
         // Find user by username in Firestore
         const usersQuery = query(
             collection(db, "mappers"),
-            where("username", "==", username)
+            where("email", "==", email)
         );
         const querySnapshot = await getDocs(usersQuery);
 
         if (querySnapshot.empty) {
-            throw new Error("check username pls");
+            throw new Error("check email pls");
         }
 
         // Get user's email
@@ -48,8 +48,8 @@ loginForm.addEventListener('submit', async (event) => {
         // Sign in with email and password
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
 
-        //Store username
-localStorage.setItem('username', userData.username);
+        //Store mail
+        localStorage.setItem('email', userData.email);
 
         // Redirect on successful login
         alert("Yay!");

@@ -9,28 +9,81 @@
     <link rel="stylesheet" href="styles.css">
     <title>Homepage</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <style>
-        #contromap {
-            border: 1px solid black;
-            background-color: black;
-            align-self: auto;
-        }
-    </style>
 </head>
 
 <body>
+    <header>
+        <div>
+            <h1>Contro.Map.</h1>
+            <h2>Interactive live-controversies.</h2>
+        </div>
+        <div>
+            <a href="signup.html">
+                <button>Signup</button>
+            </a>
+        </div>
+    </header>
 
-<header>
-    <div>
-        <a href="signup.html">
-            <button>Signup</button>
-        </a>
-    </div>
-</header>
+    <main>
 
-    <h1>Controversy Mapping.</h1>
-    <svg id="contromap" width="1400" height="800"></svg>
-    <script type="module" src="force5.js"></script>
+        <div class="content">
+
+            <svg id="contromap" width="500" height="500"></svg>
+        </div>
+
+        <div class="sidebar">
+            <button class="icon"><img src="https://img.icons8.com/?size=100&id=04GM3va536LJ&format=png&color=000000" alt="Corn">Corn</button>
+            <button><img src="https://img.icons8.com/?size=100&id=GeeWqr07j0wV&format=png&color=000000" alt="Dress"></button>
+            <button><img src="https://img.icons8.com/?size=100&id=cyquzyDQApLb&format=png&color=0000000" alt="Closed"></button>
+            <button><img src="https://img.icons8.com/?size=100&id=DjtFm0vkHkvo&format=png&color=000000" alt="Toy"></button>
+            <button><img src="https://img.icons8.com/?size=100&id=Zeaw4rsn0eQX&format=png&color=000000" alt="Plant"></button>
+            <button><img src="https://img.icons8.com/?size=100&id=9TghxfVRENeF&format=png&color=000000" alt="Car"></button>
+            <button><img src="https://img.icons8.com/?size=100&id=kOx43Y29fqm6&format=png&color=000000" alt="Stats"></button>
+            <button><img src="https://img.icons8.com/?size=100&id=7j3u1nyS3RXT&format=png&color=000000" alt="Tools"></button>
+            <button><img src="https://img.icons8.com/?size=100&id=R9v8TF6MUeVI&format=png&color=000000" alt="CD"></button>
+            <button><img src="https://img.icons8.com/?size=100&id=RwjIfAOPmj5C&format=png&color=000000" alt="Needle"></button>
+            <button><img src="https://img.icons8.com/?size=100&id=voX0OBuEQAUR&format=png&color=000000" alt="Web"></button>
+            <button><img src="https://img.icons8.com/?size=100&id=11fjR6L6CDE3&format=png&color=000000" alt="Shop"></button>
+            <button><img src="https://img.icons8.com/?size=100&id=CO9dLZvBwrax&format=png&color=000000" alt="Basket"></button>
+            <button><img src="https://img.icons8.com/?size=100&id=RHuAUueLuyds&format=png&color=000000" alt="Art"></button>
+            <button><img src="https://img.icons8.com/?size=100&id=59VPHq0GnZg2&format=png&color=000000" alt="Bank"></button>
+            <button><img src="https://img.icons8.com/?size=100&id=oVIY4QlHcGyp&format=png&color=0000000" alt="Wreckingball"></button>
+            <button><img src="https://img.icons8.com/?size=100&id=DkRYMLkNs6mJ&format=png&color=0000000" alt="CO2-Reduction"></button>
+            <button><img src="https://img.icons8.com/?size=100&id=RaSfksXeBEPt&format=png&color=000000" alt="Lorry"></button>
+            <button><img src="https://img.icons8.com/?size=100&id=5VKlSNjaWyBH&format=png&color=000000" alt="Ruler"></button>
+            <button><img src="https://img.icons8.com/?size=100&id=u2s1FIIaxfQD&format=png&color=000000" alt="Click"></button>
+            <button><img src="https://img.icons8.com/?size=100&id=3xYa6spPmTsU&format=png&color=0000000" alt="Sale"></button>
+            <button><img src="https://img.icons8.com/?size=100&id=r5TsdSWSeZkG&format=png&color=000000" alt="Noodles"></button>
+            <button><img src="https://img.icons8.com/?size=100&id=6kJnHQIB4H6K&format=png&color=0000000" alt="360degree"></button>
+            <button><img src="https://img.icons8.com/?size=100&id=QZVRMHQrfoDa&format=png&color=000000" alt="Aim"></button>
+            <button><img src="https://img.icons8.com/?size=100&id=vtQuEwmsWKN0&format=png&color=000000" alt="Bricks"></button>
+            <button><img src="https://img.icons8.com/?size=100&id=SSmstp9CWcGU&format=png&color=000000" alt="Internet"></button>
+            <button><img src="https://img.icons8.com/?size=100&id=l6BnbcAvf8VV&format=png&color=000000" alt="Coin"></button>
+            <button><img src="https://img.icons8.com/?size=100&id=m3OYxqjCPokO&format=png&color=000000" alt="Pretzel"></button>
+            <button><img src="https://img.icons8.com/?size=100&id=wIbIiPoKWchh&format=png&color=000000" alt="World"></button>
+        </div>
+
+
+
+
+        <div class="forms-container" style="display: none;">
+    <!-- Forms that open dynamically -->
+            <div id="form-field1" class="form hidden" >
+                <label for="field1-input">What is a departent store?</label>
+                <input type="text" id="field1-input" placeholder="Type something..."/>
+                <button class="submit" data-field="field1">Mhm</button>
+            </div>
+        </div>
+
+
+    </main>
+    <footer>
+        <h4> <b> &copy; 2025 Controversy Mapping.</b> <br> Technical University of Munich, Chair of Architectural Informatics, Prof. Dipl.-Ing. Frank Petzold. <br><br> Gustave Lahon, Maxim Yurin.<br><br>All Rights Reserved.</h4>
+    </footer>
+
+<script type="module" src="force5.js"></script>
+<script type="module" src="interactive-icons.js"></script>
+
 </body>
 
 </html>
