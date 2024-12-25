@@ -31,8 +31,8 @@ form.addEventListener('submit', async (event) => {
         // Sign in with email and password
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
 
-        // Store email locally
-        localStorage.setItem('email', email);
+        // Store username locally for greeting
+        localStorage.setItem('username', username);
 
         // Redirect on successful login
         alert("Yay.");
