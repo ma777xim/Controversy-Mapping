@@ -25,7 +25,7 @@ loginForm.addEventListener('submit', async (event) => {
     event.preventDefault(); // Prevent page refresh
 
     // Inputs
-    const username = document.getElementById('email').value;
+    const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
     try {
@@ -37,7 +37,7 @@ loginForm.addEventListener('submit', async (event) => {
         const querySnapshot = await getDocs(usersQuery);
 
         if (querySnapshot.empty) {
-            throw new Error("check email pls");
+            throw new Error("check mail pls");
         }
 
         // Get user's email
@@ -53,7 +53,7 @@ loginForm.addEventListener('submit', async (event) => {
 
         // Redirect on successful login
         alert("Yay!");
-        window.location.href = "dashboard.html"; // Replace with your desired page
+        window.location.href = "dashboard2.html"; // Replace with your desired page
     }
 
     catch (error) {
