@@ -19,8 +19,8 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const db = getFirestore();
 
-const loginForm = document.getElementById('loginForm');
-loginForm.addEventListener('submit', async (event) => {
+const form = document.getElementById('form');
+form.addEventListener('submit', async (event) => {
     event.preventDefault(); // Prevent page refresh
 
     // Inputs
@@ -35,7 +35,7 @@ loginForm.addEventListener('submit', async (event) => {
         localStorage.setItem('email', email);
 
         // Redirect on successful login
-        alert("Login successful!");
+        alert("Yay.");
         window.location.href = "dashboard2.html"; // Replace with your desired page
     } catch (error) {
         console.error("Login error:", error.code, error.message);
