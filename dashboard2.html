@@ -15,7 +15,7 @@
     <header>
         <div>
             <h1>Contro.Map.</h1>
-            <h2>Hey, <b><span id="loggedUserUsername"></span></b> <3</h2>
+            <h2>Hey, <b><span id="activeUsername"></span></b> <3</h2>
             <h3>Nice to see you.</h3>
         </div>
         <div>
@@ -98,6 +98,11 @@
 
 <script type="module" src="force5.js"></script>
 <script type="module" src="interactive-icons.js"></script>
+<script type="module">const activeUsername = userCredential.user.username; // Ensure displayName is set in Firebase
+localStorage.setItem('username', username);
+window.onload = function () {
+    const storedUsername = localStorage.getItem('username'); // Retrieve username
+</script>
 
 </body>
 
