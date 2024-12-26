@@ -18,7 +18,7 @@
         </div>
         <br>
         <div>
-            <h2>Hey, <b><span id="usernameSpan">mapper.</span></b></h2>
+            <h2>Hey, <b><span id="username"></span></b></h2>
         </div>
         <div>
             <a href="index4.html">
@@ -336,6 +336,7 @@
         <button class="submit" data-field="commerce">Submit</button>
     </div>
 </div>
+        </div>
 
     </main>
     <footer>
@@ -345,9 +346,10 @@
 <script type="module" src="force5.js"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
-import {getAuth, onAuthStateChanged, signOut} from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
-import{getFirestore, getDoc, doc} from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js"
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
 
+// Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyB3Vn9jXSJnQ0XC8JM64OszHpNEkvViBxA",
     authDomain: "mapping-controversies.firebaseapp.com",
@@ -362,31 +364,50 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const db = getFirestore();
-document.addEventListener('DOMContentLoaded', () => {
-    const usernameSpan = document.getElementById('usernameSpan');
-    const logoutButton = document.getElementById('logoutButton');
 
-    // Retrieve username from localStorage
-    const username = localStorage.getItem('username');
+// Monitor authentication state
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        console.log("User is logged in:", user.uid); // Debugging
 
-      if (username) {
-        // Display the username if logged in
-        usernameSpan.textContent = username;
+        try {
+            // Reference to Firestore document
+            const userRef = doc(db, "mappers", user.uid);
+            const userSnapshot = await getDoc(userRef);
 
-    // Logout functionality
-    logoutButton.addEventListener('click', () => {
-        localStorage.removeItem('username');
-    });
+            if (userSnapshot.exists()) {
+                const username = userSnapshot.data().username || "Mapper"; // Fallback to "Mapper"
+                console.log("Fetched username:", username); // Debugging
+
+                // Display the username
+                document.getElementById("username").textContent = username;
+            } else {
+                console.error("No such document for user:", user.uid);
+                document.getElementById("username").textContent = "Mapper"; // Fallback
+            }
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+            document.getElementById("username").textContent = "Mapper"; // Fallback
+        }
+    } else {
+        console.log("No user is logged in.");
+        document.getElementById("username").textContent = "bro."; // Fallback
+    }
+});
+
+// Logout functionality
+document.getElementById("logoutButton").addEventListener("click", async () => {
+    try {
+        await signOut(auth);
+        console.log("User signed out.");
+        window.location.href = "index4.html"; // Redirect after logout
+    } catch (error) {
+        console.error("Sign-out error:", error);
+    }
+});
+</script>
 
 
-                document.getElementById("logoutButton").addEventListener("click", () => {
-                        auth.signOut().then(() => {
-                                window.location.href = "index4.html"; // Redirect after logout
-                        }).catch((error) => {
-                                console.error("Sign-out error:", error);
-                        });
-                });
-        </script>
 </body>
 
 </html>
