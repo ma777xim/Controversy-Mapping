@@ -30,7 +30,7 @@
     <main>
 
         <div class="content">
-            <svg id="contromap" width="1400" height="900"></svg>
+            <svg id="contromap" width="1150" height="900"></svg>
         </div>
 
         <div class="sidebar">
@@ -371,18 +371,18 @@ const db = getFirestore();
 
                                         if (docSnap.exists) {
                                                 const userData = docSnap.data();
-                                                document.getElementById("usernameSpan").textContent = userData.username;
+                                                document.getElementById("username").textContent = userData.username;
                                         } else {
                                                 console.log("No such document!");
-                                                document.getElementById("usernameSpan").textContent = "User data not found"; // Provide feedback
+                                                document.getElementById("username").textContent = "User data not found"; // Provide feedback
                                         }
                                 } catch (error) {
                                         console.error("Error getting document:", error);
-                                        document.getElementById("usernameSpan").textContent = "Error loading username"; // Provide feedback
+                                        document.getElementById("username").textContent = "Error loading username"; // Provide feedback
                                 }
                         } else {
                                 // No user is signed in.
-                                document.getElementById("usernameSpan").textContent = "Guest"; // Or redirect to login
+                                document.getElementById("username").textContent = "bro."; // Or redirect to login
                         }
                 });
 
