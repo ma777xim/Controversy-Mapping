@@ -6,6 +6,7 @@ body {
     flex-direction: column;
     height: 100vh; /* Ensure the body takes full viewport height */
     background-color: #191919;
+    width: 100vw;
 }
 
 * {
