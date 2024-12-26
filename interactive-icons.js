@@ -18,11 +18,6 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-// Function to check if user is logged in
-function isUserLoggedIn() {
-    return !!auth.currentUser; // Returns true if logged in, false otherwise
-}
-
 // Show the corresponding form on button click
 document.querySelectorAll(".sidebar button").forEach(button => {
     button.addEventListener("click", () => {

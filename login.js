@@ -1,7 +1,7 @@
-// Import the functions you need from the SDKs
+// Import Firebase SDKs
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
-import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -19,32 +19,43 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const db = getFirestore();
 
+// Form submission logic
 const form = document.getElementById('form');
 form.addEventListener('submit', async (event) => {
-    event.preventDefault(); // Prevent page refresh
+    event.preventDefault(); // Prevent page reload
 
-    // Inputs
+    // Get user input
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
 
+    // Clear error message
+    const errorMessage = document.getElementById('error-message');
+    errorMessage.textContent = "";
+
     try {
-        // Sign in with email and password
+        // Firebase sign-in
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
 
-        // Store username locally for greeting
-        if (userCredential && userCredential.user) {
-    const username = "example_username"; // Replace with your method to get the username
-    localStorage.setItem('username', username);
-} else {
-    console.error("Login failed or username unavailable");
-}
+        // Get user info
+        const user = userCredential.user;
 
+        // Fetch username from Firestore (if stored)
+        const userDoc = doc(db, "users", user.uid);
+        const userSnapshot = await getDoc(userDoc);
 
-        // Redirect on successful login
-        alert("Yay.");
-        window.location.href = "dashboard2.html"; // Replace with your desired page
+        if (userSnapshot.exists()) {
+            const username = userSnapshot.data().username || "User";
+            localStorage.setItem('username', username); // Store username locally
+            alert(`Welcome, ${username}!`);
+        } else {
+            console.warn("No username found in Firestore. Storing default.");
+            localStorage.setItem('username', "User");
+        }
+
+        // Redirect to dashboard
+        window.location.href = "dashboard2.html";
     } catch (error) {
         console.error("Login error:", error.code, error.message);
-        alert(`Login failed: ${error.message}`);
+        errorMessage.textContent = `Error: ${error.message}`;
     }
 });

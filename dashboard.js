@@ -15,7 +15,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
-const db = getFirestore();    };
+const db = getFirestore();
 
     onAuthStateChanged(auth, (user)=>{
         const loggedInUserId=localStorage.getItem('loggedInUserId');
@@ -30,15 +30,15 @@ const db = getFirestore();    };
                                 document.getElementById('username').innerText=userData.username;
                         }
                         else{
-                                console.log("bruh doesn't exist")
+                                console.log("doesn't exist")
                         }
                 })
                 .catch((error)=>{
-                        console.log("Bruh");
+                        console.log("no worko");
                 })
         }
         else{
-                console.log("Nothing")
+                console.log("void")
         }
     })
 

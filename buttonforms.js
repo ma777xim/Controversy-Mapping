@@ -20,7 +20,7 @@ const auth = getAuth(app);
 
 // Function to check if user is logged in
 function isUserLoggedIn() {
-    return !!auth.currentUser; // Returns true if logged in, false otherwise
+    return !auth.currentUser; // Returns true if logged in, false otherwise
 }
 
 // Show the corresponding form on button click

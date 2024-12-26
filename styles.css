@@ -1,6 +1,8 @@
 html, body {
-    display: flex;
+    display: grid;
     flex-direction: column;
+    align-items: space-between;
+    align-content: flex-end;
     width: 100%;
     font-family: Inter, Google Sans, sans-serif;
     color: #f9f9f9;
@@ -10,37 +12,40 @@ html, body {
 }
 
 * {
-    box-sizing: border-box;
     font-family: Inter, Google Sans, sans-serif;
 }
 
 header {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-content: top;
     position: relative;
+    padding: 20px;
     width: 100%;
     height: auto;
     background-color: #0000ff;
     color: white;
     font-family: Inter, Google Sans, sans-serif;
     font-weight: 600;
-    text-align: left;
 }
 
 header button {
-
     font-family: Inter, Google Sans, sans-serif;
+    position: absolute;
+    right: 40px;
+    top: 40px;
     width: auto;
     font-size: 30px;
     color: #f9f9f9;
     background-color: transparent;
     border-color: #f9f9f9;
-    float: right;
+    margin: auto;
     border: solid;
     cursor: pointer;
     font-weight: 700;
     border-radius: 28px;
     transition-duration: .2s;
-    vertical-align: middle;
+    vertical-align: center;
 
 }
 
@@ -57,9 +62,9 @@ header button:hover {
 #contromap {
     display: flex;
     flex: 1;
-    align-content: left;
-    width: 90%;
-    height: 90%;
+    align-content: center;
+    width: 100%;
+    height: 100%;
     border: 1px solid #f9f9f9;
     background-color: #191919;
     border-radius: 3px;
@@ -89,44 +94,39 @@ header button:hover {
 
 h1 {
     color: #f9f9f9;
-    text-align: left;
     float: left;
-    padding: 20px;
     font-family: Inter, Google Sans, sans-serif;
     font-size: 70px;
     font-weight: 800;
-    vertical-align: middle;
+    margin: auto;
 
 }
 
 h2 {
     color: #f9f9f9;
-    text-align: left;
-    padding: 20px;
     float: left;
     font-family: Inter, Google Sans , sans-serif;
     font-size: 35px;
     font-weight: 500;
-    vertical-align: middle;
-
+    margin: auto;
 }
 
 h3 {
     color: #f9f9f9;
-    text-align: center;
     float: left;
     font-family: Inter, Google Sans, sans-serif;
     font-size: 20px;
     font-weight: 300;
+    margin: auto;
 }
 
 h4 {
     color: #454545;
-    text-align: left;
     float: left;
     font-family: Inter, Google Sans, sans-serif;
     font-size: 15px;
     font-weight: 200;
+    margin: auto;
 }
 
 label {
@@ -143,19 +143,21 @@ label {
 main {
     display: flex;
     flex: 1;
+    margin: auto;
     gap: 20px;
     padding: 20px;
-    margin-top: 50px;
     font-family: Inter, Google Sans, sans-serif;
     color: #f9f9f9;
     font-weight: 700;
     border-radius: 28px;
-    transition-duration: .4s;
+    transition-duration: .2s;
 }
 
 .main {
     display: flex;
     flex-direction: column;
+    margin: auto;
+    text-align: center;
     padding: 15px;
     background-color: #191919;
     border-radius: 5px;
@@ -171,12 +173,14 @@ main {
 
 .sidebar {
     display: flex;
+    position: relative;
+    float: right;
     flex-direction: column;
     align-content: center;
     align-items: center;
-    gap: 8px;
-    width: 78px;
-    padding: 8px;
+    gap: 15px;
+    width: 80px;
+    padding: 10px;
     background-color: #191919;
     color: #f9f9f9;
 }
@@ -225,17 +229,16 @@ main {
 
 .forms-container {
     position: fixed;
-    top: 20%;
-    left: 50%;
     transform: translate(-50%, -20%);
     background: white;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 10px;
+    margin: auto;
 }
 
 .form {
-    margin: 10px 0;
+    margin: auto;
 }
 
 .form label {
@@ -354,12 +357,9 @@ form div.incorrect input{
 }
 
 button {
-    padding: 10px;
     border-radius: 20px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    margin-right: 20px;
-    margin-left: 20px0px;
+    padding: 20px;
+    margin: auto;
     border: solid;
     border-color: #f9f9f9;
     color: white;
@@ -369,8 +369,6 @@ button {
     font-family: Inter, Google Sans, Sans-serif;
     font-weight: 400;
     transition-duration: .2s;
-    text-align: center;
-    vertical-align: middle;
 }
 
 button:hover {
@@ -488,8 +486,10 @@ svg:active {
 }
 
 footer {
-            background-color: #0000ff;
+            background-color: #191919;
             color: white;
             text-align: center;
             padding: 10px;
+            text-align: left;
+            margin-top: 50px;
         }

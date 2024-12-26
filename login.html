@@ -5,44 +5,53 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <script type="module" src="login.js" defer></script>
-
+    <style type="text/css">
+h5{
+    color: #f9f9f9;
+    font-family: Inter, Google Sans, sans-serif;
+    font-size: 70px;
+    font-weight: 700;
+    float: center;
+    margin: auto;
+}
+    </style>
 </head>
-
 <body>
-<div class="main">
+    <div class="main">
+        <h5>Login</h5>
+        <br>
+        <h3>Contro.Map.</h3>
+        <p id="error-message" class="error"></p>
+    </div>
+    <div>
+        <form id="form">
+            <div class="field">
+                <input type="email" id="email" name="email" placeholder="E-Mail" required>
+            </div>
+            <div class="field">
+                <input type="password" id="password" name="password" placeholder="Password" required>
+            </div>
+            <div class="wrap">
+                <br>
+                <br>
+                <br>
+                <br>
 
-    <h1>Login</h1>
-    <p id="error-message"></p>
-</div>
-
-<br>
-<div>
-    <form id="form">
-
-        <div class="incorrect">
-            <label for="email"></label>
-            <input type="email" id="email" name="email" placeholder="E-Mail" required />
-        </div>
-        <div class="incorrect">
-            <label for="password"></label>
-            <input type="password" id="password" name="password" placeholder="Password" required />
-        </div>
-        <div class="wrap">
-            <a href="dashboard.html">
                 <button id="signInButton" type="submit">Login</button>
-            </a>
-        </div>
-    </form>
-</div>
-
-<div>
-    <h3>
-        <a href="index.html">home</a>
-    </h3>
-</div>
+            </div>
+        </form>
+    </div>
+    <br>
+    <div class="main">
+        <h3>
+            <a href="index.html">Home</a>
+        </h3>
+    </div>
+        <footer>
+        <h4> <b> &copy; 2025 Controversy Mapping.</b> <br> Technical University of Munich, Chair of Architectural Informatics, Prof. Dipl.-Ing. Frank Petzold. <br><br> Gustave Lahon, Maxim Yurin.<br><br>All Rights Reserved.</h4>
+    </footer>
 
 </body>
 </html>
