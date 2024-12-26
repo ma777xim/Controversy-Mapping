@@ -1,7 +1,7 @@
 // Firebase imports
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js";
 import { getFirestore, doc, updateDoc } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-auth.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-auth.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -18,23 +18,15 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-// Track user state
-let currentUser = null;
-
-// Check if the user is logged in
-onAuthStateChanged(auth, user => {
-    if (user) {
-        currentUser = user; // Logged-in user
-    } else {
-        currentUser = null;
-        alert("U need to log in to do that.");
-    }
-});
+// Function to check if user is logged in
+function isUserLoggedIn() {
+    return !!auth.currentUser; // Returns true if logged in, false otherwise
+}
 
 // Show the corresponding form on button click
 document.querySelectorAll(".sidebar button").forEach(button => {
     button.addEventListener("click", () => {
-        if (!currentUser) {
+        if (!isUserLoggedIn()) {
             alert("Pls login first.");
             return;
         }
@@ -46,17 +38,17 @@ document.querySelectorAll(".sidebar button").forEach(button => {
     });
 });
 
-// form sub
+// Form submission
 document.querySelectorAll(".form .submit").forEach(submitButton => {
     submitButton.addEventListener("click", async event => {
         event.preventDefault(); // Prevent form from refreshing the page
 
-        if (!currentUser) {
-            alert("Pls log in first");
+        if (!isUserLoggedIn()) {
+            alert("Pls login first");
             return;
         }
 
-        const field = submitButton.getAttribute("data-field"); // Match with button
+        const field = submitButton.getAttribute("data-field");
         const input = document.querySelector(`#${field}-input`).value.trim();
 
         if (!input) {
@@ -65,7 +57,7 @@ document.querySelectorAll(".form .submit").forEach(submitButton => {
         }
 
         try {
-            const userDoc = doc(db, "mappers", currentUser.uid);
+            const userDoc = doc(db, "mappers", auth.currentUser.uid);
             await updateDoc(userDoc, {
                 [field]: input
             });

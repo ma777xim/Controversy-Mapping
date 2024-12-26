@@ -1,19 +1,14 @@
-
-// Handle form submission
-app.post('/submit', (req, res) => {
-    const { topic, answer } = req.body;
-
-    if (!topic || !answer) {
-        return res.status(400).send('All fields are required.');
-    }
-
-    const sql = 'INSERT INTO users (topic, answer) VALUES (?, ?)';
-    db.query(sql, [topic, answer], (err, result) => {
-        if (err) {
-            console.error(err);
-            return res.status(500).send('Database error.');
+document.querySelectorAll(".sidebar button").forEach(button => {
+    button.addEventListener("click", () => {
+        const user = auth.currentUser; // Fetch current user directly
+        if (!user) {
+            alert("Pls login first.");
+            return;
         }
-        res.status(200).send('Data saved successfully.');
+
+        const field = button.id.replace("btn-", "form-");
+        document.querySelectorAll(".form").forEach(form => form.classList.add("hidden"));
+        document.querySelector(`#${field}`).classList.remove("hidden");
+        document.querySelector(".forms-container").style.display = "block";
     });
 });
-
