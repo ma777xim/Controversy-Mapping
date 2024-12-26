@@ -47,9 +47,14 @@ form.addEventListener('submit', async (event) => {
             const username = userSnapshot.data().username || "username";
             localStorage.setItem('username', username); // Store username locally
             alert(`Welcome, ${username}!`);
+
+            // You can also update a separate HTML element to display the username
+            const usernameSpan = document.getElementById('usernameSpan'); // Update the ID as needed
+            usernameSpan.textContent = username;
         } else {
             console.warn("No username found in Firestore. Storing default.");
-            localStorage.setItem('username', "username");
+            localStorage.setItem('username', "bro");
+            alert(`Welcome!`); // Use a generic welcome if no username found
         }
 
         // Redirect to dashboard
