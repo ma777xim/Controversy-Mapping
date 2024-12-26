@@ -40,16 +40,16 @@ form.addEventListener('submit', async (event) => {
         const user = userCredential.user;
 
         // Fetch username from Firestore (if stored)
-        const userDoc = doc(db, "users", user.uid);
+        const userDoc = doc(db, "mappers", user.uid);
         const userSnapshot = await getDoc(userDoc);
 
         if (userSnapshot.exists()) {
-            const username = userSnapshot.data().username || "User";
+            const username = userSnapshot.data().username || "username";
             localStorage.setItem('username', username); // Store username locally
             alert(`Welcome, ${username}!`);
         } else {
             console.warn("No username found in Firestore. Storing default.");
-            localStorage.setItem('username', "User");
+            localStorage.setItem('username', "username");
         }
 
         // Redirect to dashboard

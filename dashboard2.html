@@ -402,7 +402,7 @@ onAuthStateChanged(auth, (user)=>{
 const logoutButton=document.getElementById('logout');
 
     logoutButton.addEventListener('click',()=>{
-        localStorage.removeItem('loggedInUserId');
+        localStorage.removeItem('username');
         signOut(auth)
         .then(()=>{
                 window.location.href='index4.html';
