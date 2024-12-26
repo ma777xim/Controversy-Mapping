@@ -22,7 +22,7 @@
         </div>
         <div>
             <a href="index4.html">
-                <button id="logout">Logout</button>
+                <button id="logoutButton">Logout</button>
             </a>
         </div>
     </header>
@@ -362,31 +362,25 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const db = getFirestore();
+document.addEventListener('DOMContentLoaded', () => {
+    const usernameSpan = document.getElementById('usernameSpan');
+    const logoutButton = document.getElementById('logoutButton');
 
-    auth.onAuthStateChanged(async (user) => {
-                        if (user) {
-                                try {
-                                        const docRef = db.collection("mappers").doc(user.uid); // Use user.uid
-                                        const docSnap = await docRef.get();
+    // Retrieve username from localStorage
+    const username = localStorage.getItem('username');
 
-                                        if (docSnap.exists) {
-                                                const userData = docSnap.data();
-                                                document.getElementById("username").textContent = userData.username;
-                                        } else {
-                                                console.log("No such document!");
-                                                document.getElementById("username").textContent = "User data not found"; // Provide feedback
-                                        }
-                                } catch (error) {
-                                        console.error("Error getting document:", error);
-                                        document.getElementById("username").textContent = "Error loading username"; // Provide feedback
-                                }
-                        } else {
-                                // No user is signed in.
-                                document.getElementById("username").textContent = "bro."; // Or redirect to login
-                        }
-                });
+      if (username) {
+        // Display the username if logged in
+        usernameSpan.textContent = username;
 
-                document.getElementById("logout").addEventListener("click", () => {
+    // Logout functionality
+    logoutButton.addEventListener('click', () => {
+        localStorage.removeItem('username');
+    });
+});
+
+
+                document.getElementById("logoutButton").addEventListener("click", () => {
                         auth.signOut().then(() => {
                                 window.location.href = "index4.html"; // Redirect after logout
                         }).catch((error) => {
