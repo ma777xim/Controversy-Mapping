@@ -30,7 +30,7 @@
     <main>
 
         <div class="content">
-            <svg id="contromap" width="1150" height="900"></svg>
+            <svg id="contromap" width="1400" height="900"></svg>
         </div>
 
         <div class="sidebar">
@@ -363,54 +363,37 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const db = getFirestore();
 
-onAuthStateChanged(auth, (user)=>{
- const loggedInUserId=localStorage.getItem('username');
-        if(loggedInUserId){
-                console.log(user);
-                const docRef = doc(db, "mappers", loggedInUserId);
-                getDoc(docRef)
-                .then((docSnap)=>{
-                        if(docSnap.exists()){
-                                const userData=docSnap.data();
-                                document.getElementById('email').innerText=userData.email;
-                                document.getElementById('username').innerText=userData.username;
+    auth.onAuthStateChanged(async (user) => {
+                        if (user) {
+                                try {
+                                        const docRef = db.collection("mappers").doc(user.uid); // Use user.uid
+                                        const docSnap = await docRef.get();
+
+                                        if (docSnap.exists) {
+                                                const userData = docSnap.data();
+                                                document.getElementById("usernameSpan").textContent = userData.username;
+                                        } else {
+                                                console.log("No such document!");
+                                                document.getElementById("usernameSpan").textContent = "User data not found"; // Provide feedback
+                                        }
+                                } catch (error) {
+                                        console.error("Error getting document:", error);
+                                        document.getElementById("usernameSpan").textContent = "Error loading username"; // Provide feedback
+                                }
+                        } else {
+                                // No user is signed in.
+                                document.getElementById("usernameSpan").textContent = "Guest"; // Or redirect to login
                         }
-                        else{
-                                console.log("doesn't exist")
-                        }
-                })
-                .catch((error)=>{
-                        console.log("no worko");
-                })
-        }
-        else{
-                console.log("void")
-        }
-    })
-    // Set username on page load
-    window.onload = function () {
-        const storedUsername = localStorage.getItem('username'); // Retrieve username
-        const usernameSpan = document.getElementById('usernameSpan'); // Use the id
+                });
 
-        if (storedUsername) {
-            usernameSpan.textContent = storedUsername; // Set username
-        } else {
-            usernameSpan.textContent = "mapper."; // Default greeting
-        }
-    };
-
-const logoutButton=document.getElementById('logout');
-
-    logoutButton.addEventListener('click',()=>{
-        localStorage.removeItem('username');
-        signOut(auth)
-        .then(()=>{
-                window.location.href='index4.html';
-        })
-        .catch((error)=>{
-                console.error('Error Signing out:', error);
-        })
-</script>
+                document.getElementById("logout").addEventListener("click", () => {
+                        auth.signOut().then(() => {
+                                window.location.href = "index4.html"; // Redirect after logout
+                        }).catch((error) => {
+                                console.error("Sign-out error:", error);
+                        });
+                });
+        </script>
 </body>
 
 </html>
