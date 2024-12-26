@@ -15,7 +15,7 @@
     <header>
         <div>
             <h1>Contro.Map.</h1>
-            <h2>Hey, <b><span id="activeUsername"></span></b> <3</h2>
+                <h2>Hey, <b><span id="usernameSpan">mapper.</span></b></h2>
             <h3>Nice to see you.</h3>
         </div>
         <div>
@@ -40,45 +40,34 @@
             <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=04GM3va536LJ&format=png&color=000000" alt="Corn">Corn</button>
         </div>
 
-            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=GeeWqr07j0wV&format=png&color=000000" alt="Dress">Dress</button>
-            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=cyquzyDQApLb&format=png&color=0000000" alt="Closed">Vacancy</button>
-            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=DjtFm0vkHkvo&format=png&color=000000" alt="Toy">Toy</button>
-            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=Zeaw4rsn0eQX&format=png&color=000000" alt="Plant">Plant</button>
-            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=9TghxfVRENeF&format=png&color=000000" alt="Car">Car</button>
-            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=kOx43Y29fqm6&format=png&color=000000" alt="Stats">Stats</button>
-            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=7j3u1nyS3RXT&format=png&color=000000" alt="Tools">Tools</button>
-            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=R9v8TF6MUeVI&format=png&color=000000" alt="CD">CD</button>
-            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=RwjIfAOPmj5C&format=png&color=000000" alt="Needle">Needle</button>
-            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=voX0OBuEQAUR&format=png&color=000000" alt="Web">Web</button>
-            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=11fjR6L6CDE3&format=png&color=000000" alt="Shop">Local Shop</button>
-            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=CO9dLZvBwrax&format=png&color=000000" alt="Basket">Basket</button>
-            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=RHuAUueLuyds&format=png&color=000000" alt="Art">Art</button>
-            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=59VPHq0GnZg2&format=png&color=000000" alt="Bank">Bank</button>
-            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=oVIY4QlHcGyp&format=png&color=0000000" alt="Wreckingball">Wrecking Ball</button>
-            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=DkRYMLkNs6mJ&format=png&color=0000000" alt="CO2-Reduction">Environment</button>
-            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=RaSfksXeBEPt&format=png&color=000000" alt="Lorry">Transport</button>
-            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=5VKlSNjaWyBH&format=png&color=000000" alt="Ruler">Distance</button>
-            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=u2s1FIIaxfQD&format=png&color=000000" alt="Click">Order</button>
-            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=3xYa6spPmTsU&format=png&color=0000000" alt="Sale">Sales</button>
-            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=r5TsdSWSeZkG&format=png&color=000000" alt="Noodles">Food</button>
-            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=6kJnHQIB4H6K&format=png&color=0000000" alt="360degree">VR & AR</button>
-            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=QZVRMHQrfoDa&format=png&color=000000" alt="Aim">Aim</button>
-            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=vtQuEwmsWKN0&format=png&color=000000" alt="Bricks">Building</button>
-            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=SSmstp9CWcGU&format=png&color=000000" alt="Internet">Online-shopping</button>
-            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=l6BnbcAvf8VV&format=png&color=000000" alt="Coin">Money</button>
-
-
-            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=m3OYxqjCPokO&format=png&color=000000" alt="Pretzel">Pretzel</button>
-            <div id="forms-container">
-                <form id="answerForm" class="hidden" onsubmit="submitForm(event, 'commerce_traditional')">
-                    <label for="commerceAnswer">What do you think about e-commerce?</label>
-                    <input type="text" id="commerceAnswer" name="commerce-answer" placeholder="Wdyt?..." required>
-                    <button type="submit">Add</button>
-                </form>
-            </div>
-
-
-            <button class="sidebar button"><img src="https://img.icons8.com/?size=100&id=wIbIiPoKWchh&format=png&color=000000" alt="World">Global</button>
+            <button class="sidebar button" id="btn-dress" data-field:dress><img src="https://img.icons8.com/?size=100&id=GeeWqr07j0wV&format=png&color=000000" alt="Dress">Dress</button>
+            <button class="sidebar button" id="btn-dress" data-field:dress><img src="https://img.icons8.com/?size=100&id=cyquzyDQApLb&format=png&color=0000000" alt="Closed">Vacancy</button>
+            <button class="sidebar button" id="btn-dress" data-field:dress><img src="https://img.icons8.com/?size=100&id=DjtFm0vkHkvo&format=png&color=000000" alt="Toy">Toy</button>
+            <button class="sidebar button" id="btn-dress" data-field:dress><img src="https://img.icons8.com/?size=100&id=Zeaw4rsn0eQX&format=png&color=000000" alt="Plant">Plant</button>
+            <button class="sidebar button" id="btn-dress" data-field:dress><img src="https://img.icons8.com/?size=100&id=9TghxfVRENeF&format=png&color=000000" alt="Car">Car</button>
+            <button class="sidebar button" id="btn-dress" data-field:dress><img src="https://img.icons8.com/?size=100&id=kOx43Y29fqm6&format=png&color=000000" alt="Stats">Stats</button>
+            <button class="sidebar button" id="btn-dress" data-field:dress><img src="https://img.icons8.com/?size=100&id=7j3u1nyS3RXT&format=png&color=000000" alt="Tools">Tools</button>
+            <button class="sidebar button" id="btn-dress" data-field:dress><img src="https://img.icons8.com/?size=100&id=R9v8TF6MUeVI&format=png&color=000000" alt="CD">CD</button>
+            <button class="sidebar button" id="btn-dress" data-field:dress><img src="https://img.icons8.com/?size=100&id=RwjIfAOPmj5C&format=png&color=000000" alt="Needle">Needle</button>
+            <button class="sidebar button" id="btn-dress" data-field:dress><img src="https://img.icons8.com/?size=100&id=voX0OBuEQAUR&format=png&color=000000" alt="Web">Web</button>
+            <button class="sidebar button" id="btn-dress" data-field:dress><img src="https://img.icons8.com/?size=100&id=11fjR6L6CDE3&format=png&color=000000" alt="Shop">Local Shop</button>
+            <button class="sidebar button" id="btn-dress" data-field:dress><img src="https://img.icons8.com/?size=100&id=CO9dLZvBwrax&format=png&color=000000" alt="Basket">Basket</button>
+            <button class="sidebar button" id="btn-dress" data-field:dress><img src="https://img.icons8.com/?size=100&id=RHuAUueLuyds&format=png&color=000000" alt="Art">Art</button>
+            <button class="sidebar button" id="btn-dress" data-field:dress><img src="https://img.icons8.com/?size=100&id=59VPHq0GnZg2&format=png&color=000000" alt="Bank">Bank</button>
+            <button class="sidebar button" id="btn-dress" data-field:dress><img src="https://img.icons8.com/?size=100&id=oVIY4QlHcGyp&format=png&color=0000000" alt="Wreckingball">Wrecking Ball</button>
+            <button class="sidebar button" id="btn-dress" data-field:dress><img src="https://img.icons8.com/?size=100&id=DkRYMLkNs6mJ&format=png&color=0000000" alt="CO2-Reduction">Environment</button>
+            <button class="sidebar button" id="btn-dress" data-field:dress><img src="https://img.icons8.com/?size=100&id=RaSfksXeBEPt&format=png&color=000000" alt="Lorry">Transport</button>
+            <button class="sidebar button" id="btn-dress" data-field:dress><img src="https://img.icons8.com/?size=100&id=5VKlSNjaWyBH&format=png&color=000000" alt="Ruler">Distance</button>
+            <button class="sidebar button" id="btn-dress" data-field:dress><img src="https://img.icons8.com/?size=100&id=u2s1FIIaxfQD&format=png&color=000000" alt="Click">Order</button>
+            <button class="sidebar button" id="btn-dress" data-field:dress><img src="https://img.icons8.com/?size=100&id=3xYa6spPmTsU&format=png&color=0000000" alt="Sale">Sales</button>
+           <button class="sidebar button" id="btn-dress" data-field:dress><img src="https://img.icons8.com/?size=100&id=r5TsdSWSeZkG&format=png&color=000000" alt="Noodles">Food</button>
+            <button class="sidebar button" id="btn-dress" data-field:dress><img src="https://img.icons8.com/?size=100&id=6kJnHQIB4H6K&format=png&color=0000000" alt="360degree">VR & AR</button>
+            <button class="sidebar button" id="btn-dress" data-field:dress><img src="https://img.icons8.com/?size=100&id=QZVRMHQrfoDa&format=png&color=000000" alt="Aim">Aim</button>
+            <button class="sidebar button" id="btn-dress" data-field:dress><img src="https://img.icons8.com/?size=100&id=vtQuEwmsWKN0&format=png&color=000000" alt="Bricks">Building</button>
+           <button class="sidebar button" id="btn-dress" data-field:dress><img src="https://img.icons8.com/?size=100&id=SSmstp9CWcGU&format=png&color=000000" alt="Internet">Online-shopping</button>
+            <button class="sidebar button" id="btn-dress" data-field:dress><img src="https://img.icons8.com/?size=100&id=l6BnbcAvf8VV&format=png&color=000000" alt="Coin">Money</button>
+            <button class="sidebar button" id="btn-dress" data-field:dress><img src="https://img.icons8.com/?size=100&id=m3OYxqjCPokO&format=png&color=000000" alt="Pretzel">Pretzel</button>
+            <button class="sidebar button" id="btn-dress" data-field:dress><img src="https://img.icons8.com/?size=100&id=wIbIiPoKWchh&format=png&color=000000" alt="World">Global</button>
         </div>
 
         <div class="forms-container" style="display: none;">
@@ -97,11 +86,21 @@
     </footer>
 
 <script type="module" src="force5.js"></script>
+<script src="answersdb.js"></script>
+<script src="buttonforms.js"></script>
 <script type="module" src="interactive-icons.js"></script>
-<script type="module">const activeUsername = userCredential.user.username; // Ensure displayName is set in Firebase
-localStorage.setItem('username', username);
-window.onload = function () {
-    const storedUsername = localStorage.getItem('username'); // Retrieve username
+<script type="module">
+    // Set username on page load
+    window.onload = function () {
+        const storedUsername = localStorage.getItem('username'); // Retrieve username
+        const usernameSpan = document.getElementById('usernameSpan'); // Use the id
+
+        if (storedUsername) {
+            usernameSpan.textContent = storedUsername; // Set username
+        } else {
+            usernameSpan.textContent = "mapper."; // Default greeting
+        }
+    };
 </script>
 
 </body>

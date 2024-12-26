@@ -32,7 +32,13 @@ form.addEventListener('submit', async (event) => {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
 
         // Store username locally for greeting
-        localStorage.setItem('username', username);
+        if (userCredential && userCredential.user) {
+    const username = "example_username"; // Replace with your method to get the username
+    localStorage.setItem('username', username);
+} else {
+    console.error("Login failed or username unavailable");
+}
+
 
         // Redirect on successful login
         alert("Yay.");

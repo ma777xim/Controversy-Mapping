@@ -1,23 +1,3 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const mysql = require('mysql2');
-
-const app = express();
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-// Database connection
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '', // Your MySQL password
-    database: 'mappers',
-});
-
-db.connect(err => {
-    if (err) throw err;
-    console.log('Connected to database');
-});
 
 // Handle form submission
 app.post('/submit', (req, res) => {
@@ -37,8 +17,3 @@ app.post('/submit', (req, res) => {
     });
 });
 
-// Start the server
-const PORT = 3000;
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
