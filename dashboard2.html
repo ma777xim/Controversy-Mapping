@@ -18,6 +18,7 @@
             transform: translate(-50%, -50%);
             width: 120%;
             background-color: transparent;
+            background: transparent;
             align-content: center;
             align-items: center;
             text-align: center;
@@ -77,10 +78,13 @@
     </header>
 
 <main>
-
+    <div>
+        <button id="toggle-display" style="display: block; font-size: 40px; transform: scale(50%)"><img src="https://img.icons8.com/?size=100&id=59817&format=png&color=ffffff"><br>Names</button>
+    </div>
     <div class="content">
         <svg id="contromap" width="1300" height="900"></svg>
     </div>
+
 
     <div class="sidebar">
 
@@ -103,7 +107,7 @@
             </div>
 
             <div>
-            <button class="sidebarButton" id="openPopup" data-field="whyDecay" data-question="Why do department stores currently experience massive decay?" data-placeholder="Cultural annoyance / Fun / Outdated / ...">
+            <button class="sidebarButton" id="openPopup" data-field="whyDecay" data-question="Why do department stores currently experience massive decay?" data-placeholder="Online shopping / Trends / Expensive ...">
                 <img src="https://img.icons8.com/?size=100&id=aNjqurbKMyHL&format=png&color=FFFFFF" alt="Stop">Decay
             </button>
                 <div class="popup" id="popup" style="display: none;">
@@ -121,7 +125,7 @@
             </div>
 
             <div>
-            <button class="sidebarButton" id="openPopup" data-field="decayResponsibility" data-question="Who or what is responsible for the demise of department store culture?" data-placeholder="Cultural annoyance / Fun / Outdated / ...">
+            <button class="sidebarButton" id="openPopup" data-field="decayResponsibility" data-question="Who or what is responsible for the demise of department store culture?" data-placeholder="SIGNA / The internet / Consumers / ...">
                 <img src="https://img.icons8.com/?size=100&id=ninssh9J2Rwm&format=png&color=FFFFFF" alt="Corn">Corn
             </button>
                 <div class="popup" id="popup" style="display: none;">
@@ -139,7 +143,7 @@
             </div>
 
             <div>
-            <button class="sidebarButton" id="openPopup" data-field="emotionTrigger" data-question="What emotion does your local department store trigger in you?" data-placeholder="Cultural annoyance / Fun / Outdated / ...">
+            <button class="sidebarButton" id="openPopup" data-field="emotionTrigger" data-question="What emotion does your local department store trigger in you?" data-placeholder="Anger / Nostalgia / Disgust / Excitment / ...">
                 <img src="https://img.icons8.com/?size=100&id=ZS4Ax3svk2bt&format=png&color=FFFFFF" alt="Thinking">Emotion
             </button>
                 <div class="popup" id="popup" style="display: none;">
@@ -157,7 +161,7 @@
             </div>
 
             <div>
-            <button class="sidebarButton" id="openPopup" data-field="whoGoesToDepSto" data-question="Who goes to department stores?" data-placeholder="Cultural annoyance / Fun / Outdated / ...">
+            <button class="sidebarButton" id="openPopup" data-field="whoGoesToDepSto" data-question="Who goes to department stores?" data-placeholder="Seniors / Young people / Families / ...">
                 <img src="https://img.icons8.com/?size=100&id=QAteNc5Pkk9i&format=png&color=FFFFFF" alt="Human">Users
             </button>
                 <div class="popup" id="popup" style="display: none;">
@@ -175,7 +179,7 @@
             </div>
 
             <div>
-            <button class="sidebarButton" id="openPopup" data-field="howToAdressVacancy" data-question="How should vacancy of former department stores be adressed?" data-placeholder="Cultural annoyance / Fun / Outdated / ...">
+            <button class="sidebarButton" id="openPopup" data-field="howToAdressVacancy" data-question="How should vacancy of former department stores be adressed?" data-placeholder="Reuse / Keep my store! / Hotel / ...">
                 <img src="https://img.icons8.com/?size=100&id=HLdJb2yeBLBj&format=png&color=FFFFFF" alt="Puzzle">Vacancy
             </button>
                 <div class="popup" id="popup" style="display: none;">
@@ -193,7 +197,7 @@
             </div>
 
             <div>
-            <button class="sidebarButton" id="openPopup" data-field="roleOfDepStoToday" data-question="What is the role of a department store for the inner city?" data-placeholder="Cultural annoyance / Fun / Outdated / ...">
+            <button class="sidebarButton" id="openPopup" data-field="roleOfDepStoToday" data-question="What is the role of a department store for the inner city?" data-placeholder="Monolith / Place of Joy / Idk / ...">
                 <img src="https://img.icons8.com/?size=100&id=aBWCQEL4zD9J&format=png&color=FFFFFF" alt="Corn">Corn
             </button>
                 <div class="popup" id="popup" style="display: none;">
@@ -211,7 +215,7 @@
             </div>
 
             <div>
-            <button class="sidebarButton" id="openPopup" data-field="whyGoIfOnlineTrading" data-question="Why would you go to the department store in times of online-trading?" data-placeholder="Cultural annoyance / Fun / Outdated / ...">
+            <button class="sidebarButton" id="openPopup" data-field="whyGoIfOnlineTrading" data-question="Why would you go to the department store in times of online-trading?" data-placeholder="I can try something on / I would not / ...">
                 <img src="https://img.icons8.com/?size=100&id=0rU1TIHT8AmB&format=png&color=FFFFFF" alt="Dress">Worth
             </button>
                 <div class="popup" id="popup" style="display: none;">
@@ -229,7 +233,7 @@
             </div>
 
             <div>
-            <button class="sidebarButton" id="openPopup" data-field="whyStillExist" data-question="Why do department stores still exist?" data-placeholder="Cultural annoyance / Fun / Outdated / ...">
+            <button class="sidebarButton" id="openPopup" data-field="whyStillExist" data-question="Why do department stores still exist?" data-placeholder="Seniors / Bad investments / Benko / ...">
                 <img src="https://img.icons8.com/?size=100&id=cWZEG8n3gKPN&format=png&color=FFFFFF" alt="Shoe">Existance
             </button>
                 <div class="popup" id="popup" style="display: none;">
@@ -247,7 +251,7 @@
             </div>
 
             <div>
-            <button class="sidebarButton" id="openPopup" data-field="howRelatedToSustainibility" data-question="How are department stores (un)sustainable?" data-placeholder="Cultural annoyance / Fun / Outdated / ...">
+            <button class="sidebarButton" id="openPopup" data-field="howRelatedToSustainibility" data-question="How are department stores (un)sustainable?" data-placeholder="??? / ??? / ???...">
                 <img src="https://img.icons8.com/?size=100&id=SzLrKPTsX3YF&format=png&color=FFFFFF" alt="Plant">Environment
             </button>
                 <div class="popup" id="popup" style="display: none;">
@@ -265,7 +269,7 @@
             </div>
 
             <div>
-            <button class="sidebarButton" id="openPopup" data-field="whatWouldChangeHabit" data-question="What would make you change your habits of visiting department stores?" data-placeholder="Cultural annoyance / Fun / Outdated / ...">
+            <button class="sidebarButton" id="openPopup" data-field="whatWouldChangeHabit" data-question="What would make you change your habits of visiting department stores?" data-placeholder="A cinema / A football field / Brands / Cheaper / ...">
                 <img src="https://img.icons8.com/?size=100&id=qzW2Nmedl6tE&format=png&color=FFFFFF" alt="Arrows in Circle">Habits
             </button>
                 <div class="popup" id="popup" style="display: none;">
@@ -283,7 +287,7 @@
             </div>
 
             <div>
-            <button class="sidebarButton" id="openPopup" data-field="whoBenefits" data-question="Who benefits the most from department stores?" data-placeholder="Cultural annoyance / Fun / Outdated / ...">
+            <button class="sidebarButton" id="openPopup" data-field="whoBenefits" data-question="Who benefits the most from department stores?" data-placeholder="SIGNA / The customer / The manager / The architect / ...">
                 <img src="https://img.icons8.com/?size=100&id=71IYRAPYbQ2w&format=png&color=FFFFFF" alt="Money">Revenue
             </button>
                 <div class="popup" id="popup" style="display: none;">
@@ -301,7 +305,7 @@
             </div>
 
             <div>
-            <button class="sidebarButton" id="openPopup" data-field="effectOnEconomy" data-question="What effect do department stores have on the local economy?" data-placeholder="Cultural annoyance / Fun / Outdated / ...">
+            <button class="sidebarButton" id="openPopup" data-field="effectOnEconomy" data-question="What effect do department stores have on the local economy?" data-placeholder="Boost / decay / no effect / ...">
                 <img src="https://img.icons8.com/?size=100&id=cGGd0kbjd7ew&format=png&color=FFFFFF" alt="Cent">Economy
             </button>
                 <div class="popup" id="popup" style="display: none;">
@@ -319,7 +323,7 @@
             </div>
 
             <div>
-            <button class="sidebarButton" id="openPopup" data-field="whatShouldOffer" data-question="What should department stores offer?" data-placeholder="Cultural annoyance / Fun / Outdated / ...">
+            <button class="sidebarButton" id="openPopup" data-field="whatShouldOffer" data-question="What should department stores offer?" data-placeholder="More shoes / Less stuff / Groceries ...">
                 <img src="https://img.icons8.com/?size=100&id=0L5y3Qh5Maxp&format=png&color=FFFFFF" alt="Corn">Corn
             </button>
                 <div class="popup" id="popup" style="display: none;">
@@ -337,7 +341,7 @@
             </div>
 
             <div>
-            <button class="sidebarButton" id="openPopup" data-field="whatBuyAtDepsto" data-question="What would you buy at department stores?" data-placeholder="Cultural annoyance / Fun / Outdated / ...">
+            <button class="sidebarButton" id="openPopup" data-field="whatBuyAtDepsto" data-question="What would you buy at department stores?" data-placeholder="Shoes / Jacket / Blazer / Ring / ...">
                 <img src="https://img.icons8.com/?size=100&id=CrfnxTu5liig&format=png&color=FFFFFF" alt="Gilette">Products
             </button>
                 <div class="popup" id="popup" style="display: none;">
@@ -355,7 +359,7 @@
             </div>
 
             <div>
-            <button class="sidebarButton" id="openPopup" data-field="" data-question="What is the difference between online-shopping and a department store?" data-placeholder="Cultural annoyance / Fun / Outdated / ...">
+            <button class="sidebarButton" id="openPopup" data-field="" data-question="What is the difference between online-shopping and a department store?" data-placeholder="Faster delivery / Cheaper Prices / more offers / guarantee / ...">
                 <img src="https://img.icons8.com/?size=100&id=KEX82uLupdtl&format=png&color=FFFFFF" alt="Pointer">Online
             </button>
                 <div class="popup" id="popup" style="display: none;">
@@ -373,7 +377,7 @@
             </div>
 
             <div>
-            <button class="sidebarButton" id="openPopup" data-field="whenBetterThanOnline" data-question="When is a department store better than online-shopping?" data-placeholder="Cultural annoyance / Fun / Outdated / ...">
+            <button class="sidebarButton" id="openPopup" data-field="whenBetterThanOnline" data-question="When is a department store better than online-shopping?" data-placeholder="To try on clothes / to just walk around / ...">
                 <img src="https://img.icons8.com/?size=100&id=eIHDNBhQApDG&format=png&color=FFFFFF" alt="Bag">Superiorityy
             </button>
                 <div class="popup" id="popup" style="display: none;">
@@ -391,7 +395,7 @@
             </div>
 
             <div>
-            <button class="sidebarButton" id="openPopup" data-field="whatFuture" data-question="What will happen with department stores in the future?" data-placeholder="Cultural annoyance / Fun / Outdated / ...">
+            <button class="sidebarButton" id="openPopup" data-field="whatFuture" data-question="What will happen with department stores in the future?" data-placeholder="Reuse / they will return / ...">
                 <img src="https://img.icons8.com/?size=100&id=zSECQVRrFw1D&format=png&color=FFFFFF" alt="Corn">Corn
             </button>
                 <div class="popup" id="popup" style="display: none;">
@@ -415,6 +419,7 @@
     </footer>
 
 <script type="module" src="force5.js"></script>
+<script type="module" src="forcegraph2.js"></script>
 <script type="module"> //Username
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";

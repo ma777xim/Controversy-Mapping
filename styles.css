@@ -26,6 +26,7 @@ header {
     color: white;
     font-family: Inter, Google Sans, sans-serif;
     font-weight: 600;
+    margin-bottom: 50px;
 }
 
 header button {
@@ -57,6 +58,15 @@ header button:hover {
     transform: scale(1.05);
 
 }
+
+#toggle-display {
+    margin: 30px;
+    position: absolute;
+    top: 175px;
+    left: 0px;
+    z-index: 1000;
+}
+
 /*Network Diagram v2 (firestore-based)*/
 #contromap {
     display: flex;
@@ -67,6 +77,21 @@ header button:hover {
     height: 100%;
     border: solid #191919;
     background-color: #191919;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+/*Network Diagram v2 (firestore-based)*/
+#contrograph {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    height: 100%;
+    border: solid #191919;
+    background-color: #191919;
+    color: #f9f9f9;
     border-radius: 5px;
     overflow: hidden;
 }
@@ -269,12 +294,13 @@ main {
     background-color: #191919;
     border-radius: 5px;
     transition-duration: .2s;
+    margin:30px;
 }
 
 .form input:hover {
     display: flex;
     flex: 1;
-    width: 100%;
+    width: 110%;
     font-family: consolas;
     padding: 12px;
     border: solid;
@@ -318,21 +344,22 @@ form {
 }
 
 form input {
-    width: 120%;
+    width: 100%;
     margin: auto;
+    margin-bottom: 30px;
     align-items: center;
     align-content: center;
     box-sizing: border-box;
     border: solid;
-    border-radius: 20px;
+    border-radius: 10px;
     border-color: #f9f9f9;
     color: #f9f9f9;
     background-color: #191919;
-    font-size: 120%;
+    font-size: 100%;
     font-family: Consolas, Google Sans, sans-serif;
     font-weight: 400;
     text-align: center;
-    transition: .3s;
+    transition: .2s;
 
 }
 
@@ -360,7 +387,7 @@ div:has(input:focus) > label {
 
 form input:hover {
     opacity: 1; /* Firefox */
-    transform: scale(101%);
+    transform: scale(102%);
     color: white;
 }
 
@@ -369,7 +396,7 @@ form div.incorrect label{
 }
 
 form div.incorrect input{
-    border-color: #f9f9f9;
+    border-color: #ff0000;
 }
 
 button {

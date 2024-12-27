@@ -111,7 +111,22 @@ async function updateNetwork() {
         .attr("fill", (d, i) => d3.schemeCategory10[i % 10])
         .call(drag(simulation)); // Add drag behavior to nodes
 
-    node.append("title").text(d => d.id);
+        // Initially show usernames as a tooltip
+    const labelsGroup = svg.append("g").selectAll("text");
+
+    let showConstantDisplay = false; // Initial state for username display
+
+    node.append("title").text(d => d.username);
+
+    const labels = svg.append("g")
+        .selectAll("text")
+        .data(nodes)
+        .join("text")
+        .attr("text-anchor", "middle")
+        .attr("dy", -20) // Position above the circle
+        .attr("font-size", "14px")
+        .attr("fill", "#f9f9f9")
+        .text(d => d.username); // Use the username property from node data
 
     simulation.on("tick", () => {
         link
@@ -123,8 +138,25 @@ async function updateNetwork() {
         node
             .attr("cx", d => d.x)
             .attr("cy", d => d.y);
+
+        labels
+            .attr("x", d => d.x)
+            .attr("y", d => d.y + 25); // Adjust label position
+    });
+
+
+ // Toggle button functionality
+    document.getElementById("toggle-display").addEventListener("click", () => {
+        showConstantDisplay = !showConstantDisplay;
+
+        if (showConstantDisplay) {
+            node.select("title").remove(); // Remove tooltips
+            labels.style("display", "block"); // Show constant labels
+        } else {
+            labels.style("display", "none"); // Hide constant labels
+            node.append("title").text(d => d.username); // Restore tooltips
+        }
     });
 }
-
 // Initialize the graph
 updateNetwork();

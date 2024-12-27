@@ -8,81 +8,586 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <title>Homepage</title>
+    <style>
+        /* Popup container styling */
+        .popup {
+            display: block;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120%;
+            background-color: transparent;
+            background: transparent;
+            align-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 20px;
+            margin: auto;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.7);
+            border-radius: 8px;
+            z-index: 1000;
+            color: #f9f9f9;
+        }
+
+        ::placeholder {
+            display: flex;
+            font-family: Consolas;
+            float: center;
+            margin: auto;
+        }
+
+        #popupInput {
+            width: 120%;
+            font-size: 20px
+            margin: auto;
+            text-align: center;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+
+
+    </style>
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 
 <body>
-    <header>
+    <header style="margin-bottom: 200px;">
         <div>
-            Contro.Map.
-            <h2>Interactive live-controversies.</h2>
+            <h1>Contro.Map.</h1>
+        </div>
+    <br>
+        <div>
+            <h2>Hey, <b><span id="username"></span></b></h2>
         </div>
         <div>
-            <a href="signup.html">
-                <button>Signup</button>
+            <a href="login.html">
+                <button id="signInButton">Login</button>
             </a>
         </div>
     </header>
 
-    <main>
+<main>
+        <div style="position: absolute; left: 10px; top: 275px; display: flex; font-size: 20px; transform: scale(100%); z-index: 1000">
+    <label for="sortCriteria">Connect:</label>
+    <select id="sortCriteria">
+        <option value="username">Username</option>
+        <option value="email">Email</option>
+        <option value="whatIsDepSto">What is a department store?</option>
 
-        <div class="content">
+    </select>
+</div>
+<br>
+<div style="position: absolute; left: 20px; top: 200px; display: flex; font-size: 20px; transform: scale(100%); z-index: 1000;">
+    <label for="labelCriteria" >Display:</label>
+    <select id="labelCriteria">
+        <option value="name">Name</option>
+        <option value="email">Email</option>
+        <option value="whatIsDepSto">What is a department store?</option>
 
-            <svg id="contromap" width="500" height="500"></svg>
-        </div>
-
-        <div class="sidebar">
-            <button class="icon"><img src="https://img.icons8.com/?size=100&id=04GM3va536LJ&format=png&color=000000" alt="Corn">Corn</button>
-            <button><img src="https://img.icons8.com/?size=100&id=GeeWqr07j0wV&format=png&color=000000" alt="Dress"></button>
-            <button><img src="https://img.icons8.com/?size=100&id=cyquzyDQApLb&format=png&color=0000000" alt="Closed"></button>
-            <button><img src="https://img.icons8.com/?size=100&id=DjtFm0vkHkvo&format=png&color=000000" alt="Toy"></button>
-            <button><img src="https://img.icons8.com/?size=100&id=Zeaw4rsn0eQX&format=png&color=000000" alt="Plant"></button>
-            <button><img src="https://img.icons8.com/?size=100&id=9TghxfVRENeF&format=png&color=000000" alt="Car"></button>
-            <button><img src="https://img.icons8.com/?size=100&id=kOx43Y29fqm6&format=png&color=000000" alt="Stats"></button>
-            <button><img src="https://img.icons8.com/?size=100&id=7j3u1nyS3RXT&format=png&color=000000" alt="Tools"></button>
-            <button><img src="https://img.icons8.com/?size=100&id=R9v8TF6MUeVI&format=png&color=000000" alt="CD"></button>
-            <button><img src="https://img.icons8.com/?size=100&id=RwjIfAOPmj5C&format=png&color=000000" alt="Needle"></button>
-            <button><img src="https://img.icons8.com/?size=100&id=voX0OBuEQAUR&format=png&color=000000" alt="Web"></button>
-            <button><img src="https://img.icons8.com/?size=100&id=11fjR6L6CDE3&format=png&color=000000" alt="Shop"></button>
-            <button><img src="https://img.icons8.com/?size=100&id=CO9dLZvBwrax&format=png&color=000000" alt="Basket"></button>
-            <button><img src="https://img.icons8.com/?size=100&id=RHuAUueLuyds&format=png&color=000000" alt="Art"></button>
-            <button><img src="https://img.icons8.com/?size=100&id=59VPHq0GnZg2&format=png&color=000000" alt="Bank"></button>
-            <button><img src="https://img.icons8.com/?size=100&id=oVIY4QlHcGyp&format=png&color=0000000" alt="Wreckingball"></button>
-            <button><img src="https://img.icons8.com/?size=100&id=DkRYMLkNs6mJ&format=png&color=0000000" alt="CO2-Reduction"></button>
-            <button><img src="https://img.icons8.com/?size=100&id=RaSfksXeBEPt&format=png&color=000000" alt="Lorry"></button>
-            <button><img src="https://img.icons8.com/?size=100&id=5VKlSNjaWyBH&format=png&color=000000" alt="Ruler"></button>
-            <button><img src="https://img.icons8.com/?size=100&id=u2s1FIIaxfQD&format=png&color=000000" alt="Click"></button>
-            <button><img src="https://img.icons8.com/?size=100&id=3xYa6spPmTsU&format=png&color=0000000" alt="Sale"></button>
-            <button><img src="https://img.icons8.com/?size=100&id=r5TsdSWSeZkG&format=png&color=000000" alt="Noodles"></button>
-            <button><img src="https://img.icons8.com/?size=100&id=6kJnHQIB4H6K&format=png&color=0000000" alt="360degree"></button>
-            <button><img src="https://img.icons8.com/?size=100&id=QZVRMHQrfoDa&format=png&color=000000" alt="Aim"></button>
-            <button><img src="https://img.icons8.com/?size=100&id=vtQuEwmsWKN0&format=png&color=000000" alt="Bricks"></button>
-            <button><img src="https://img.icons8.com/?size=100&id=SSmstp9CWcGU&format=png&color=000000" alt="Internet"></button>
-            <button><img src="https://img.icons8.com/?size=100&id=l6BnbcAvf8VV&format=png&color=000000" alt="Coin"></button>
-            <button><img src="https://img.icons8.com/?size=100&id=m3OYxqjCPokO&format=png&color=000000" alt="Pretzel"></button>
-            <button><img src="https://img.icons8.com/?size=100&id=wIbIiPoKWchh&format=png&color=000000" alt="World"></button>
-        </div>
+    </select>
+</div>
+    <div class="content">
+        <svg id="contrograph" width="750" height="750"></svg>
+    </div>
 
 
+    <div class="sidebar">
 
-
-        <div class="forms-container" style="display: none;">
-    <!-- Forms that open dynamically -->
-            <div id="form-field1" class="form hidden" >
-                <label for="field1-input">What is a departent store?</label>
-                <input type="text" id="field1-input" placeholder="Type something..."/>
-                <button class="submit" data-field="field1">Mhm</button>
+        <div>
+            <button class="sidebarButton" id="openPopup" data-field="whatIsDepSto" data-question="What is a department store?" data-placeholder="Cultural annoyance / Fun / Outdated / ...">
+                <img src="https://img.icons8.com/?size=100&id=xbtKqR0lcsgS&format=png&color=FFFFFF" alt="DepartmentStore">Definition
+            </button>
+                <div class="popup" id="popup" style="display: none;">
+                    <form>
+                        <label id="popupQuestion" for="answer"></label>
+                            <div>
+                                <input type="text" id="popupInput" name="whatIsDepSto" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
+                            </div>
+                        <button class="submit" type="button" id="popupSubmit">Submit</button>
+                    </form>
+                </div>
+                <div
+                    id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10;">
+                </div>
             </div>
-        </div>
 
+            <div>
+            <button class="sidebarButton" id="openPopup" data-field="whyDecay" data-question="Why do department stores currently experience massive decay?" data-placeholder="Online shopping / Trends / Expensive ...">
+                <img src="https://img.icons8.com/?size=100&id=aNjqurbKMyHL&format=png&color=FFFFFF" alt="Stop">Decay
+            </button>
+                <div class="popup" id="popup" style="display: none;">
+                    <form>
+                        <label id="popupQuestion" for="answer"></label>
+                            <div>
+                                <input type="text" id="popupInput" name="whyDecay" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
+                            </div>
+                        <button class="submit" type="button" id="popupSubmit">Submit</button>
+                    </form>
+                </div>
+                <div
+                    id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10;">
+                </div>
+            </div>
 
-    </main>
+            <div>
+            <button class="sidebarButton" id="openPopup" data-field="decayResponsibility" data-question="Who or what is responsible for the demise of department store culture?" data-placeholder="SIGNA / The internet / Consumers / ...">
+                <img src="https://img.icons8.com/?size=100&id=ninssh9J2Rwm&format=png&color=FFFFFF" alt="Corn">Corn
+            </button>
+                <div class="popup" id="popup" style="display: none;">
+                    <form>
+                        <label id="popupQuestion" for="answer"></label>
+                            <div>
+                                <input type="text" id="popupInput" name="decayResponsibility" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
+                            </div>
+                        <button class="submit" type="button" id="popupSubmit">Submit</button>
+                    </form>
+                </div>
+                <div
+                    id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10;">
+                </div>
+            </div>
+
+            <div>
+            <button class="sidebarButton" id="openPopup" data-field="emotionTrigger" data-question="What emotion does your local department store trigger in you?" data-placeholder="Anger / Nostalgia / Disgust / Excitment / ...">
+                <img src="https://img.icons8.com/?size=100&id=ZS4Ax3svk2bt&format=png&color=FFFFFF" alt="Thinking">Emotion
+            </button>
+                <div class="popup" id="popup" style="display: none;">
+                    <form>
+                        <label id="popupQuestion" for="answer"></label>
+                            <div>
+                                <input type="text" id="popupInput" name="emotionTrigger" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
+                            </div>
+                        <button class="submit" type="button" id="popupSubmit">Submit</button>
+                    </form>
+                </div>
+                <div
+                    id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10;">
+                </div>
+            </div>
+
+            <div>
+            <button class="sidebarButton" id="openPopup" data-field="whoGoesToDepSto" data-question="Who goes to department stores?" data-placeholder="Seniors / Young people / Families / ...">
+                <img src="https://img.icons8.com/?size=100&id=QAteNc5Pkk9i&format=png&color=FFFFFF" alt="Human">Users
+            </button>
+                <div class="popup" id="popup" style="display: none;">
+                    <form>
+                        <label id="popupQuestion" for="answer"></label>
+                            <div>
+                                <input type="text" id="popupInput" name="whoGoesToDepSto" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
+                            </div>
+                        <button class="submit" type="button" id="popupSubmit">Submit</button>
+                    </form>
+                </div>
+                <div
+                    id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10;">
+                </div>
+            </div>
+
+            <div>
+            <button class="sidebarButton" id="openPopup" data-field="howToAdressVacancy" data-question="How should vacancy of former department stores be adressed?" data-placeholder="Reuse / Keep my store! / Hotel / ...">
+                <img src="https://img.icons8.com/?size=100&id=HLdJb2yeBLBj&format=png&color=FFFFFF" alt="Puzzle">Vacancy
+            </button>
+                <div class="popup" id="popup" style="display: none;">
+                    <form>
+                        <label id="popupQuestion" for="answer"></label>
+                            <div>
+                                <input type="text" id="popupInput" name="howToAdressVacancy" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
+                            </div>
+                        <button class="submit" type="button" id="popupSubmit">Submit</button>
+                    </form>
+                </div>
+                <div
+                    id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10;">
+                </div>
+            </div>
+
+            <div>
+            <button class="sidebarButton" id="openPopup" data-field="roleOfDepStoToday" data-question="What is the role of a department store for the inner city?" data-placeholder="Monolith / Place of Joy / Idk / ...">
+                <img src="https://img.icons8.com/?size=100&id=aBWCQEL4zD9J&format=png&color=FFFFFF" alt="Corn">Corn
+            </button>
+                <div class="popup" id="popup" style="display: none;">
+                    <form>
+                        <label id="popupQuestion" for="answer"></label>
+                            <div>
+                                <input type="text" id="popupInput" name="roleOfDepStoToday" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
+                            </div>
+                        <button class="submit" type="button" id="popupSubmit">Submit</button>
+                    </form>
+                </div>
+                <div
+                    id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10;">
+                </div>
+            </div>
+
+            <div>
+            <button class="sidebarButton" id="openPopup" data-field="whyGoIfOnlineTrading" data-question="Why would you go to the department store in times of online-trading?" data-placeholder="I can try something on / I would not / ...">
+                <img src="https://img.icons8.com/?size=100&id=0rU1TIHT8AmB&format=png&color=FFFFFF" alt="Dress">Worth
+            </button>
+                <div class="popup" id="popup" style="display: none;">
+                    <form>
+                        <label id="popupQuestion" for="answer"></label>
+                            <div>
+                                <input type="text" id="popupInput" name="whyGoIfOnlineTrading" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
+                            </div>
+                        <button class="submit" type="button" id="popupSubmit">Submit</button>
+                    </form>
+                </div>
+                <div
+                    id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10;">
+                </div>
+            </div>
+
+            <div>
+            <button class="sidebarButton" id="openPopup" data-field="whyStillExist" data-question="Why do department stores still exist?" data-placeholder="Seniors / Bad investments / Benko / ...">
+                <img src="https://img.icons8.com/?size=100&id=cWZEG8n3gKPN&format=png&color=FFFFFF" alt="Shoe">Existance
+            </button>
+                <div class="popup" id="popup" style="display: none;">
+                    <form>
+                        <label id="popupQuestion" for="answer"></label>
+                            <div>
+                                <input type="text" id="popupInput" name="whyStillExist" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
+                            </div>
+                        <button class="submit" type="button" id="popupSubmit">Submit</button>
+                    </form>
+                </div>
+                <div
+                    id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10;">
+                </div>
+            </div>
+
+            <div>
+            <button class="sidebarButton" id="openPopup" data-field="howRelatedToSustainibility" data-question="How are department stores (un)sustainable?" data-placeholder="??? / ??? / ???...">
+                <img src="https://img.icons8.com/?size=100&id=SzLrKPTsX3YF&format=png&color=FFFFFF" alt="Plant">Environment
+            </button>
+                <div class="popup" id="popup" style="display: none;">
+                    <form>
+                        <label id="popupQuestion" for="answer"></label>
+                            <div>
+                                <input type="text" id="popupInput" name="howRelatedToSustainibility" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
+                            </div>
+                        <button class="submit" type="button" id="popupSubmit">Submit</button>
+                    </form>
+                </div>
+                <div
+                    id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10;">
+                </div>
+            </div>
+
+            <div>
+            <button class="sidebarButton" id="openPopup" data-field="whatWouldChangeHabit" data-question="What would make you change your habits of visiting department stores?" data-placeholder="A cinema / A football field / Brands / Cheaper / ...">
+                <img src="https://img.icons8.com/?size=100&id=qzW2Nmedl6tE&format=png&color=FFFFFF" alt="Arrows in Circle">Habits
+            </button>
+                <div class="popup" id="popup" style="display: none;">
+                    <form>
+                        <label id="popupQuestion" for="answer"></label>
+                            <div>
+                                <input type="text" id="popupInput" name="whatWouldChangeHabit" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
+                            </div>
+                        <button class="submit" type="button" id="popupSubmit">Submit</button>
+                    </form>
+                </div>
+                <div
+                    id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10;">
+                </div>
+            </div>
+
+            <div>
+            <button class="sidebarButton" id="openPopup" data-field="whoBenefits" data-question="Who benefits the most from department stores?" data-placeholder="SIGNA / The customer / The manager / The architect / ...">
+                <img src="https://img.icons8.com/?size=100&id=71IYRAPYbQ2w&format=png&color=FFFFFF" alt="Money">Revenue
+            </button>
+                <div class="popup" id="popup" style="display: none;">
+                    <form>
+                        <label id="popupQuestion" for="answer"></label>
+                            <div>
+                                <input type="text" id="popupInput" name="whoBenefits" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
+                            </div>
+                        <button class="submit" type="button" id="popupSubmit">Submit</button>
+                    </form>
+                </div>
+                <div
+                    id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10;">
+                </div>
+            </div>
+
+            <div>
+            <button class="sidebarButton" id="openPopup" data-field="effectOnEconomy" data-question="What effect do department stores have on the local economy?" data-placeholder="Boost / decay / no effect / ...">
+                <img src="https://img.icons8.com/?size=100&id=cGGd0kbjd7ew&format=png&color=FFFFFF" alt="Cent">Economy
+            </button>
+                <div class="popup" id="popup" style="display: none;">
+                    <form>
+                        <label id="popupQuestion" for="answer"></label>
+                            <div>
+                                <input type="text" id="popupInput" name="effectOnEconomy" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
+                            </div>
+                        <button class="submit" type="button" id="popupSubmit">Submit</button>
+                    </form>
+                </div>
+                <div
+                    id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10;">
+                </div>
+            </div>
+
+            <div>
+            <button class="sidebarButton" id="openPopup" data-field="whatShouldOffer" data-question="What should department stores offer?" data-placeholder="More shoes / Less stuff / Groceries ...">
+                <img src="https://img.icons8.com/?size=100&id=0L5y3Qh5Maxp&format=png&color=FFFFFF" alt="Corn">Corn
+            </button>
+                <div class="popup" id="popup" style="display: none;">
+                    <form>
+                        <label id="popupQuestion" for="answer"></label>
+                            <div>
+                                <input type="text" id="popupInput" name="whatShouldOffer" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
+                            </div>
+                        <button class="submit" type="button" id="popupSubmit">Submit</button>
+                    </form>
+                </div>
+                <div
+                    id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10;">
+                </div>
+            </div>
+
+            <div>
+            <button class="sidebarButton" id="openPopup" data-field="whatBuyAtDepsto" data-question="What would you buy at department stores?" data-placeholder="Shoes / Jacket / Blazer / Ring / ...">
+                <img src="https://img.icons8.com/?size=100&id=CrfnxTu5liig&format=png&color=FFFFFF" alt="Gilette">Products
+            </button>
+                <div class="popup" id="popup" style="display: none;">
+                    <form>
+                        <label id="popupQuestion" for="answer"></label>
+                            <div>
+                                <input type="text" id="popupInput" name="whatBuyAtDepsto" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
+                            </div>
+                        <button class="submit" type="button" id="popupSubmit">Submit</button>
+                    </form>
+                </div>
+                <div
+                    id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10;">
+                </div>
+            </div>
+
+            <div>
+            <button class="sidebarButton" id="openPopup" data-field="" data-question="What is the difference between online-shopping and a department store?" data-placeholder="Faster delivery / Cheaper Prices / more offers / guarantee / ...">
+                <img src="https://img.icons8.com/?size=100&id=KEX82uLupdtl&format=png&color=FFFFFF" alt="Pointer">Online
+            </button>
+                <div class="popup" id="popup" style="display: none;">
+                    <form>
+                        <label id="popupQuestion" for="answer"></label>
+                            <div>
+                                <input type="text" id="popupInput" name="whyGoToDepSto" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
+                            </div>
+                        <button class="submit" type="button" id="popupSubmit">Submit</button>
+                    </form>
+                </div>
+                <div
+                    id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10;">
+                </div>
+            </div>
+
+            <div>
+            <button class="sidebarButton" id="openPopup" data-field="whenBetterThanOnline" data-question="When is a department store better than online-shopping?" data-placeholder="To try on clothes / to just walk around / ...">
+                <img src="https://img.icons8.com/?size=100&id=eIHDNBhQApDG&format=png&color=FFFFFF" alt="Bag">Superiorityy
+            </button>
+                <div class="popup" id="popup" style="display: none;">
+                    <form>
+                        <label id="popupQuestion" for="answer"></label>
+                            <div>
+                                <input type="text" id="popupInput" name="whenBetterThanOnline" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
+                            </div>
+                        <button class="submit" type="button" id="popupSubmit">Submit</button>
+                    </form>
+                </div>
+                <div
+                    id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10;">
+                </div>
+            </div>
+
+            <div>
+            <button class="sidebarButton" id="openPopup" data-field="whatFuture" data-question="What will happen with department stores in the future?" data-placeholder="Reuse / they will return / ...">
+                <img src="https://img.icons8.com/?size=100&id=zSECQVRrFw1D&format=png&color=FFFFFF" alt="Corn">Corn
+            </button>
+                <div class="popup" id="popup" style="display: none;">
+                    <form>
+                        <label id="popupQuestion" for="answer"></label>
+                            <div>
+                                <input type="text" id="popupInput" name="whatFuture" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
+                            </div>
+                        <button class="submit" type="button" id="popupSubmit">Submit</button>
+                    </form>
+                </div>
+                <div
+                    id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10;">
+                </div>
+            </div>
+
+    </div>
+</main>
     <footer>
         <h4> <b> &copy; 2025 Controversy Mapping.</b> <br> Technical University of Munich, Chair of Architectural Informatics, Prof. Dipl.-Ing. Frank Petzold. <br><br> Gustave Lahon, Maxim Yurin.<br><br>All Rights Reserved.</h4>
     </footer>
 
 <script type="module" src="force5.js"></script>
-<script type="module" src="interactive-icons.js"></script>
+<script type="module" src="forcegraph2.js"></script>
+<script type="module"> //Username
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+
+// Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyB3Vn9jXSJnQ0XC8JM64OszHpNEkvViBxA",
+    authDomain: "mapping-controversies.firebaseapp.com",
+    projectId: "mapping-controversies",
+    storageBucket: "mapping-controversies.appspot.com",
+    messagingSenderId: "259825186402",
+    appId: "1:259825186402:web:7c38048d67546fbe9b833b",
+    measurementId: "G-Q0WM4CNVM4"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth();
+const db = getFirestore();
+
+// Monitor authentication state
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        console.log("User is logged in:", user.uid); // Debugging
+
+        try {
+            // Reference to Firestore document
+            const userRef = doc(db, "mappers", user.uid);
+            const userSnapshot = await getDoc(userRef);
+
+            if (userSnapshot.exists()) {
+                const username = userSnapshot.data().username || "Mapper"; // Fallback to "Mapper"
+                console.log("Fetched username:", username); // Debugging
+
+                // Display the username
+                document.getElementById("username").textContent = username;
+            } else {
+                console.error("No such document for user:", user.uid);
+                document.getElementById("username").textContent = "Mapper"; // Fallback
+            }
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+            document.getElementById("username").textContent = "Mapper"; // Fallback
+        }
+    } else {
+        console.log("No user is logged in.");
+        document.getElementById("username").textContent = "bro."; // Fallback
+    }
+});
+
+// Logout functionality
+document.getElementById("logoutButton").addEventListener("click", async () => {
+    try {
+        await signOut(auth);
+        console.log("User signed out.");
+        window.location.href = "index4.html"; // Redirect after logout
+    } catch (error) {
+        console.error("Sign-out error:", error);
+    }
+});
+</script>
+
+<script type="module">
+// Import Firebase SDKs
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+import { getFirestore, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+
+// Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyB3Vn9jXSJnQ0XC8JM64OszHpNEkvViBxA",
+    authDomain: "mapping-controversies.firebaseapp.com",
+    projectId: "mapping-controversies",
+    storageBucket: "mapping-controversies.appspot.com",
+    messagingSenderId: "259825186402",
+    appId: "1:259825186402:web:7c38048d67546fbe9b833b",
+    measurementId: "G-Q0WM4CNVM4"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth();
+const db = getFirestore();
+
+// Static elements
+const popup = document.getElementById("popup");
+const overlay = document.getElementById("overlay");
+const popupQuestion = document.getElementById("popupQuestion");
+const popupInput = document.getElementById("popupInput");
+const popupSubmit = document.getElementById("popupSubmit");
+
+// Current field to update
+let currentField = null;
+
+// Show popup when a sidebar button is clicked
+document.querySelectorAll(".sidebarButton").forEach(button => {
+    button.addEventListener("click", () => {
+        // Get dynamic values from the clicked button
+        currentField = button.getAttribute("data-field");
+        const question = button.getAttribute("data-question");
+        const placeholder = button.getAttribute("data-placeholder");
+
+        // Update popup content dynamically
+        popupQuestion.textContent = question || `Add data to: ${currentField}`;
+        popupInput.placeholder = placeholder || `Enter value for ${currentField}`;
+        popupInput.value = ""; // Clear previous input
+
+        // Show the popup
+        popup.style.display = "block";
+        overlay.style.display = "block";
+    });
+});
+
+// Hide popup when clicking the overlay
+overlay.addEventListener("click", () => {
+    popup.style.display = "none";
+    overlay.style.display = "none";
+});
+
+// Submit data to Firebase
+popupSubmit.addEventListener("click", async () => {
+    const value = popupInput.value.trim(); // Get the user input
+
+    if (value && currentField) {
+        try {
+            // Check if the user is logged in
+            const user = auth.currentUser;
+            if (!user) throw new Error("No logged-in user.");
+
+            // Get the user's document in Firestore
+            const userRef = doc(db, "mappers", user.uid);
+
+            // Update the field in the Firestore document
+            await updateDoc(userRef, { [currentField]: value });
+
+            alert(`${currentField} has been updated to: ${value}`);
+        } catch (error) {
+            console.error("Error updating document:", error);
+            alert("Failed to update the field.");
+        }
+    } else {
+        alert("Please provide a valid input.");
+    }
+
+    // Hide the popup after submission
+    popup.style.display = "none";
+    overlay.style.display = "none";
+});
+
+</script>
+
 
 </body>
 

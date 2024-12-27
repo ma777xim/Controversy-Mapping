@@ -1,141 +1,171 @@
-d3.csv("data.csv?v=" + new Date().getTime()).then(data => {
-    let allData = { nodes: [], links: [] }; // For reloading dynamically
-    const container = d3.select("#controversymap");
+// Firebase configuration
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
 
-    function updateVisualization(columnForColor, columnForConnections) {
-        container.html(""); // Clear the previous content
+// Initialize Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyB3VnQ0XC8JM64OszHpNEkvViBxA",
+    authDomain: "mapping-controversies.firebaseapp.com",
+    databaseURL: "https://mapping-controversies-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "mapping-controversies",
+    storageBucket: "mapping-controversies.appspot.com",
+    messagingSenderId: "259825186402",
+    appId: "1:259825186402:web:7c38048d67546fbe9b833b",
+    measurementId: "G-Q0WM4CNVM4"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-        // Generate links based on the selected column for connections
-        const links = [];
-        data.forEach((source, i) => {
-            data.forEach((target, j) => {
-                if (i < j && source[columnForConnections] && target[columnForConnections]) {
-                    if (source[columnForConnections] === target[columnForConnections]) {
-                        links.push({ source: source.id, target: target.id, value: 1 });
-                    }
+// D3 setup
+const svg = d3.select("#contrograph");
+const width = +svg.attr("width") || 1000;
+const height = +svg.attr("height") || 1000;
+const marginLeft = 150;
+const marginRight = 20;
+const step = 20;
+
+// Function to fetch data from Firestore
+async function fetchNetworkData() {
+    const nodes = [];
+    const links = [];
+
+    try {
+        const snapshot = await getDocs(collection(db, "mappers"));
+        snapshot.forEach((doc) => {
+            const node = doc.data();
+            node.id = doc.id;
+            nodes.push(node);
+        });
+
+        // Create links based on common words
+        for (let i = 0; i < nodes.length; i++) {
+            for (let j = i + 1; j < nodes.length; j++) {
+                if (hasCommonWords(nodes[i], nodes[j])) {
+                    links.push({ source: nodes[i].id, target: nodes[j].id });
                 }
-            });
-        });
-
-        const nodes = data.map(d => ({
-            id: d.id,
-            name: d.name,
-            degree: 0,
-            ...d
-        }));
-
-        // Count degree
-        links.forEach(link => {
-            const sourceNode = nodes.find(node => node.id === link.source);
-            const targetNode = nodes.find(node => node.id === link.target);
-            if (sourceNode) sourceNode.degree++;
-            if (targetNode) targetNode.degree++;
-        });
-
-        allData = { nodes, links }; // Cache for reuse
-        createGraph({ nodes, links }, columnForColor);
-    }
-
-    function createGraph(data, columnForColor) {
-        const container = document.getElementById("controversymap");
-        const width = container.offsetWidth;
-        const height = container.offsetHeight;
-
-        const svg = d3.select("#controversymap").append("svg")
-            .attr("width", "100%")
-            .attr("height", "100%");
-
-        const color = d3.scaleOrdinal(d3.schemeCategory10)
-            .domain(data.nodes.map(d => d[columnForColor]));
-
-        const simulation = d3.forceSimulation(data.nodes)
-            .force("link", d3.forceLink(data.links).id(d => d.id).distance(400))
-            .force("charge", d3.forceManyBody().strength(-100))
-            .force("center", d3.forceCenter(width / 2, height / 2));
-
-        const link = svg.append("g")
-            .attr("stroke", "#999")
-            .attr("stroke-opacity", 0.6)
-            .selectAll("line")
-            .data(data.links)
-            .join("line")
-            .attr("stroke-width", d => d.value);
-
-        const node = svg.append("g")
-            .attr("stroke", "#fff")
-            .attr("stroke-width", 1.5)
-            .selectAll("circle")
-            .data(data.nodes)
-            .join("circle")
-            .attr("r", d => 5 + d.degree) // Adjust size
-            .attr("fill", d => color(d[columnForColor])) // Dynamic color
-            .call(drag(simulation));
-
-        node.append("title")
-            .text(d => `${d.name} (Degree: ${d.degree})`);
-
-        simulation.on("tick", () => {
-            link
-                .attr("x1", d => d.source.x)
-                .attr("y1", d => d.source.y)
-                .attr("x2", d => d.target.x)
-                .attr("y2", d => d.target.y);
-
-            node
-                .attr("cx", d => d.x)
-                .attr("cy", d => d.y);
-        });
-
-        function drag(simulation) {
-            return d3.drag()
-                .on("start", event => {
-                    if (!event.active) simulation.alphaTarget(0.3).restart();
-                    event.subject.fx = event.subject.x;
-                    event.subject.fy = event.subject.y;
-                })
-                .on("drag", event => {
-                    event.subject.fx = event.x;
-                    event.subject.fy = event.y;
-                })
-                .on("end", event => {
-                    if (!event.active) simulation.alphaTarget(0);
-                    event.subject.fx = null;
-                    event.subject.fy = null;
-                });
-        }
-    }
-
-    // Add New Node and Link
-    function addNewNode(userInput) {
-        const newId = `node${allData.nodes.length + 1}`;
-        const newWords = userInput.toLowerCase().split(/\W+/); // Split into words
-        const newNode = { id: newId, name: userInput, degree: 0, words: newWords };
-
-        // Create links to nodes with shared words
-        allData.nodes.forEach(existingNode => {
-            const sharedWords = existingNode.words.filter(word => newWords.includes(word));
-            if (sharedWords.length > 0) {
-                allData.links.push({ source: existingNode.id, target: newId, value: sharedWords.length });
-                existingNode.degree++;
-                newNode.degree++;
             }
-        });
-
-        // Add the new node
-        allData.nodes.push(newNode);
-        createGraph(allData, "name"); // Re-render graph
+        }
+    } catch (error) {
+        console.error("Error fetching data: ", error);
     }
 
-    // Event listener for form submissions
-    document.getElementById("answerForm").addEventListener("submit", event => {
-        event.preventDefault();
-        const userInput = event.target.querySelector("input[name='answer']").value;
-        if (userInput.trim()) {
-            addNewNode(userInput.trim());
-        }
-        event.target.reset();
+    return { nodes, links };
+}
+
+// Helper to check for common words
+function hasCommonWords(nodeA, nodeB) {
+    const commonWords = getWords(nodeA.email).filter((word) =>
+        getWords(nodeB.email).includes(word)
+    );
+    const commonUsername = getWords(nodeA.username).filter((word) =>
+        getWords(nodeB.username).includes(word)
+    );
+    return commonWords.length > 0 || commonUsername.length > 0;
+}
+
+// Helper to split a string into words
+function getWords(str) {
+    return str.toLowerCase().replace(/[^a-z0-9\s]/g, "").split(/\s+/);
+}
+
+// Main Visuals
+async function drawArcDiagram() {
+    const { nodes, links } = await fetchNetworkData();
+
+    // Scales and positioning
+    const y = d3
+        .scalePoint()
+        .domain(nodes.map((d) => d.id))
+        .range([20, height - 10]);
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+    // Arc function
+    function arc(d) {
+        const y1 = y(d.source);
+        const y2 = y(d.target);
+        const r = Math.abs(y2 - y1) / 2;
+        return `M${marginLeft},${y1}A${r},${r} 0,0,${y1 < y2 ? 1 : 0} ${marginLeft},${y2}`;
+    }
+
+    // Render arcs
+    const arcs = svg
+        .append("g")
+        .attr("fill", "none")
+        .attr("stroke", "white")
+        .attr("stroke-opacity", 0.6)
+        .attr("stroke-width", 1)
+        .selectAll("path")
+        .data(links)
+        .join("path")
+        .attr("d", arc);
+
+    // Render nodes with labels
+    const labels = svg
+        .append("g")
+        .attr("font-family", "Inter")
+        .attr("font-weight", "400")
+        .attr("font-size", 15)
+        .attr("text-anchor", "end")
+        .attr("fill", "#f9f9f9")
+        .attr("padding", "20px")
+        .selectAll("g")
+        .data(nodes)
+        .join("g")
+        .attr("transform", (d) => `translate(${marginLeft},${y(d.id)})`)
+        .call((g) =>
+            g
+                .append("text")
+                .attr("x", -36)
+                .attr("dy", "0.35em")
+                .text((d) => d.username) // Default to ID
+        )
+        .call((g) =>
+            g
+                .append("circle")
+                .attr("r", 24)
+                .attr("fill", (d) => color(d.gender))
+        );
+
+    // Update function for label display
+    function updateLabels(labelBy) {
+        labels.select("text").text((d) => d[labelBy] || "N/A");
+    }
+
+    // Update function for reordering
+    function updateOrder(orderBy) {
+        const order = nodes
+            .slice()
+            .sort((a, b) =>
+                d3.ascending(a[orderBy]?.toString().toLowerCase(), b[orderBy]?.toString().toLowerCase())
+            )
+            .map((d) => d.id);
+
+        y.domain(order);
+
+        labels
+            .transition()
+            .duration(750)
+            .attr("transform", (d) => `translate(${marginLeft},${y(d.id)})`);
+
+        arcs
+            .transition()
+            .duration(750)
+            .attr("d", arc);
+    }
+
+    // Add event listener for label display dropdown
+    d3.select("#labelCriteria").on("change", function () {
+        const labelBy = d3.select(this).property("value");
+        updateLabels(labelBy);
     });
 
-    // Initialize visualization
-    updateVisualization("gender", "all");
-});
+    // Add event listener for sorting dropdown
+    d3.select("#sortCriteria").on("change", function () {
+        const orderBy = d3.select(this).property("value");
+        updateOrder(orderBy);
+    });
+}
+
+
+// Execute
+drawArcDiagram();
