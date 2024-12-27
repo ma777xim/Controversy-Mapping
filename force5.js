@@ -96,18 +96,18 @@ async function updateNetwork() {
         .force("center", d3.forceCenter(width / 2, height / 2));
 
     const link = svg.append("g")
-        .attr("stroke", "#aaa")
+        .attr("stroke", "#F9F9F9")
         .selectAll("line")
         .data(links)
         .join("line");
 
     const node = svg.append("g")
-        .attr("stroke", "#fff")
+        .attr("stroke", "#191919")
         .attr("stroke-width", 2)
         .selectAll("circle")
         .data(nodes)
         .join("circle")
-        .attr("r", 20)
+        .attr("r", 15)
         .attr("fill", (d, i) => d3.schemeCategory10[i % 10])
         .call(drag(simulation)); // Add drag behavior to nodes
 
