@@ -9,6 +9,18 @@
     <link rel="stylesheet" href="styles.css">
     <title>Homepage</title>
     <style>
+
+
+    a {
+    color: inherit; /* Inherit color from parent element */
+    text-decoration: none; /* Remove underline */
+}
+
+    a:hover {
+        color: inherit; /* Inherit color from parent element */
+        text-decoration: underline; /* Remove underline */
+}
+
         /* Popup container styling */
         .popup {
             display: block;
@@ -40,8 +52,6 @@
         #popupInput {
             width: 120%;
             font-size: 20px
-            margin: auto;
-            text-align: center;
         }
 
         .overlay {
@@ -65,22 +75,31 @@
     <header>
         <div>
             <h1>Contro.Map.</h1>
+            <br>
+            <h2>Hey, <b><span id="username"></span></b>.</h2>
+            <br>
         </div>
-    <br>
-        <div>
-            <h2>Hey, <b><span id="username"></span></b></h2>
-        </div>
+
         <div>
             <a href="index4.html">
                 <button id="logoutButton">Logout</button>
             </a>
+            <br>
         </div>
+        <br>
     </header>
+    <div style="width: auto; text-align: center; vertical-align: bottom; display: inline; background-color: red; height: 105px;">
+            <a href="index4.html" style="margin: 25px;">Account</a>
+            <a href="signup2.html" style="margin: 25px;">Account</a>
+            <a href="signup2.html" style="margin: 25px;">Account</a>
+            <a href="signup2.html" style="margin: 25px;">Account</a>
 
+    </div>
 <main>
-    <div>
+        <div>
         <button id="toggle-display" style="display: block; font-size: 40px; transform: scale(50%)"><img src="https://img.icons8.com/?size=100&id=59817&format=png&color=ffffff"><br>Names</button>
     </div>
+
     <div class="content">
         <svg id="contromap" width="1400" height="900"></svg>
     </div>
@@ -89,7 +108,7 @@
     <div class="sidebar">
 
         <div>
-            <button class="sidebarButton" id="openPopup" data-field="whatIsDepSto" data-question="What is a department store?" data-placeholder="Cultural annoyance / Fun / Outdated / ...">
+            <button class="sidebarButton" id="openPopup" data-field="whatIsDepSto" data-question="What is a department store to you?" data-placeholder="Cultural annoyance / Fun / Outdated / ...">
                 <img src="https://img.icons8.com/?size=100&id=xbtKqR0lcsgS&format=png&color=FFFFFF" alt="DepartmentStore">Definition
             </button>
                 <div class="popup" id="popup" style="display: none;">
@@ -97,24 +116,6 @@
                         <label id="popupQuestion" for="answer"></label>
                             <div>
                                 <input type="text" id="popupInput" name="whatIsDepSto" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
-                            </div>
-                        <button class="submit" type="button" id="popupSubmit">Submit</button>
-                    </form>
-                </div>
-                <div
-                    id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10;">
-                </div>
-            </div>
-
-            <div>
-            <button class="sidebarButton" id="openPopup" data-field="whyDecay" data-question="Why do department stores currently experience massive decay?" data-placeholder="Online shopping / Trends / Expensive ...">
-                <img src="https://img.icons8.com/?size=100&id=aNjqurbKMyHL&format=png&color=FFFFFF" alt="Stop">Decay
-            </button>
-                <div class="popup" id="popup" style="display: none;">
-                    <form>
-                        <label id="popupQuestion" for="answer"></label>
-                            <div>
-                                <input type="text" id="popupInput" name="whyDecay" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
                             </div>
                         <button class="submit" type="button" id="popupSubmit">Submit</button>
                     </form>

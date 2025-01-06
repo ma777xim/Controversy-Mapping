@@ -8,6 +8,82 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;400;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            color: #f9f9f9;
+            font-family: 'Inter', sans-serif;
+            text-align: center;
+        }
+
+        .gender-option {
+            display: inline-block;
+            margin: 10px;
+        }
+
+        .gender-label {
+            font-size: 10px;
+            margin-left: 10px;
+        }
+
+        input[type="radio"] {
+            display: none; /* Hide the default radio button */
+        }
+
+        input[type="radio"] + label {
+            position: relative;
+            padding-left: 40px;
+            cursor: pointer;
+            font-size: 15px;
+            margin-bottom: 30px;
+        }
+
+        input[type="radio"] + label::before {
+            content: "";
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            border: solid #f9f9f9;
+            border-radius: 50%;
+            background-color: transparent;
+            transition: all 0.5s ease;
+            transition-duration: .7s;
+        }
+
+        input[type="radio"] + label:hover::before {
+            content: "";
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            border: solid #f9f9f9;
+            border-radius: 50%;
+            background-color: #f9f9f9;
+            transition: all 0.2s ease;
+        }
+
+        input[type="radio"]:checked + label::before {
+            background-color: #f9f9f9;
+            border-color: #f9f9f9;
+        }
+
+        input[type="radio"]:checked + label::after {
+            content: "";
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 10px;
+            height: 10px;
+            background-color: #fff;
+            border-radius: 50%;
+        }
+    </style>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js"></script>
     <script type="module" defer>
@@ -68,11 +144,11 @@
 </head>
 <body>
     <div style="color: #f9f9f9; text-align: center; font-size: 70px; font-weight: 800; margin: 20px;">
-        Welcome.
+        Account
     </div>
-    <div style="color: #f9f9f9; text-align: center; font-size: 25px; font-weight: 400; margin: 20px;">
-        View and update your profile.
-    </div>
+        <div style="margin: auto;">
+            <h2><b><span id="username"></span></b>'s Profile</h2>
+        </div>
     <div>
         <form id="form" style="border-color: transparent; text-align: center; display: block;">
             <div class="incorrect">
@@ -87,7 +163,22 @@
                 <label for="age" style="color: white;">Age</label>
                 <input type="text" id="age" name="age" placeholder="1-99" required />
             </div>
-            <div class="wrap">
+
+    <div>
+    <div class="gender-option">
+        <input type="radio" id="male" name="gender" value="m">
+        <label for="male">m</label>
+    </div>
+    <div class="gender-option">
+        <input type="radio" id="female" name="gender" value="w">
+        <label for="female">w</label>
+    </div>
+    <div class="gender-option">
+        <input type="radio" id="other" name="gender" value="d">
+        <label for="other">d</label>
+    </div>
+    </div>
+    <div class="wrap">
                 <button id="submit" type="submit">Save</button>
             </div>
         </form>
@@ -95,5 +186,79 @@
     <div style="color: #f9f9f9; text-align: center; font-size: 15px; margin: 20px;">
         <a href="index.html">Home</a>
     </div>
+    <script>
+    // Listen for changes on gender selection
+    const genderRadios = document.querySelectorAll('input[name="gender"]');
+
+    genderRadios.forEach(radio => {
+        radio.addEventListener("change", () => {
+            const selectedGender = document.querySelector('input[name="gender"]:checked').value;
+            console.log("Selected gender:", selectedGender); // For now, just log it to the console
+            // Here, you can add functionality to add the gender to the document or to your Firestore
+        });
+    });
+</script>
+<script type="module"> //Username
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+
+// Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyB3Vn9jXSJnQ0XC8JM64OszHpNEkvViBxA",
+    authDomain: "mapping-controversies.firebaseapp.com",
+    projectId: "mapping-controversies",
+    storageBucket: "mapping-controversies.appspot.com",
+    messagingSenderId: "259825186402",
+    appId: "1:259825186402:web:7c38048d67546fbe9b833b",
+    measurementId: "G-Q0WM4CNVM4"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth();
+const db = getFirestore();
+
+// Monitor authentication state
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        console.log("User is logged in:", user.uid); // Debugging
+
+        try {
+            // Reference to Firestore document
+            const userRef = doc(db, "mappers", user.uid);
+            const userSnapshot = await getDoc(userRef);
+
+            if (userSnapshot.exists()) {
+                const username = userSnapshot.data().username || "Mapper"; // Fallback to "Mapper"
+                console.log("Fetched username:", username); // Debugging
+
+                // Display the username
+                document.getElementById("username").textContent = username;
+            } else {
+                console.error("No such document for user:", user.uid);
+                document.getElementById("username").textContent = "Mapper"; // Fallback
+            }
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+            document.getElementById("username").textContent = "Mapper"; // Fallback
+        }
+    } else {
+        console.log("No user is logged in.");
+        document.getElementById("username").textContent = "bro."; // Fallback
+    }
+});
+
+// Logout functionality
+document.getElementById("logoutButton").addEventListener("click", async () => {
+    try {
+        await signOut(auth);
+        console.log("User signed out.");
+        window.location.href = "index4.html"; // Redirect after logout
+    } catch (error) {
+        console.error("Sign-out error:", error);
+    }
+});
+</script>
 </body>
 </html>

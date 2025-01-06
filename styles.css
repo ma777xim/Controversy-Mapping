@@ -16,18 +16,17 @@ body {
 
 header {
     display: flex;
-    flex-direction: column;
-    align-content: top;
-    position: relative;
+    justify-content: space-between; /* Space out elements to left and right */
+    align-items: center; /* Vertically center the items */
     padding: 20px;
     width: 100vw;
-    height: auto;
     background-color: #0000ff;
     color: white;
     font-family: Inter, Google Sans, sans-serif;
     font-weight: 600;
-    margin-bottom: 50px;
+    margin-bottom: 0px;
 }
+
 
 header button {
     font-family: Inter, Google Sans, sans-serif;
@@ -60,10 +59,7 @@ header button:hover {
 }
 
 #toggle-display {
-    margin: 30px;
-    position: absolute;
-    top: 175px;
-    left: 0px;
+    margin-left: 0px;
     z-index: 1000;
 }
 
@@ -73,8 +69,8 @@ header button:hover {
     flex: 1;
     justify-content: center;
     align-items: center;
-    width: 90%;
-    height: 100%;
+    width: 100vw%;
+    height: 100vh;
     border: solid #191919;
     background-color: #191919;
     border-radius: 5px;
@@ -396,7 +392,7 @@ form div.incorrect label{
 }
 
 form div.incorrect input{
-    border-color: #ff0000;
+    border-color: #f9f9f9;
 }
 
 button {
