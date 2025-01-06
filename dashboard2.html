@@ -542,32 +542,34 @@ overlay.addEventListener("click", () => {
 
 // Submit data to Firebase
 popupSubmit.addEventListener("click", async () => {
-    const value = popupInput.value.trim(); // Get the user input
+    const value = popupInput.value.trim();
 
-    if (value && currentField) {
-        try {
-            // Check if the user is logged in
-            const user = auth.currentUser;
-            if (!user) throw new Error("No logged-in user.");
-
-            // Get the user's document in Firestore
-            const userRef = doc(db, "mappers", user.uid);
-
-            // Update the field in the Firestore document
-            await updateDoc(userRef, { [currentField]: value });
-
-            alert(`${currentField} has been updated to: ${value}`);
-        } catch (error) {
-            console.error("Error updating document:", error);
-            alert("Failed to update the field.");
-        }
-    } else {
+    if (!value) {
         alert("Please provide a valid input.");
+        return;
     }
 
-    // Hide the popup after submission
-    popup.style.display = "none";
-    overlay.style.display = "none";
+    if (!currentField) {
+        alert("No field selected for update.");
+        return;
+    }
+
+    try {
+        const user = auth.currentUser;
+        if (!user) throw new Error("No logged-in user.");
+
+        const userRef = doc(db, "mappers", user.uid);
+
+        await updateDoc(userRef, { [currentField]: value });
+
+        alert(`${currentField} has been updated to: ${value}`);
+    } catch (error) {
+        console.error("Error updating document:", error);
+        alert(`Failed to update: ${error.message}`);
+    } finally {
+        popup.style.display = "none";
+        overlay.style.display = "none";
+    }
 });
 
 </script>
