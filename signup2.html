@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;400;800&display=swap" rel="stylesheet">
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js"></script>
+    <script type="module" defer>
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyB3VnQ0XC8JM64OszHpNEkvViBxA",
+            authDomain: "mapping-controversies.firebaseapp.com",
+            databaseURL: "https://mapping-controversies-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "mapping-controversies",
+            storageBucket: "mapping-controversies.appspot.com",
+            messagingSenderId: "259825186402",
+            appId: "1:259825186402:web:7c38048d67546fbe9b833b",
+            measurementId: "G-Q0WM4CNVM4"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const userId = "exampleUserId"; // Replace with actual user ID from authentication
+
+        async function loadUserData() {
+            const userDoc = doc(db, "users", userId);
+            const userSnap = await getDoc(userDoc);
+
+            if (userSnap.exists()) {
+                const data = userSnap.data();
+                document.getElementById("ZIP").value = data.ZIP || "";
+                document.getElementById("job").value = data.job || "";
+                document.getElementById("age").value = data.age || "";
+            } else {
+                console.log("No user data found. Fields will remain empty.");
+            }
+        }
+
+        async function saveUserData(event) {
+            event.preventDefault();
+
+            const ZIP = document.getElementById("ZIP").value.trim();
+            const job = document.getElementById("job").value.trim();
+            const age = document.getElementById("age").value.trim();
+
+            try {
+                await setDoc(doc(db, "users", userId), { ZIP, job, age }, { merge: true });
+                alert("Profile updated successfully!");
+            } catch (error) {
+                console.error("Error updating profile: ", error);
+                alert("Failed to update profile. Try again later.");
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadUserData();
+            document.getElementById("form").addEventListener("submit", saveUserData);
+        });
+    </script>
+</head>
+<body>
+    <div style="color: #f9f9f9; text-align: center; font-size: 70px; font-weight: 800; margin: 20px;">
+        Welcome.
+    </div>
+    <div style="color: #f9f9f9; text-align: center; font-size: 25px; font-weight: 400; margin: 20px;">
+        View and update your profile.
+    </div>
+    <div>
+        <form id="form" style="border-color: transparent; text-align: center; display: block;">
+            <div class="incorrect">
+                <label for="ZIP" style="color: white;">ZIP</label>
+                <input type="text" id="ZIP" name="ZIP" placeholder="53177" />
+            </div>
+            <div class="incorrect">
+                <label for="job" style="color: white;">Job</label>
+                <input type="text" id="job" name="job" placeholder="Engineer / Manager / Student / ..." />
+            </div>
+            <div class="incorrect">
+                <label for="age" style="color: white;">Age</label>
+                <input type="text" id="age" name="age" placeholder="1-99" required />
+            </div>
+            <div class="wrap">
+                <button id="submit" type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+    <div style="color: #f9f9f9; text-align: center; font-size: 15px; margin: 20px;">
+        <a href="index.html">Home</a>
+    </div>
+</body>
+</html>
