@@ -2,7 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
 
-// Initialize Firebase
+// Firebase setup
 const firebaseConfig = {
     apiKey: "AIzaSyB3Vn9jXSJnQ0XC8JM64OszHpNEkvViBxA",
     authDomain: "mapping-controversies.firebaseapp.com",
@@ -13,6 +13,7 @@ const firebaseConfig = {
     appId: "1:259825186402:web:7c38048d67546fbe9b833b",
     measurementId: "G-Q0WM4CNVM4"
 };
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
@@ -21,54 +22,57 @@ const svg = d3.select("#contromap");
 const width = +svg.attr("width");
 const height = +svg.attr("height");
 
-// Fetch data from Firestore
+// Fetch nodes from Firestore
 async function fetchNetworkData() {
     const nodes = [];
-    const links = [];
 
     try {
         const snapshot = await getDocs(collection(db, "mappers"));
         snapshot.forEach(doc => {
             const node = doc.data();
-            node.id = doc.id; // Use document ID as node ID
+            node.id = doc.id; // Document ID as unique node ID
             nodes.push(node);
         });
-
-        // Create links between nodes based on common words in any field
-        for (let i = 0; i < nodes.length; i++) {
-            for (let j = i + 1; j < nodes.length; j++) {
-                if (hasCommonWordsAcrossFields(nodes[i], nodes[j])) {
-                    links.push({ source: nodes[i].id, target: nodes[j].id });
-                }
-            }
-        }
     } catch (error) {
         console.error("Error fetching data: ", error);
     }
 
-    return { nodes, links };
+    return nodes;
 }
 
-// Check for common words across all fields
-function hasCommonWordsAcrossFields(nodeA, nodeB) {
-    const combinedA = combineFields(nodeA);
-    const combinedB = combineFields(nodeB);
-
-    const commonWords = getWords(combinedA).filter(word => getWords(combinedB).includes(word));
-    return commonWords.length > 0;
+// Create links dynamically based on selected field
+function createLinksByField(nodes, field) {
+    const links = [];
+    for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+            if (hasCommonWordsInField(nodes[i], nodes[j], field)) {
+                links.push({ source: nodes[i].id, target: nodes[j].id });
+            }
+        }
+    }
+    return links;
 }
 
-// Combine all fields into a single string for a node
-function combineFields(node) {
-    return Object.values(node).join(" ").toLowerCase(); // Combine all fields as a lowercase string
+// Check for common words in a specific field, ensuring the field exists
+function hasCommonWordsInField(nodeA, nodeB, field) {
+    if (!nodeA[field] || !nodeB[field]) {
+        // If the field doesn't exist for either node, don't connect them
+        return false;
+    }
+
+    const wordsA = getWords(nodeA[field]);
+    const wordsB = getWords(nodeB[field]);
+
+    return wordsA.some(word => wordsB.includes(word));
 }
+
 
 // Helper: split string into words
 function getWords(str) {
     return str.replace(/[^a-z0-9\s]/g, "").split(/\s+/);
 }
 
-// Add drag behavior
+// Drag behavior
 function drag(simulation) {
     function dragstarted(event, d) {
         if (!event.active) simulation.alphaTarget(0.3).restart();
@@ -93,41 +97,51 @@ function drag(simulation) {
         .on("end", dragended);
 }
 
-// Update the graph
-async function updateNetwork() {
-    const { nodes, links } = await fetchNetworkData();
+// Update graph dynamically
+async function updateNetwork(selectedField) {
+    const nodes = await fetchNetworkData();
+    const links = selectedField === "all" ? [] : createLinksByField(nodes, selectedField);
 
+    // Clear existing elements
+    svg.selectAll("*").remove();
+
+    // Force simulation
     const simulation = d3.forceSimulation(nodes)
-        .force("link", d3.forceLink(links).id(d => d.id))
+        .force("link", d3.forceLink(links).id(d => d.id).distance(150))
         .force("charge", d3.forceManyBody().strength(-100))
         .force("center", d3.forceCenter(width / 2, height / 2));
 
+    // Render links
     const link = svg.append("g")
-        .attr("stroke", "#F9F9F9")
+        .attr("stroke", "#aaa")
         .selectAll("line")
         .data(links)
-        .join("line");
+        .join("line")
+        .attr("stroke-width", 2);
 
+    // Render nodes
     const node = svg.append("g")
-        .attr("stroke", "#191919")
-        .attr("stroke-width", 2)
+        .attr("stroke", "#fff")
+        .attr("stroke-width", 1.5)
         .selectAll("circle")
         .data(nodes)
         .join("circle")
-        .attr("r", 15)
+        .attr("r", 10)
         .attr("fill", (d, i) => d3.schemeCategory10[i % 10])
-        .call(drag(simulation)); // Add drag behavior to nodes
+        .call(drag(simulation));
 
-    const labels = svg.append("g")
+    // Render labels
+    const label = svg.append("g")
         .selectAll("text")
         .data(nodes)
         .join("text")
         .attr("text-anchor", "middle")
-        .attr("dy", -20) // Position above the circle
-        .attr("font-size", "14px")
+        .attr("dy", -15)
+        .attr("font-size", "10px")
         .attr("fill", "#f9f9f9")
-        .text(d => d.username); // Use the username property from node data
+        .text(d => d.username);
 
+    // Update positions on each tick
     simulation.on("tick", () => {
         link
             .attr("x1", d => d.source.x)
@@ -139,17 +153,17 @@ async function updateNetwork() {
             .attr("cx", d => d.x)
             .attr("cy", d => d.y);
 
-        labels
+        label
             .attr("x", d => d.x)
-            .attr("y", d => d.y + 25); // Adjust label position
-    });
-
-    // Toggle button functionality
-    document.getElementById("toggle-display").addEventListener("click", () => {
-        const showLabels = labels.style("display") === "none" ? "block" : "none";
-        labels.style("display", showLabels);
+            .attr("y", d => d.y);
     });
 }
 
-// Initialize the graph
-updateNetwork();
+// Field filter listener
+document.getElementById("field-filter").addEventListener("change", (event) => {
+    const selectedField = event.target.value;
+    updateNetwork(selectedField);
+});
+
+// Initialize graph
+updateNetwork("all");
