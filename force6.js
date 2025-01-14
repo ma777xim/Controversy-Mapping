@@ -56,7 +56,6 @@ function createLinksByField(nodes, field) {
 // Check for common words in a specific field, ensuring the field exists
 function hasCommonWordsInField(nodeA, nodeB, field) {
     if (!nodeA[field] || !nodeB[field]) {
-        // If the field doesn't exist for either node, don't connect them
         return false;
     }
 
@@ -66,10 +65,29 @@ function hasCommonWordsInField(nodeA, nodeB, field) {
     return wordsA.some(word => wordsB.includes(word));
 }
 
-
 // Helper: split string into words
 function getWords(str) {
     return str.replace(/[^a-z0-9\s]/g, "").split(/\s+/);
+}
+
+// Generate a consistent color for matching values
+function getColorByValue(value, colorMap) {
+    if (!colorMap.has(value)) {
+        const colorIndex = colorMap.size % 10; // Use D3's 10-color scheme
+        colorMap.set(value, d3.schemeCategory10[colorIndex]);
+    }
+    return colorMap.get(value);
+}
+
+// Generate age range color
+function getAgeRangeColor(age, colorMap) {
+    if (isNaN(age)) {
+        return "#ccc"; // Default color for invalid or missing age
+    }
+
+    const range = Math.floor(age / 10) * 10; // Calculate age range (e.g., 20 for ages 20-29)
+    const rangeLabel = `${range}-${range + 9}`; // Create a range label like "20-29"
+    return getColorByValue(rangeLabel, colorMap);
 }
 
 // Drag behavior
@@ -98,17 +116,20 @@ function drag(simulation) {
 }
 
 // Update graph dynamically
-async function updateNetwork(selectedField) {
+async function updateNetwork(selectedField, colorField, labelField) {
     const nodes = await fetchNetworkData();
     const links = selectedField === "all" ? [] : createLinksByField(nodes, selectedField);
 
     // Clear existing elements
     svg.selectAll("*").remove();
 
+    // Create a color map for consistent coloring of same values
+    const colorMap = new Map();
+
     // Force simulation
     const simulation = d3.forceSimulation(nodes)
         .force("link", d3.forceLink(links).id(d => d.id).distance(150))
-        .force("charge", d3.forceManyBody().strength(-100))
+        .force("charge", d3.forceManyBody().strength(-50))
         .force("center", d3.forceCenter(width / 2, height / 2));
 
     // Render links
@@ -119,16 +140,28 @@ async function updateNetwork(selectedField) {
         .join("line")
         .attr("stroke-width", 2);
 
-    // Render nodes
-    const node = svg.append("g")
-        .attr("stroke", "#fff")
-        .attr("stroke-width", 1.5)
-        .selectAll("circle")
-        .data(nodes)
-        .join("circle")
-        .attr("r", 10)
-        .attr("fill", (d, i) => d3.schemeCategory10[i % 10])
-        .call(drag(simulation));
+   // Render nodes with dynamic radius based on connections
+const node = svg.append("g")
+    .attr("stroke", "#fff")
+    .attr("stroke-width", 1)
+    .selectAll("circle")
+    .data(nodes)
+    .join("circle")
+    .attr("r", d => {
+        // Calculate node degree (number of connections)
+        const degree = links.filter(link => link.source.id === d.id || link.target.id === d.id).length;
+        return 10 + degree * 1.5; // Base size of 10, increase with degree
+    })
+    .attr("fill", d => {
+        // Color nodes based on the selected colorField
+        if (colorField === "gender" || colorField === "job") {
+            return getColorByValue(d[colorField], colorMap); // Use the color map for consistent coloring
+        } else if (colorField === "age") {
+            return getAgeRangeColor(d[colorField], colorMap); // Color by age range
+        }
+        return d[colorField] ? d3.schemeCategory10[d[colorField].length % 10] : "#ccc";
+    })
+    .call(drag(simulation));
 
     // Render labels
     const label = svg.append("g")
@@ -136,10 +169,10 @@ async function updateNetwork(selectedField) {
         .data(nodes)
         .join("text")
         .attr("text-anchor", "middle")
-        .attr("dy", -15)
+        .attr("dy", +3)
         .attr("font-size", "10px")
         .attr("fill", "#f9f9f9")
-        .text(d => d.username);
+        .text(d => d[labelField] || "N/A"); // Label nodes based on the selected labelField
 
     // Update positions on each tick
     simulation.on("tick", () => {
@@ -162,8 +195,26 @@ async function updateNetwork(selectedField) {
 // Field filter listener
 document.getElementById("field-filter").addEventListener("change", (event) => {
     const selectedField = event.target.value;
-    updateNetwork(selectedField);
+    const colorField = document.getElementById("colorField").value;
+    const labelField = document.getElementById("labelField").value;
+    updateNetwork(selectedField, colorField, labelField);
+});
+
+// Color field listener
+document.getElementById("colorField").addEventListener("change", (event) => {
+    const colorField = event.target.value;
+    const selectedField = document.getElementById("field-filter").value;
+    const labelField = document.getElementById("labelField").value;
+    updateNetwork(selectedField, colorField, labelField);
+});
+
+// Label field listener
+document.getElementById("labelField").addEventListener("change", (event) => {
+    const labelField = event.target.value;
+    const selectedField = document.getElementById("field-filter").value;
+    const colorField = document.getElementById("colorField").value;
+    updateNetwork(selectedField, colorField, labelField);
 });
 
 // Initialize graph
-updateNetwork("all");
+updateNetwork("all", "job", "username");
