@@ -1,8 +1,8 @@
-// Firebase imports and configuration
+// Firebase configuration
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js";
-import { getFirestore, doc, updateDoc, collection } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-auth.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
 
+// Firebase setup
 const firebaseConfig = {
     apiKey: "AIzaSyB3Vn9jXSJnQ0XC8JM64OszHpNEkvViBxA",
     authDomain: "mapping-controversies.firebaseapp.com",
@@ -16,15 +16,15 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const auth = getAuth(app);
 
 // D3 setup
 const svg = d3.select("#contromap");
 const width = +svg.attr("width");
 const height = +svg.attr("height");
 
+// Initialize empty nodes and links
 let nodes = [
-    { id: "depStoNode", label: "Department Store" },
+{ id: "depStoNode", label: "Department Store" },
     { id: "signaNode", label: "SIGNA" },
     { id: "shoppersNode", label: "Shoppers" },
     { id: "transportationNode", label: "Transportation" },
@@ -43,7 +43,6 @@ let nodes = [
     { id: "rawMaterialNode", label: "Raw Materials" },
     { id: "brandsNode", label: "Brands" },
 ];
-
 let links = [
     { source: "depStoNode", target: "signaNode" },
     { source: "depStoNode", target: "shoppersNode" },
@@ -64,17 +63,57 @@ let links = [
     { source: "depStoNode", target: "brandsNode" },
 ];
 
-// Force simulation
-const simulation = d3.forceSimulation(nodes)
-    .force("link", d3.forceLink(links).id(d => d.id).distance(150))
-    .force("charge", d3.forceManyBody().strength(-50))
-    .force("center", d3.forceCenter(width / 2, height / 2));
+// Fetch data from Firestore
+async function fetchFirebaseData() {
+    try {
+        const querySnapshot = await getDocs(collection(db, "answers"));
 
-// Render graph
+        querySnapshot.forEach(doc => {
+            const parentId = doc.id; // Parent node ID (document ID in Firestore)
+            const data = doc.data();
+
+            // Check if parent node already exists
+            let parentNode = nodes.find(node => node.id === parentId);
+            if (!parentNode) {
+                // Add parent node
+                parentNode = { id: parentId, label: parentId };
+                nodes.push(parentNode);
+            }
+
+            // Add child nodes and links
+            Object.entries(data).forEach(([username, answer]) => {
+                const childId = `${parentId}_${username}`;
+                const childNode = { id: childId, label: answer };
+
+                // Add child node if it doesn't exist
+                if (!nodes.find(node => node.id === childId)) {
+                    nodes.push(childNode);
+                }
+
+                // Add link from parent to child
+                if (!links.find(link => link.source === parentId && link.target === childId)) {
+                    links.push({ source: parentId, target: childId });
+                }
+            });
+        });
+
+        // Render the graph
+        renderGraph();
+    } catch (error) {
+        console.error("Error fetching Firebase data:", error);
+    }
+}
+
+// Render the graph
 function renderGraph() {
-    svg.selectAll("line").remove();
-    svg.selectAll("circle").remove();
-    svg.selectAll("text").remove();
+    // Clear the SVG before rendering
+    svg.selectAll("*").remove();
+
+    // Force simulation
+    const simulation = d3.forceSimulation(nodes)
+        .force("link", d3.forceLink(links).id(d => d.id).distance(150))
+        .force("charge", d3.forceManyBody().strength(-50))
+        .force("center", d3.forceCenter(width / 2, height / 2));
 
     // Render links
     svg.append("g")
@@ -84,13 +123,6 @@ function renderGraph() {
         .join("line")
         .attr("stroke-width", 2);
 
-    // Calculate node radii dynamically based on the degree
-    const nodeDegree = {};
-    links.forEach(link => {
-        nodeDegree[link.source.id || link.source] = (nodeDegree[link.source.id || link.source] || 0) + 1;
-        nodeDegree[link.target.id || link.target] = (nodeDegree[link.target.id || link.target] || 0) + 1;
-    });
-
     // Render nodes
     const node = svg.append("g")
         .attr("stroke", "#fff")
@@ -98,7 +130,11 @@ function renderGraph() {
         .selectAll("circle")
         .data(nodes)
         .join("circle")
-        .attr("r", d => 10 + (nodeDegree[d.id] || 0) * 2) // Base radius + dynamic increase
+        .attr("r", d => {
+            // Calculate radius based on number of connections (degree)
+            const degree = links.filter(link => link.source.id === d.id || link.target.id === d.id).length;
+            return 10 + degree * 2; // Base size 10, increased with degree
+        })
         .attr("fill", "#69b3a2")
         .call(drag(simulation))
         .on("click", handleNodeClick);
@@ -114,8 +150,8 @@ function renderGraph() {
         .attr("fill", "#f9f9f9")
         .text(d => d.label);
 
-    // Update positions on tick
-    simulation.nodes(nodes).on("tick", () => {
+    // Update positions on each tick
+    simulation.on("tick", () => {
         svg.selectAll("line")
             .attr("x1", d => d.source.x)
             .attr("y1", d => d.source.y)
@@ -130,35 +166,19 @@ function renderGraph() {
             .attr("x", d => d.x)
             .attr("y", d => d.y);
     });
-
-    simulation.force("link").links(links);
-    simulation.alpha(1).restart();
 }
-renderGraph();
 
 // Handle node click
 async function handleNodeClick(event, d) {
-    const user = auth.currentUser;
-    if (!user) {
-        alert("Please log in to interact with the nodes.");
-        return;
-    }
-
     const answer = prompt(`Enter your answer for ${d.label}:`);
     if (answer) {
-        const username = user.displayName || user.email;
-        const docRef = doc(collection(db, "answers"), d.id);
-
         try {
-            // Add user answer to Firestore
-            await updateDoc(docRef, { [username]: answer });
+            const docRef = doc(collection(db, "answers"), d.id);
+            await updateDoc(docRef, { [firebase.auth().currentUser.displayName]: answer });
+            alert("Answer saved!");
 
-            // Add a new node with the answer
-            const newNode = { id: `${d.id}_${answer}`, label: answer };
-            nodes.push(newNode);
-            links.push({ source: d.id, target: newNode.id });
-
-            renderGraph();
+            // Refresh the graph after adding the answer
+            await fetchFirebaseData();
         } catch (error) {
             console.error("Error saving answer:", error);
             alert("Failed to save answer. Check console for details.");
@@ -191,11 +211,5 @@ function drag(simulation) {
         .on("end", dragended);
 }
 
-// Auth listener
-onAuthStateChanged(auth, user => {
-    if (user) {
-        console.log(`Logged in as ${user.email}`);
-    } else {
-        console.log("No user logged in.");
-    }
-});
+// Initialize graph with Firebase data
+fetchFirebaseData();
