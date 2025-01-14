@@ -24,24 +24,24 @@ const width = +svg.attr("width");
 const height = +svg.attr("height");
 
 let nodes = [
-        { id: "depStoNode", label: "Department Store" },
-        { id: "signaNode", label: "SIGNA" },
-        { id: "shoppersNode", label: "Shoppers" },
-        { id: "transportationNode", label: "Transportation" },
-        { id: "employeesNode", label: "Employees" },
-        { id: "managerNode", label: "Manager" },
-        { id: "architectNode", label: "Architect" },
-        { id: "urbanPlannerNode", label: "Urban Planner" },
-        { id: "politicsNode", label: "Politics" },
-        { id: "lawNode", label: "Law" },
-        { id: "communityNode", label: "Community" },
-        { id: "internetNode", label: "Internet" },
-        { id: "onlineShoppingNode", label: "Online Shopping" },
-        { id: "mediaNode", label: "Media" },
-        { id: "manufacturerNode", label: "Manufacturer" },
-        { id: "productNode", label: "Product" },
-        { id: "rawMaterialNode", label: "Raw Materials" },
-        { id: "brandsNode", label: "Brands" },
+    { id: "depStoNode", label: "Department Store" },
+    { id: "signaNode", label: "SIGNA" },
+    { id: "shoppersNode", label: "Shoppers" },
+    { id: "transportationNode", label: "Transportation" },
+    { id: "employeesNode", label: "Employees" },
+    { id: "managerNode", label: "Manager" },
+    { id: "architectNode", label: "Architect" },
+    { id: "urbanPlannerNode", label: "Urban Planner" },
+    { id: "politicsNode", label: "Politics" },
+    { id: "lawNode", label: "Law" },
+    { id: "communityNode", label: "Community" },
+    { id: "internetNode", label: "Internet" },
+    { id: "onlineShoppingNode", label: "Online Shopping" },
+    { id: "mediaNode", label: "Media" },
+    { id: "manufacturerNode", label: "Manufacturer" },
+    { id: "productNode", label: "Product" },
+    { id: "rawMaterialNode", label: "Raw Materials" },
+    { id: "brandsNode", label: "Brands" },
 ];
 
 let links = [
@@ -70,30 +70,40 @@ const simulation = d3.forceSimulation(nodes)
     .force("charge", d3.forceManyBody().strength(-50))
     .force("center", d3.forceCenter(width / 2, height / 2));
 
-// Render links
-svg.append("g")
-    .attr("stroke", "#aaa")
-    .selectAll("line")
-    .data(links)
-    .join("line")
-    .attr("stroke-width", 2);
-
-// Render nodes
-function renderNodes() {
+// Render graph
+function renderGraph() {
+    svg.selectAll("line").remove();
     svg.selectAll("circle").remove();
     svg.selectAll("text").remove();
 
+    // Render links
+    svg.append("g")
+        .attr("stroke", "#aaa")
+        .selectAll("line")
+        .data(links)
+        .join("line")
+        .attr("stroke-width", 2);
+
+    // Calculate node radii dynamically based on the degree
+    const nodeDegree = {};
+    links.forEach(link => {
+        nodeDegree[link.source.id || link.source] = (nodeDegree[link.source.id || link.source] || 0) + 1;
+        nodeDegree[link.target.id || link.target] = (nodeDegree[link.target.id || link.target] || 0) + 1;
+    });
+
+    // Render nodes
     const node = svg.append("g")
         .attr("stroke", "#fff")
         .attr("stroke-width", 1.5)
         .selectAll("circle")
         .data(nodes)
         .join("circle")
-        .attr("r", 10)
+        .attr("r", d => 10 + (nodeDegree[d.id] || 0) * 2) // Base radius + dynamic increase
         .attr("fill", "#69b3a2")
         .call(drag(simulation))
         .on("click", handleNodeClick);
 
+    // Render labels
     svg.append("g")
         .selectAll("text")
         .data(nodes)
@@ -104,6 +114,7 @@ function renderNodes() {
         .attr("fill", "#f9f9f9")
         .text(d => d.label);
 
+    // Update positions on tick
     simulation.nodes(nodes).on("tick", () => {
         svg.selectAll("line")
             .attr("x1", d => d.source.x)
@@ -123,7 +134,7 @@ function renderNodes() {
     simulation.force("link").links(links);
     simulation.alpha(1).restart();
 }
-renderNodes();
+renderGraph();
 
 // Handle node click
 async function handleNodeClick(event, d) {
@@ -147,7 +158,7 @@ async function handleNodeClick(event, d) {
             nodes.push(newNode);
             links.push({ source: d.id, target: newNode.id });
 
-            renderNodes();
+            renderGraph();
         } catch (error) {
             console.error("Error saving answer:", error);
             alert("Failed to save answer. Check console for details.");
