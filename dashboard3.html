@@ -87,12 +87,11 @@
 <body>
     <header>
         <div>
-            <h1>Contro.Map.</h1>
+            <h1>What do you think about department stores?</h1>
             <br>
             <h2>Hey, <b><span id="username"></span></b>.</h2>
             <br>
         </div>
-
         <div>
             <a href="index4.html">
                 <button id="logoutButton">Logout</button>
@@ -102,243 +101,18 @@
         <br>
     </header>
     <div style="width: 100%; text-align: center; vertical-align: bottom; display: inline; background-color: transparent; height: 105px;">
-            <a href="signup2.html" style="margin: 5%; color: white;">Home</a>
+            <a href="signup2.html" style="margin: 5%; color: white;">Controversies</a>
             <a href="about.html" style="margin: 5%; color: white;">About</a>
             <a href="" style="margin: 5%; color: white;">Map</a>
             <a href="" style="margin: 5%; color: white;">Answers</a>
             <a href="signup2.html" style="margin: 5%;color: white;">Profile</a>
     </div>
 
-  
 <main>
-        <div>
-        <button id="toggle-display" style="display: block; font-size: 40px; transform: scale(50%)"><img src="https://img.icons8.com/?size=100&id=59817&format=png&color=ffffff"><br></button>
-    </div>
-
     <div class="content">
-        <svg id="contromap" width="1200" height="800"></svg>
+        <svg id="contromap" width="1100" height="1200"></svg>
     </div>
-
-
-    <div class="sidebar">
-
-        <div>
-            <button class="sidebarButton" id="openPopup" data-field="whatIsDepSto" data-question="How would you describe your local department store?" data-placeholder="Cultural annoyance / Fun / Outdated / ...">
-                <img src="https://img.icons8.com/?size=100&id=xbtKqR0lcsgS&format=png&color=FFFFFF" alt="DepartmentStore">Definition
-            </button>
-                <div class="popup" id="popup" style="display: none;">
-                    <form>
-                        <label id="popupQuestion" for="answer"></label>
-                            <div>
-                                <input type="text" id="popupInput" name="whatIsDepSto" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
-                            </div>
-                        <button class="submit" type="button" id="popupSubmit">Submit</button>
-                    </form>
-                </div>
-                <div
-                    id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10;">
-                </div>
-            </div>
-
-            <div>
-            <button class="sidebarButton" id="openPopup" data-field="emotionTrigger" data-question="What emotion does your local department store trigger in you?" data-placeholder="Anger / Nostalgia / Disgust / Excitment / ...">
-                <img src="https://img.icons8.com/?size=100&id=ZS4Ax3svk2bt&format=png&color=FFFFFF" alt="Thinking">Emotion
-            </button>
-                <div class="popup" id="popup" style="display: none;">
-                    <form>
-                        <label id="popupQuestion" for="answer"></label>
-                            <div>
-                                <input type="text" id="popupInput" name="emotionTrigger" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
-                            </div>
-                        <button class="submit" type="button" id="popupSubmit">Submit</button>
-                    </form>
-                </div>
-                <div
-                    id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10;">
-                </div>
-            </div>
-
-            <div>
-            <button class="sidebarButton" id="openPopup" data-field="whyVacancy" data-question="What is your first thought when you see an empty department store?" data-placeholder="Reuse / Keep my store! / Hotel / ...">
-                <img src="https://img.icons8.com/?size=100&id=HLdJb2yeBLBj&format=png&color=FFFFFF" alt="Puzzle">Vacancy
-            </button>
-                <div class="popup" id="popup" style="display: none;">
-                    <form>
-                        <label id="popupQuestion" for="answer"></label>
-                            <div>
-                                <input type="text" id="popupInput" name="howToAdressVacancy" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
-                            </div>
-                        <button class="submit" type="button" id="popupSubmit">Submit</button>
-                    </form>
-                </div>
-                <div
-                    id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10;">
-                </div>
-            </div>
-
-            <div>
-            <button class="sidebarButton" id="openPopup" data-field="whyGoIfOnlineTrading" data-question="How would you describe the architecture of department stores?" data-placeholder="I can try something on / I would not / ...">
-                <img src="https://img.icons8.com/?size=100&id=0rU1TIHT8AmB&format=png&color=FFFFFF" alt="Dress">Architecture
-            </button>
-                <div class="popup" id="popup" style="display: none;">
-                    <form>
-                        <label id="popupQuestion" for="answer"></label>
-                            <div>
-                                <input type="text" id="popupInput" name="whyGoIfOnlineTrading" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
-                            </div>
-                        <button class="submit" type="button" id="popupSubmit">Submit</button>
-                    </form>
-                </div>
-                <div
-                    id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10;">
-                </div>
-            </div>
-
-            <div>
-            <button class="sidebarButton" id="openPopup" data-field="whyStillExist" data-question="If you owned a vacant department store building, what would you do?" data-placeholder="Seniors / Bad investments / Benko / ...">
-                <img src="https://img.icons8.com/?size=100&id=cWZEG8n3gKPN&format=png&color=FFFFFF" alt="Shoe">Existance
-            </button>
-                <div class="popup" id="popup" style="display: none;">
-                    <form>
-                        <label id="popupQuestion" for="answer"></label>
-                            <div>
-                                <input type="text" id="popupInput" name="whyStillExist" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
-                            </div>
-                        <button class="submit" type="button" id="popupSubmit">Submit</button>
-                    </form>
-                </div>
-                <div
-                    id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10;">
-                </div>
-            </div>
-
-            <div>
-            <button class="sidebarButton" id="openPopup" data-field="brands" data-question="Which brands would you want to see in a department store?" data-placeholder="??? / ??? / ???...">
-                <img src="https://img.icons8.com/?size=100&id=SzLrKPTsX3YF&format=png&color=FFFFFF" alt="Plant">Environment
-            </button>
-                <div class="popup" id="popup" style="display: none;">
-                    <form>
-                        <label id="popupQuestion" for="answer"></label>
-                            <div>
-                                <input type="text" id="popupInput" name="howRelatedToSustainibility" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
-                            </div>
-                        <button class="submit" type="button" id="popupSubmit">Submit</button>
-                    </form>
-                </div>
-                <div
-                    id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10;">
-                </div>
-            </div>
-
-            <div>
-            <button class="sidebarButton" id="openPopup" data-field="whatWouldChangeHabit" data-question="What will make you change your habits of shopping at department stores?" data-placeholder="A cinema / A football field / Brands / Cheaper / ...">
-                <img src="https://img.icons8.com/?size=100&id=qzW2Nmedl6tE&format=png&color=FFFFFF" alt="Arrows in Circle">Habits
-            </button>
-                <div class="popup" id="popup" style="display: none;">
-                    <form>
-                        <label id="popupQuestion" for="answer"></label>
-                            <div>
-                                <input type="text" id="popupInput" name="whatWouldChangeHabit" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
-                            </div>
-                        <button class="submit" type="button" id="popupSubmit">Submit</button>
-                    </form>
-                </div>
-                <div
-                    id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10;">
-                </div>
-            </div>
-
-            <div>
-            <button class="sidebarButton" id="openPopup" data-field="whoOwns" data-question="Who owns your local department store?" data-placeholder="SIGNA / The customer / The manager / The architect / ...">
-                <img src="https://img.icons8.com/?size=100&id=71IYRAPYbQ2w&format=png&color=FFFFFF" alt="Money">Revenue
-            </button>
-                <div class="popup" id="popup" style="display: none;">
-                    <form>
-                        <label id="popupQuestion" for="answer"></label>
-                            <div>
-                                <input type="text" id="popupInput" name="whoBenefits" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
-                            </div>
-                        <button class="submit" type="button" id="popupSubmit">Submit</button>
-                    </form>
-                </div>
-                <div
-                    id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10;">
-                </div>
-            </div>
-
-            <div>
-            <button class="sidebarButton" id="openPopup" data-field="effectOnEconomy" data-question="What qualities besides shopping could department stores offer to you?" data-placeholder="Boost / decay / no effect / ...">
-                <img src="https://img.icons8.com/?size=100&id=cGGd0kbjd7ew&format=png&color=FFFFFF" alt="Cent">Economy
-            </button>
-                <div class="popup" id="popup" style="display: none;">
-                    <form>
-                        <label id="popupQuestion" for="answer"></label>
-                            <div>
-                                <input type="text" id="popupInput" name="effectOnEconomy" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
-                            </div>
-                        <button class="submit" type="button" id="popupSubmit">Submit</button>
-                    </form>
-                </div>
-                <div
-                    id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10;">
-                </div>
-            </div>
-
-            <div>
-            <button class="sidebarButton" id="openPopup" data-field="whatShouldOffer" data-question="What do department stores sell?" data-placeholder="More shoes / Less stuff / Groceries ...">
-                <img src="https://img.icons8.com/?size=100&id=0L5y3Qh5Maxp&format=png&color=FFFFFF" alt="Corn">Corn
-            </button>
-                <div class="popup" id="popup" style="display: none;">
-                    <form>
-                        <label id="popupQuestion" for="answer"></label>
-                            <div>
-                                <input type="text" id="popupInput" name="whatShouldOffer" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
-                            </div>
-                        <button class="submit" type="button" id="popupSubmit">Submit</button>
-                    </form>
-                </div>
-                <div
-                    id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10;">
-                </div>
-            </div>
-
-            <div>
-            <button class="sidebarButton" id="openPopup" data-field="whatBuyAtDepsto" data-question="Where do you want department stores to be located?" data-placeholder="Shoes / Jacket / Blazer / Ring / ...">
-                <img src="https://img.icons8.com/?size=100&id=CrfnxTu5liig&format=png&color=FFFFFF" alt="Gilette">Products
-            </button>
-                <div class="popup" id="popup" style="display: none;">
-                    <form>
-                        <label id="popupQuestion" for="answer"></label>
-                            <div>
-                                <input type="text" id="popupInput" name="whatBuyAtDepsto" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
-                            </div>
-                        <button class="submit" type="button" id="popupSubmit">Submit</button>
-                    </form>
-                </div>
-                <div
-                    id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10;">
-                </div>
-            </div>
-
-            <div>
-            <button class="sidebarButton" id="openPopup" data-field="onlineShopping" data-question="How would you compare online-shopping to a department store?" data-placeholder="Faster delivery / Cheaper Prices / more offers / guarantee / ...">
-                <img src="https://img.icons8.com/?size=100&id=KEX82uLupdtl&format=png&color=FFFFFF" alt="Pointer">Online
-            </button>
-                <div class="popup" id="popup" style="display: none;">
-                    <form>
-                        <label id="popupQuestion" for="answer"></label>
-                            <div>
-                                <input type="text" id="popupInput" name="whyGoToDepSto" placeholder="..." style="display: flex; width: 75%; margin: auto; margin-top: 30px; margin-bottom: 30px;">
-                            </div>
-                        <button class="submit" type="button" id="popupSubmit">Submit</button>
-                    </form>
-                </div>
-                <div
-                    id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10;">
-                </div>
-            </div>
-        </div>
-    </main>
+</main>
     <footer>
         <h4> <b> &copy; 2025 Controversy Mapping.</b> <br> Technical University of Munich, Chair of Architectural Informatics, Prof. Dipl.-Ing. Frank Petzold. <br><br> Gustave Lahon, Maxim Yurin.<br><br>All Rights Reserved.</h4>
     </footer>

@@ -1,6 +1,6 @@
 // Firebase configuration
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
+import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
 
 // Firebase setup
 const firebaseConfig = {
@@ -22,97 +22,58 @@ const svg = d3.select("#contromap");
 const width = +svg.attr("width");
 const height = +svg.attr("height");
 
-// Initialize empty nodes and links
-let nodes = [
-{ id: "depStoNode", label: "Department Store" },
-    { id: "signaNode", label: "SIGNA" },
-    { id: "shoppersNode", label: "Shoppers" },
-    { id: "transportationNode", label: "Transportation" },
-    { id: "employeesNode", label: "Employees" },
-    { id: "managerNode", label: "Manager" },
-    { id: "architectNode", label: "Architect" },
-    { id: "urbanPlannerNode", label: "Urban Planner" },
-    { id: "politicsNode", label: "Politics" },
-    { id: "lawNode", label: "Law" },
-    { id: "communityNode", label: "Community" },
-    { id: "internetNode", label: "Internet" },
-    { id: "onlineShoppingNode", label: "Online Shopping" },
-    { id: "mediaNode", label: "Media" },
-    { id: "manufacturerNode", label: "Manufacturer" },
-    { id: "productNode", label: "Product" },
-    { id: "rawMaterialNode", label: "Raw Materials" },
-    { id: "brandsNode", label: "Brands" },
+// Static nodes and their specific questions
+let staticNodes = [
+    { id: "depStoNode", label: "Department Store", question: "What are your thoughts on department stores?" },
+    { id: "signaNode", label: "SIGNA", question: "What do you think about SIGNA?" },
+    { id: "shoppersNode", label: "Shoppers", question: "How do shoppers influence this topic?" },
+    // Add more static nodes and their questions as needed
 ];
-let links = [
-    { source: "depStoNode", target: "signaNode" },
-    { source: "depStoNode", target: "shoppersNode" },
-    { source: "depStoNode", target: "transportationNode" },
-    { source: "depStoNode", target: "employeesNode" },
-    { source: "depStoNode", target: "managerNode" },
-    { source: "depStoNode", target: "architectNode" },
-    { source: "depStoNode", target: "urbanPlannerNode" },
-    { source: "depStoNode", target: "politicsNode" },
-    { source: "depStoNode", target: "lawNode" },
-    { source: "depStoNode", target: "communityNode" },
-    { source: "depStoNode", target: "internetNode" },
-    { source: "depStoNode", target: "onlineShoppingNode" },
-    { source: "depStoNode", target: "mediaNode" },
-    { source: "depStoNode", target: "manufacturerNode" },
-    { source: "depStoNode", target: "productNode" },
-    { source: "depStoNode", target: "rawMaterialNode" },
-    { source: "depStoNode", target: "brandsNode" },
-];
+let links = []; // Dynamic links will come from Firestore
 
 // Fetch data from Firestore
 async function fetchFirebaseData() {
     try {
         const querySnapshot = await getDocs(collection(db, "answers"));
+        let dynamicNodes = [];
 
         querySnapshot.forEach(doc => {
-            const parentId = doc.id; // Parent node ID (document ID in Firestore)
+            const source = doc.id; // Document ID as source node
             const data = doc.data();
 
-            // Check if parent node already exists
-            let parentNode = nodes.find(node => node.id === parentId);
-            if (!parentNode) {
-                // Add parent node
-                parentNode = { id: parentId, label: parentId };
-                nodes.push(parentNode);
-            }
+            // Add dynamic nodes and links
+            Object.entries(data).forEach(([target, label]) => {
+                const targetNode = { id: target, label };
 
-            // Add child nodes and links
-            Object.entries(data).forEach(([username, answer]) => {
-                const childId = `${parentId}_${username}`;
-                const childNode = { id: childId, label: answer };
-
-                // Add child node if it doesn't exist
-                if (!nodes.find(node => node.id === childId)) {
-                    nodes.push(childNode);
+                // Add target node if it doesn't exist
+                if (!dynamicNodes.find(node => node.id === target)) {
+                    dynamicNodes.push(targetNode);
                 }
 
-                // Add link from parent to child
-                if (!links.find(link => link.source === parentId && link.target === childId)) {
-                    links.push({ source: parentId, target: childId });
-                }
+                // Add link
+                links.push({ source, target });
             });
         });
 
+        // Combine static and dynamic nodes
+        const nodes = [...staticNodes, ...dynamicNodes];
+
         // Render the graph
-        renderGraph();
+        renderGraph(nodes, links);
     } catch (error) {
         console.error("Error fetching Firebase data:", error);
     }
 }
 
 // Render the graph
-function renderGraph() {
+function renderGraph(nodes, links) {
     // Clear the SVG before rendering
     svg.selectAll("*").remove();
 
     // Force simulation
     const simulation = d3.forceSimulation(nodes)
         .force("link", d3.forceLink(links).id(d => d.id).distance(150))
-        .force("charge", d3.forceManyBody().strength(-50))
+        .force("charge", d3.forceManyBody().strength(-500))
         .force("center", d3.forceCenter(width / 2, height / 2));
 
     // Render links
@@ -121,7 +82,7 @@ function renderGraph() {
         .selectAll("line")
         .data(links)
         .join("line")
-        .attr("stroke-width", 2);
+        .attr("stroke-width", 1);
 
     // Render nodes
     const node = svg.append("g")
@@ -130,12 +91,8 @@ function renderGraph() {
         .selectAll("circle")
         .data(nodes)
         .join("circle")
-        .attr("r", d => {
-            // Calculate radius based on number of connections (degree)
-            const degree = links.filter(link => link.source.id === d.id || link.target.id === d.id).length;
-            return 10 + degree * 2; // Base size 10, increased with degree
-        })
-        .attr("fill", "#69b3a2")
+        .attr("r", 10)
+        .attr("fill", d => (staticNodes.find(n => n.id === d.id) ? "#69b3a2" : "#ff7f0e"))
         .call(drag(simulation))
         .on("click", handleNodeClick);
 
@@ -145,9 +102,9 @@ function renderGraph() {
         .data(nodes)
         .join("text")
         .attr("text-anchor", "middle")
-        .attr("dy", 3)
+        .attr("dy", -15)
         .attr("font-size", "12px")
-        .attr("fill", "#f9f9f9")
+        .attr("fill", "#333")
         .text(d => d.label);
 
     // Update positions on each tick
@@ -170,11 +127,19 @@ function renderGraph() {
 
 // Handle node click
 async function handleNodeClick(event, d) {
-    const answer = prompt(`Enter your answer for ${d.label}:`);
+    const staticNode = staticNodes.find(node => node.id === d.id);
+
+    // Static node: ask the predefined question
+    const question = staticNode ? staticNode.question : `What do you want to add about ${d.label}?`;
+    const answer = prompt(question);
+
     if (answer) {
         try {
-            const docRef = doc(collection(db, "answers"), d.id);
-            await updateDoc(docRef, { [firebase.auth().currentUser.displayName]: answer });
+            // Add new document to Firestore
+            const newDoc = {};
+            newDoc[d.id] = answer;
+
+            await addDoc(collection(db, "answers"), newDoc);
             alert("Answer saved!");
 
             // Refresh the graph after adding the answer
