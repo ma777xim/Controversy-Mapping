@@ -24,12 +24,116 @@ const height = +svg.attr("height");
 
 // Static nodes and their specific questions
 let staticNodes = [
-    { id: "depStoNode", label: "Department Store", question: "What are your thoughts on department stores?" },
-    { id: "signaNode", label: "SIGNA", question: "What do you think about SIGNA?" },
-    { id: "shoppersNode", label: "Shoppers", question: "How do shoppers influence this topic?" },
+    { id: "depStoNode", label: "Department Store" },
+    { id: "signaNode", label: "SIGNA" },
+    { id: "shoppersNode", label: "Shoppers" },
+    { id: "transportationNode", label: "Transportation" },
+    { id: "employeesNode", label: "Employees" },
+    { id: "managerNode", label: "Manager" },
+    { id: "architectNode", label: "Architect" },
+    { id: "urbanPlannerNode", label: "Urban Planner" },
+    { id: "politicsNode", label: "Politics" },
+    { id: "lawNode", label: "Law" },
+    { id: "communityNode", label: "Community" },
+    { id: "internetNode", label: "Internet" },
+    { id: "onlineShoppingNode", label: "Online Shopping" },
+    { id: "mediaNode", label: "Media" },
+    { id: "manufacturerNode", label: "Manufacturer" },
+    { id: "productNode", label: "Product" },
+    { id: "rawMaterialNode", label: "Raw Materials" },
+    { id: "brandsNode", label: "Brands" },
     // Add more static nodes and their questions as needed
 ];
-let links = []; // Dynamic links will come from Firestore
+let links = [
+ { source: "depStoNode", target: "signaNode" },
+    { source: "depStoNode", target: "shoppersNode" },
+    { source: "depStoNode", target: "transportationNode" },
+    { source: "depStoNode", target: "employeesNode" },
+    { source: "depStoNode", target: "managerNode" },
+    { source: "depStoNode", target: "architectNode" },
+    { source: "depStoNode", target: "urbanPlannerNode" },
+    { source: "depStoNode", target: "politicsNode" },
+    { source: "depStoNode", target: "lawNode" },
+    { source: "depStoNode", target: "communityNode" },
+    { source: "depStoNode", target: "internetNode" },
+    { source: "depStoNode", target: "onlineShoppingNode" },
+    { source: "depStoNode", target: "mediaNode" },
+    { source: "depStoNode", target: "manufacturerNode" },
+    { source: "depStoNode", target: "productNode" },
+    { source: "depStoNode", target: "rawMaterialNode" },
+    { source: "depStoNode", target: "brandsNode" },
+    { source: "signaNode", target: "employeesNode" },
+    { source: "signaNode", target: "managerNode" },
+    { source: "signaNode", target: "architectNode" },
+    { source: "signaNode", target: "urbanPlannerNode" },
+    { source: "signaNode", target: "politicsNode" },
+    { source: "signaNode", target: "lawNode" },
+    { source: "signaNode", target: "mediaNode" },
+    { source: "shoppersNode", target: "transportationNode" },
+    { source: "shoppersNode", target: "employeesNode" },
+    { source: "shoppersNode", target: "communityNode" },
+    { source: "shoppersNode", target: "internetNode" },
+    { source: "shoppersNode", target: "onlineShoppingNode" },
+    { source: "shoppersNode", target: "mediaNode" },
+    { source: "shoppersNode", target: "productNode" },
+    { source: "shoppersNode", target: "brandsNode" },
+    { source: "transportationNode", target: "employeesNode" },
+    { source: "transportationNode", target: "managerNode" },
+    { source: "transportationNode", target: "rawMaterialNode" },
+    { source: "transportationNode", target: "politicsNode" },
+    { source: "transportationNode", target: "lawNode" },
+    { source: "transportationNode", target: "communityNode" },
+    { source: "transportationNode", target: "onlineShoppingNode" },
+    { source: "transportationNode", target: "productNode" },
+    { source: "employeesNode", target: "productNode" },
+    { source: "employeesNode", target: "managerNode" },
+    { source: "employeesNode", target: "politicsNode" },
+    { source: "employeesNode", target: "lawNode" },
+    { source: "employeesNode", target: "communityNode" },
+    { source: "employeesNode", target: "internetNode" },
+    { source: "employeesNode", target: "onlineShoppingNode" },
+    { source: "employeesNode", target: "mediaNode" },
+    { source: "employeesNode", target: "productNode" },
+    { source: "employeesNode", target: "brandsNode" },
+    { source: "managerNode", target: "politicsNode" },
+    { source: "managerNode", target: "lawNode" },
+    { source: "managerNode", target: "communityNode" },
+    { source: "managerNode", target: "internetNode" },
+    { source: "managerNode", target: "onlineShoppingNode" },
+    { source: "managerNode", target: "mediaNode" },
+    { source: "managerNode", target: "productNode" },
+    { source: "managerNode", target: "manufacturerNode" },
+    { source: "managerNode", target: "brandsNode" },
+    { source: "architectNode", target: "urbanPlannerNode" },
+    { source: "architectNode", target: "politicsNode" },
+    { source: "architectNode", target: "lawNode" },
+    { source: "architectNode", target: "mediaNode" },
+    { source: "urbanPlannerNode", target: "politicsNode" },
+    { source: "urbanPlannerNode", target: "lawNode" },
+    { source: "urbanPlannerNode", target: "communityNode" },
+    { source: "urbanPlannerNode", target: "mediaNode" },
+    { source: "politicsNode", target: "lawNode" },
+    { source: "politicsNode", target: "mediaNode" },
+    { source: "politicsNode", target: "communityNode" },
+    { source: "politicsNode", target: "internetNode" },
+    { source: "communityNode", target: "internetNode" },
+    { source: "communityNode", target: "onlineShoppingNode" },
+    { source: "communityNode", target: "mediaNode" },
+    { source: "communityNode", target: "productNode" },
+    { source: "communityNode", target: "brandsNode" },
+    { source: "internetNode", target: "onlineShoppingNode" },
+    { source: "internetNode", target: "mediaNode" },
+    { source: "internetNode", target: "productNode" },
+    { source: "internetNode", target: "brandsNode" },
+    { source: "onlineShoppingNode", target: "mediaNode" },
+    { source: "onlineShoppingNode", target: "productNode" },
+    { source: "onlineShoppingNode", target: "brandsNode" },
+    { source: "manufacturerNode", target: "productNode" },
+    { source: "manufacturerNode", target: "rawMaterialNode" },
+    { source: "manufacturerNode", target: "brandsNode" },
+    { source: "productNode", target: "rawMaterialNode" },
+    { source: "productNode", target: "brandsNode" },
+]; // Dynamic links will come from Firestore
 
 // Fetch data from Firestore
 async function fetchFirebaseData() {
@@ -72,8 +176,8 @@ function renderGraph(nodes, links) {
 
     // Force simulation
     const simulation = d3.forceSimulation(nodes)
-        .force("link", d3.forceLink(links).id(d => d.id).distance(150))
-        .force("charge", d3.forceManyBody().strength(-500))
+        .force("link", d3.forceLink(links).id(d => d.id).distance(300))
+        .force("charge", d3.forceManyBody().strength(-1250))
         .force("center", d3.forceCenter(width / 2, height / 2));
 
     // Render links
@@ -91,8 +195,11 @@ function renderGraph(nodes, links) {
         .selectAll("circle")
         .data(nodes)
         .join("circle")
-        .attr("r", 10)
-        .attr("fill", d => (staticNodes.find(n => n.id === d.id) ? "#69b3a2" : "#ff7f0e"))
+        .attr("r", d => {
+            // Calculate radius based on number of connections (degree)
+            const degree = links.filter(link => link.source.id === d.id || link.target.id === d.id).length;
+            return 5 + degree * 4; // Base size 10, increased with degree
+        })        .attr("fill", d => (staticNodes.find(n => n.id === d.id) ? "#69b3a2" : "#ff7f0e"))
         .call(drag(simulation))
         .on("click", handleNodeClick);
 
@@ -102,9 +209,9 @@ function renderGraph(nodes, links) {
         .data(nodes)
         .join("text")
         .attr("text-anchor", "middle")
-        .attr("dy", -15)
+        .attr("dy", -1)
         .attr("font-size", "12px")
-        .attr("fill", "#333")
+        .attr("fill", "white")
         .text(d => d.label);
 
     // Update positions on each tick
