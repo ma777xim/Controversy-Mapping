@@ -19,7 +19,6 @@ const db = getFirestore(app);
 
 // Ensure the DOM is fully loaded before rendering
 window.addEventListener("DOMContentLoaded", () => {
-    // D3 Radial Bundle Chart Setup
     const width = 954;
     const radius = width / 2;
 
@@ -46,7 +45,7 @@ window.addEventListener("DOMContentLoaded", () => {
                     console.warn(`Node with ID ${doc.id} is missing a 'name' field.`);
                     return null;
                 }
-                nodeMap[doc.id] = { id: doc.id, name: data.name };
+                nodeMap[doc.id] = { id: doc.id, name: data.name, human: data.human || null };
                 return nodeMap[doc.id];
             }).filter(Boolean);
 
@@ -86,11 +85,26 @@ window.addEventListener("DOMContentLoaded", () => {
             .data(links.map(link => {
                 const sourceNode = root.leaves().find(node => node.data.id === link.source.id);
                 const targetNode = root.leaves().find(node => node.data.id === link.target.id);
-                return sourceNode && targetNode ? sourceNode.path(targetNode) : null;
+                if (sourceNode && targetNode) {
+                    return {
+                        path: sourceNode.path(targetNode),
+                        sourceHuman: link.source.human,
+                        targetHuman: link.target.human
+                    };
+                }
+                return null;
             }).filter(Boolean))
             .join("path")
-            .attr("d", line)
-            .attr("stroke", "#aaa")
+            .attr("d", d => d.path ? line(d.path) : null)
+            .attr("stroke", d => {
+                if (d.sourceHuman === "true" && d.targetHuman === "true") {
+                    return "blue";
+                } else if (d.sourceHuman === "false" && d.targetHuman === "false") {
+                    return "red";
+                } else {
+                    return "purple";
+                }
+            })
             .attr("fill", "none")
             .attr("stroke-width", 1);
 
@@ -107,14 +121,12 @@ window.addEventListener("DOMContentLoaded", () => {
         node.append("text")
             .attr("dy", "0.6em")
             .attr("x", d => d.x < Math.PI ? 12 : -12)
-                        .attr("fill", "white")
-
             .attr("text-anchor", d => d.x < Math.PI ? "start" : "end")
             .attr("transform", d => d.x >= Math.PI ? "rotate(180)" : null)
-            .text(d => d.data.name);
+            .text(d => d.data.name)
+            .attr("fill", "white");
     }
 
-    // Helper to create bilink structure
     function bilink(root) {
         const map = new Map(root.leaves().map(d => [id(d), d]));
         for (const link of links) {
