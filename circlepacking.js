@@ -67,7 +67,7 @@ async function renderCirclePacking() {
         .attr("viewBox", `0 0 ${width} ${height}`)
         .style("display", "block")
         .style("margin", "auto")
-        .style("background", "#111")
+        .style("background", "#191919")
         .style("cursor", "pointer");
 
     const root = d3.hierarchy(data)

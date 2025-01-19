@@ -167,12 +167,18 @@ function openCustomPopup(nodeId, question) {
     popup.style.zIndex = "1000";
 
     popup.innerHTML = `
-        <h3>${question}</h3>
         <form id="popup-form">
+        <div style="margin-bottom: 50px;">
+                <h3>${question}</h3>
+                </div><br>
             <input type="text" id="node-name" placeholder="Your answer will become a new node." required />
             <div style="margin: 10px 0;">
-                <label><input type="radio" name="human" value="true" required /> Human</label>
-                <label style="margin-left: 10px;"><input type="radio" name="human" value="false" required /> Non-Human</label>
+               <div style="display: inline-block; margin-right: 10px;">
+            <label><input type="radio" name="human" value="true" required /> Human</label>
+        </div>
+        <div style="display: inline-block;">
+            <label><input type="radio" name="human" value="false" required /> Non-Human</label>
+        </div>
             </div>
             <button type="submit">Submit</button>
             <button type="button" id="close-popup">Cancel</button>
