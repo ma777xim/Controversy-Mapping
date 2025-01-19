@@ -1,90 +1,347 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mapping Controversies</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">    <link rel="stylesheet" href="styles.css">
-<script src="https://d3js.org/d3.v7.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <title>Homepage</title>
+    <style>
 
-<style>
-        #contromap {
-            border: 1px solid black;
-            background-color: lightblue;
-            align-self: auto;
-        }
+
+    a {
+    color: inherit; /* Inherit color from parent element */
+    text-decoration: none; /* Remove underline */
+    transition-duration: .5s;
+}
+
+    a:hover {
+        color: inherit; /* Inherit color from parent element */
+        text-decoration: underline; /* Remove underline */
+        font-weight: 500;
+}
+
+
     </style>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 
 <body>
     <header>
-        <h1>Mapping Controversies</h1>
+        <div>
+            <h1>What do you think about department stores?</h1>
+            <br>
+            <h2>Hey, <b><span id="username"></span></b>. </h2>
+            <br>
+        </div>
         <div>
             <a href="signup.html">
-            <button>Signup</button>
+                <button>Signup</button>
             </a>
+            <br>
         </div>
+        <br>
     </header>
-
-    <div>
-        <h2> <b>Greetings, traveller.</b> </h2>
+    <div style="width: 100%; text-align: center; vertical-align: bottom; display: inline; background-color: transparent; height: 105px;">
+            <a href="dashboard.html" style="margin: 5%; color: white;">Actor-Network</a>
+            <a href="circlepacking.html" style="margin: 5%; color: white;">Circle-Packing</a>
+            <a href="radial.html" style="margin: 5%; color: white;">Radial-Connection</a>
+            <a href="map.html" style="margin: 5%; color: white;">Map</a>
+            <a href="signup2.html" style="margin: 5%;color: white;">Profile</a>
     </div>
 
-    <div>
-        <h4>Select scheme</h4>
-        <label for="color-switch">Color By:</label>
-        <select id="color-switch">
-            <option value="gender">By Gender</option>
-            <option value="age">By Age</option>
-        </select>
-
-        <label for="connection-filter">Filter Connections:</label>
-        <select id="connection-filter">
-            <option value="all">All Connections</option>
-            <option value="job">By Job</option>
-            <option value="age">By Age</option>
-            <option value="gender">By Gender</option>
-        </select>
+<main>
+    <div style="margin: 10px;">
+        <button style="margin: 10px; position: relative; horizontal-align: right;" id="addEdgeButton">Add Edge</button>
+        <button style="margin: 10px; position: relative; horizontal-align: right;" id="removeEdgeButton">Remove Edge</button>
     </div>
-
-    <svg id="contromap" width="800" height="600"></svg>
-
-    <div id="main-container">
-    <div id="icons-container">
-        <button class="icon" data-topic="commerce" onclick="showForm('commerceForm')">
-            <img src="images/mariocoin.png" alt="E-Commerce Icon" width="80">
-            <span></span>
-        </button>
-            <div id="forms-container">
-            <form id="ecommerceForm" class="hidden" onsubmit="submitForm(event, 'ecommerce')">
-            <label for="ecommerceQuestion">What do you think about e-commerce?</label>
-            <input type="text" id="ecommerceQuestion" name="answer" required>
-        <button type="submit">Submit</button>
-    </form>
+    <div class="content">
+        <svg id="contromap" width="1100" height="1200"></svg>
     </div>
-        <button class="icon" data-topic="sustainability" onclick="showForm('sustainabilityForm')">
-            <img src="images/rb_29621.png" alt="Sustainability Icon" width="80">
-            <span></span>
-        </button>
-        <div>
-            <form id="sustainabilityForm" class="hidden" onsubmit="submitForm(event, 'sustainability')">
-                <label for="sustainabilityQuestion">How can we improve sustainability?</label>
-                <input type="text" id="sustainabilityQuestion" name="answer" required>
-                <button type="submit">Submit</button>
-            </form>
-        </div>
-        <!-- Add more buttons if needed -->
-    </div>
-</div>
+</main>
     <footer>
-        <p>TUM Chair of Architectural Informatics</p>
-        <p><a href="mailto:maxim@yurin.de">maxim@yurin.de</a></p>
+        <h4> <b> &copy; 2025 Controversy Mapping.</b> <br> Technical University of Munich, Chair of Architectural Informatics, Prof. Dipl.-Ing. Frank Petzold. <br><br> Gustave Lahon, Maxim Yurin.<br><br>All Rights Reserved.</h4>
     </footer>
 
-  
-    <script src="forcegraph2.js"></script>
+<script type="module" src="force8.js"></script>
+<script>
+let addEdgeMode = false; // To track edge-adding mode
+let removeEdgeMode = false; // To track edge-removing mode
+let firstNode = null; // To store the first selected node
+
+// Button click event to activate edge-adding mode
+document.getElementById("addEdgeButton").addEventListener("click", () => {
+    addEdgeMode = true;
+    removeEdgeMode = false; // Disable remove mode if active
+    firstNode = null; // Reset selection
+    alert("Edge-adding mode activated. Click two nodes to connect them.");
+});
+
+// Button click event to activate edge-removing mode
+document.getElementById("removeEdgeButton").addEventListener("click", () => {
+    removeEdgeMode = true;
+    addEdgeMode = false; // Disable add mode if active
+    firstNode = null; // Reset selection
+    alert("Edge-removal mode activated. Click two nodes to disconnect them.");
+});
+
+// Modify handleNodeClick to support both add and remove edge modes
+async function handleNodeClick(event, d) {
+    try {
+        if (addEdgeMode || removeEdgeMode) {
+            // Edge creation or removal logic
+            if (!firstNode) {
+                // First node selected
+                firstNode = d;
+                alert(`First node selected: ${d.label}. Now select the second node.`);
+            } else {
+                // Second node selected
+                const secondNode = d;
+
+                if (addEdgeMode) {
+                    // Add a new edge in Firestore
+                    await updateDoc(doc(collection(db, "nodes"), firstNode.id), {
+                        [secondNode.id]: "edge", // Add field with "edge" value
+                    });
+
+                    alert(`Edge created between ${firstNode.label} and ${secondNode.label}.`);
+                } else if (removeEdgeMode) {
+                    // Remove an edge in Firestore
+                    await updateDoc(doc(collection(db, "nodes"), firstNode.id), {
+                        [secondNode.id]: deleteField(), // Remove field
+                    });
+
+                    alert(`Edge removed between ${firstNode.label} and ${secondNode.label}.`);
+                }
+
+                // Reset mode and selection
+                addEdgeMode = false;
+                removeEdgeMode = false;
+                firstNode = null;
+
+                // Fetch updated data and re-render the graph
+                fetchFirebaseData();
+            }
+        } else {
+            // Normal node click behavior (question handling)
+            const nodeDoc = await getDoc(doc(collection(db, "nodes"), d.id));
+
+            if (nodeDoc.exists()) {
+                const data = nodeDoc.data();
+                const question = data.question || `What do you think about ${d.label}.`;
+
+                // Display the question in a prompt popup
+                const answer = prompt(question);
+
+                if (answer) {
+                    // Update the document with the user's response
+                    await updateDoc(doc(collection(db, "nodes"), d.id), {
+                        response: answer, // Save the response under a "response" field
+                    });
+                    alert("Answer saved!");
+                }
+            } else {
+                alert(`Node data not found for ${d.label}.`);
+            }
+        }
+    } catch (error) {
+        console.error("Error handling node click:", error);
+        alert("An error occurred while processing the node. Check the console for details.");
+    }
+}
+
+// Drag behavior
+function drag(simulation) {
+    function dragstarted(event, d) {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+    }
+
+    function dragged(event, d) {
+        d.fx = event.x;
+        d.fy = event.y;
+    }
+
+    function dragended(event, d) {
+        if (!event.active) simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+    }
+
+    return d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended);
+}
+
+</script>
+<script type="module"> //Username
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+
+// Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyB3Vn9jXSJnQ0XC8JM64OszHpNEkvViBxA",
+    authDomain: "mapping-controversies.firebaseapp.com",
+    projectId: "mapping-controversies",
+    storageBucket: "mapping-controversies.appspot.com",
+    messagingSenderId: "259825186402",
+    appId: "1:259825186402:web:7c38048d67546fbe9b833b",
+    measurementId: "G-Q0WM4CNVM4"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth();
+const db = getFirestore();
+
+// Monitor authentication state
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        console.log("User is logged in:", user.uid); // Debugging
+
+        try {
+            // Reference to Firestore document
+            const userRef = doc(db, "mappers", user.uid);
+            const userSnapshot = await getDoc(userRef);
+
+            if (userSnapshot.exists()) {
+                const username = userSnapshot.data().username || "Mapper"; // Fallback to "Mapper"
+                console.log("Fetched username:", username); // Debugging
+
+                // Display the username
+                document.getElementById("username").textContent = username;
+            } else {
+                console.error("No such document for user:", user.uid);
+                document.getElementById("username").textContent = "Mapper"; // Fallback
+            }
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+            document.getElementById("username").textContent = "Mapper"; // Fallback
+        }
+    } else {
+        console.log("No user is logged in.");
+        document.getElementById("username").textContent = "user"; // Fallback
+    }
+});
+
+// Logout functionality
+document.getElementById("logoutButton").addEventListener("click", async () => {
+    try {
+        await signOut(auth);
+        console.log("User signed out.");
+        window.location.href = "index4.html"; // Redirect after logout
+    } catch (error) {
+        console.error("Sign-out error:", error);
+    }
+});
+</script>
+
+<script type="module">
+// Import Firebase SDKs
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+import { getFirestore, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+
+// Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyB3Vn9jXSJnQ0XC8JM64OszHpNEkvViBxA",
+    authDomain: "mapping-controversies.firebaseapp.com",
+    projectId: "mapping-controversies",
+    storageBucket: "mapping-controversies.appspot.com",
+    messagingSenderId: "259825186402",
+    appId: "1:259825186402:web:7c38048d67546fbe9b833b",
+    measurementId: "G-Q0WM4CNVM4"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth();
+const db = getFirestore();
+
+// Static elements
+const popup = document.getElementById("popup");
+const overlay = document.getElementById("overlay");
+const popupQuestion = document.getElementById("popupQuestion");
+const popupInput = document.getElementById("popupInput");
+const popupSubmit = document.getElementById("popupSubmit");
+
+// Current field to update
+let currentField = null;
+
+// Show popup when a sidebar button is clicked
+document.querySelectorAll(".sidebarButton").forEach(button => {
+    button.addEventListener("click", () => {
+        // Get dynamic values from the clicked button
+        currentField = button.getAttribute("data-field");
+        const question = button.getAttribute("data-question");
+        const placeholder = button.getAttribute("data-placeholder");
+
+        // Update popup content dynamically
+        popupQuestion.textContent = question || `Add data to: ${currentField}`;
+        popupInput.placeholder = placeholder || `Enter value for ${currentField}`;
+        popupInput.value = ""; // Clear previous input
+
+        // Show the popup
+        popup.style.display = "block";
+        overlay.style.display = "block";
+    });
+});
+
+// Hide popup when clicking the overlay
+overlay.addEventListener("click", () => {
+    popup.style.display = "none";
+    overlay.style.display = "none";
+});
+
+// Submit data to Firebase
+popupSubmit.addEventListener("click", async () => {
+    const value = popupInput.value.trim();
+
+    // Check if input is valid and contains two words
+    const wordCount = value.split(/\s+/).filter(word => word.length > 0).length; // Count words ignoring extra spaces
+    if (!value) {
+        alert("Nothing typed.");
+        return;
+    }
+
+    if (wordCount > 2) {
+        alert("Your answer is limited to two words.");
+        return;
+    }
+
+    if (!currentField) {
+        alert("No field selected for update.");
+        return;
+    }
+
+    try {
+        const user = auth.currentUser;
+        if (!user) throw new Error("No logged-in user.");
+
+        const userRef = doc(db, "mappers", user.uid);
+
+        await updateDoc(userRef, { [currentField]: value });
+
+        alert(`${currentField} has been updated to: ${value}`);
+    } catch (error) {
+        console.error("Error updating document:", error);
+        alert(`Failed to update: ${error.message}`);
+    } finally {
+        popup.style.display = "none";
+        overlay.style.display = "none";
+    }
+});
+
+
+</script>
+
 
 </body>
+
 </html>
+

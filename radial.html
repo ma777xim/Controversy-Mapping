@@ -8,21 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <title>Homepage</title>
-    <style>
-
-
-    a {
-    color: inherit; /* Inherit color from parent element */
-    text-decoration: none; /* Remove underline */
-    transition-duration: .5s;
-}
-
-    a:hover {
-        color: inherit; /* Inherit color from parent element */
-        text-decoration: underline; /* Remove underline */
-        font-weight: 500;
-}
-
+ <style>
 
     </style>
     <script src="https://d3js.org/d3.v7.min.js"></script>
@@ -45,7 +31,7 @@
         <br>
     </header>
     <div style="width: 100%; text-align: center; vertical-align: bottom; display: inline; background-color: transparent; height: 105px;">
-            <a href="dashboard.html" style="margin: 5%; color: white;">Actor-Network</a>
+         <a href="dashboard.html" style="margin: 5%; color: white;">Actor-Network</a>
             <a href="circlepacking.html" style="margin: 5%; color: white;">Circle-Packing</a>
             <a href="radial.html" style="margin: 5%; color: white;">Radial-Connection</a>
             <a href="map.html" style="margin: 5%; color: white;">Map</a>
@@ -53,19 +39,16 @@
     </div>
 
 <main>
-    <div style="margin: 10px;">
-        <button style="margin: 10px; position: relative; horizontal-align: right;" id="addEdgeButton">Add Edge</button>
-        <button style="margin: 10px; position: relative; horizontal-align: right;" id="removeEdgeButton">Remove Edge</button>
-    </div>
+  
     <div class="content">
-        <svg id="contromap" width="1100" height="1200"></svg>
+<div id="radial-chart"></div>
     </div>
 </main>
     <footer>
         <h4> <b> &copy; 2025 Controversy Mapping.</b> <br> Technical University of Munich, Chair of Architectural Informatics, Prof. Dipl.-Ing. Frank Petzold. <br><br> Gustave Lahon, Maxim Yurin.<br><br>All Rights Reserved.</h4>
     </footer>
 
-<script type="module" src="force8.js"></script>
+<script type="module" src="radial.js"></script>
 <script>
 let addEdgeMode = false; // To track edge-adding mode
 let removeEdgeMode = false; // To track edge-removing mode
@@ -130,7 +113,7 @@ async function handleNodeClick(event, d) {
 
             if (nodeDoc.exists()) {
                 const data = nodeDoc.data();
-                const question = data.question || `What do you think about ${d.label}.`;
+                const question = data.question || `No question available for ${d.label}.`;
 
                 // Display the question in a prompt popup
                 const answer = prompt(question);

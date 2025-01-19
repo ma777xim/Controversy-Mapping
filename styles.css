@@ -72,12 +72,12 @@ header button:hover {
     flex: 1;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    height: 150%;
+    width: 1200px;
+    height: 1500px;
     border: solid transparent;
     background-color: transparent;
     border-radius: 5px;
-    overflow: hidden;
+    overflow: visible;
 }
 
 /*Network Diagram v2 (firestore-based)*/
@@ -94,6 +94,42 @@ header button:hover {
     border-radius: 5px;
     overflow: hidden;
 }
+
+#commentModal {
+    background-color: #191919;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px #191919;
+    max-width: 800px;
+    width: 100%;
+    overflow-y: auto;
+    align-content: center;
+}
+
+#commentModal h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+#commentModal textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #191919;
+    border-radius: 5px;
+    resize: none;
+}
+
+#commentModal input[type="file"] {
+    margin-bottom: 10px;
+}
+
+
+
+#commentList img {
+    margin-top: 5px;
+}
+
 
 /*Network Diagram v1 (csv-based)*/
 #controversymap {
@@ -333,10 +369,9 @@ main {
 form {
     margin: auto;
     background-color: #191919;
-    border-color: #f9f9f9;
+    border-color: none;
     border: solid;
     border-radius: 15px;
-    width: 50%;
     text-align: center;
     padding: 20px;
 

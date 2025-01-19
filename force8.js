@@ -1,6 +1,6 @@
 // Firebase configuration
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js";
-import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
+import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, addDoc } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
 
 // Firebase setup
 const firebaseConfig = {
@@ -22,165 +22,52 @@ const svg = d3.select("#contromap");
 const width = +svg.attr("width");
 const height = +svg.attr("height");
 
-// Static nodes and their specific questions
-let staticNodes = [
-    { id: "depStoNode", label: "Department Store" },
-    { id: "signaNode", label: "SIGNA" },
-    { id: "shoppersNode", label: "Shoppers" },
-    { id: "transportationNode", label: "Transportation" },
-    { id: "employeesNode", label: "Employees" },
-    { id: "managerNode", label: "Manager" },
-    { id: "architectNode", label: "Architect" },
-    { id: "urbanPlannerNode", label: "Urban Planner" },
-    { id: "politicsNode", label: "Politics" },
-    { id: "lawNode", label: "Law" },
-    { id: "communityNode", label: "Community" },
-    { id: "internetNode", label: "Internet" },
-    { id: "onlineShoppingNode", label: "Online Shopping" },
-    { id: "mediaNode", label: "Media" },
-    { id: "manufacturerNode", label: "Manufacturer" },
-    { id: "productNode", label: "Product" },
-    { id: "rawMaterialNode", label: "Raw Materials" },
-    { id: "brandsNode", label: "Brands" },
-    // Add more static nodes and their questions as needed
-];
-let links = [
- { source: "depStoNode", target: "signaNode" },
-    { source: "depStoNode", target: "shoppersNode" },
-    { source: "depStoNode", target: "transportationNode" },
-    { source: "depStoNode", target: "employeesNode" },
-    { source: "depStoNode", target: "managerNode" },
-    { source: "depStoNode", target: "architectNode" },
-    { source: "depStoNode", target: "urbanPlannerNode" },
-    { source: "depStoNode", target: "politicsNode" },
-    { source: "depStoNode", target: "lawNode" },
-    { source: "depStoNode", target: "communityNode" },
-    { source: "depStoNode", target: "internetNode" },
-    { source: "depStoNode", target: "onlineShoppingNode" },
-    { source: "depStoNode", target: "mediaNode" },
-    { source: "depStoNode", target: "manufacturerNode" },
-    { source: "depStoNode", target: "productNode" },
-    { source: "depStoNode", target: "rawMaterialNode" },
-    { source: "depStoNode", target: "brandsNode" },
-    { source: "signaNode", target: "employeesNode" },
-    { source: "signaNode", target: "managerNode" },
-    { source: "signaNode", target: "architectNode" },
-    { source: "signaNode", target: "urbanPlannerNode" },
-    { source: "signaNode", target: "politicsNode" },
-    { source: "signaNode", target: "lawNode" },
-    { source: "signaNode", target: "mediaNode" },
-    { source: "shoppersNode", target: "transportationNode" },
-    { source: "shoppersNode", target: "employeesNode" },
-    { source: "shoppersNode", target: "communityNode" },
-    { source: "shoppersNode", target: "internetNode" },
-    { source: "shoppersNode", target: "onlineShoppingNode" },
-    { source: "shoppersNode", target: "mediaNode" },
-    { source: "shoppersNode", target: "productNode" },
-    { source: "shoppersNode", target: "brandsNode" },
-    { source: "transportationNode", target: "employeesNode" },
-    { source: "transportationNode", target: "managerNode" },
-    { source: "transportationNode", target: "rawMaterialNode" },
-    { source: "transportationNode", target: "politicsNode" },
-    { source: "transportationNode", target: "lawNode" },
-    { source: "transportationNode", target: "communityNode" },
-    { source: "transportationNode", target: "onlineShoppingNode" },
-    { source: "transportationNode", target: "productNode" },
-    { source: "employeesNode", target: "productNode" },
-    { source: "employeesNode", target: "managerNode" },
-    { source: "employeesNode", target: "politicsNode" },
-    { source: "employeesNode", target: "lawNode" },
-    { source: "employeesNode", target: "communityNode" },
-    { source: "employeesNode", target: "internetNode" },
-    { source: "employeesNode", target: "onlineShoppingNode" },
-    { source: "employeesNode", target: "mediaNode" },
-    { source: "employeesNode", target: "productNode" },
-    { source: "employeesNode", target: "brandsNode" },
-    { source: "managerNode", target: "politicsNode" },
-    { source: "managerNode", target: "lawNode" },
-    { source: "managerNode", target: "communityNode" },
-    { source: "managerNode", target: "internetNode" },
-    { source: "managerNode", target: "onlineShoppingNode" },
-    { source: "managerNode", target: "mediaNode" },
-    { source: "managerNode", target: "productNode" },
-    { source: "managerNode", target: "manufacturerNode" },
-    { source: "managerNode", target: "brandsNode" },
-    { source: "architectNode", target: "urbanPlannerNode" },
-    { source: "architectNode", target: "politicsNode" },
-    { source: "architectNode", target: "lawNode" },
-    { source: "architectNode", target: "mediaNode" },
-    { source: "urbanPlannerNode", target: "politicsNode" },
-    { source: "urbanPlannerNode", target: "lawNode" },
-    { source: "urbanPlannerNode", target: "communityNode" },
-    { source: "urbanPlannerNode", target: "mediaNode" },
-    { source: "politicsNode", target: "lawNode" },
-    { source: "politicsNode", target: "mediaNode" },
-    { source: "politicsNode", target: "communityNode" },
-    { source: "politicsNode", target: "internetNode" },
-    { source: "communityNode", target: "internetNode" },
-    { source: "communityNode", target: "onlineShoppingNode" },
-    { source: "communityNode", target: "mediaNode" },
-    { source: "communityNode", target: "productNode" },
-    { source: "communityNode", target: "brandsNode" },
-    { source: "internetNode", target: "onlineShoppingNode" },
-    { source: "internetNode", target: "mediaNode" },
-    { source: "internetNode", target: "productNode" },
-    { source: "internetNode", target: "brandsNode" },
-    { source: "onlineShoppingNode", target: "mediaNode" },
-    { source: "onlineShoppingNode", target: "productNode" },
-    { source: "onlineShoppingNode", target: "brandsNode" },
-    { source: "manufacturerNode", target: "productNode" },
-    { source: "manufacturerNode", target: "rawMaterialNode" },
-    { source: "manufacturerNode", target: "brandsNode" },
-    { source: "productNode", target: "rawMaterialNode" },
-    { source: "productNode", target: "brandsNode" },
-]; // Dynamic links will come from Firestore
+// Initialize empty nodes and links
+let nodes = [];
+let links = [];
+
+// Mode variables
+let addEdgeMode = false;
+let removeEdgeMode = false;
+let firstNode = null;
 
 // Fetch data from Firestore
 async function fetchFirebaseData() {
     try {
-        const querySnapshot = await getDocs(collection(db, "answers"));
-        let dynamicNodes = [];
+        const nodesSnapshot = await getDocs(collection(db, "nodes"));
+        const nodeMap = {};
 
-        querySnapshot.forEach(doc => {
-            const source = doc.id; // Document ID as source node
+        nodes = nodesSnapshot.docs.map(doc => {
             const data = doc.data();
+            nodeMap[doc.id] = { id: doc.id, label: data.name };
+            return { id: doc.id, label: data.name, human: data.human };
+        });
 
-            // Add dynamic nodes and links
-            Object.entries(data).forEach(([target, label]) => {
-                const targetNode = { id: target, label };
-
-                // Add target node if it doesn't exist
-                if (!dynamicNodes.find(node => node.id === target)) {
-                    dynamicNodes.push(targetNode);
+        links = [];
+        nodesSnapshot.docs.forEach(doc => {
+            const data = doc.data();
+            Object.entries(data).forEach(([field, value]) => {
+                if (value === "edge" && nodeMap[field]) {
+                    links.push({ source: doc.id, target: field });
                 }
-
-                // Add link
-                links.push({ source, target });
             });
         });
 
-        // Combine static and dynamic nodes
-        const nodes = [...staticNodes, ...dynamicNodes];
-
-        // Render the graph
-        renderGraph(nodes, links);
+        renderGraph();
     } catch (error) {
         console.error("Error fetching Firebase data:", error);
     }
 }
 
 // Render the graph
-function renderGraph(nodes, links) {
-    // Clear the SVG before rendering
+function renderGraph() {
     svg.selectAll("*").remove();
 
-    // Force simulation
     const simulation = d3.forceSimulation(nodes)
-        .force("link", d3.forceLink(links).id(d => d.id).distance(300))
-        .force("charge", d3.forceManyBody().strength(-1250))
+        .force("link", d3.forceLink(links).id(d => d.id).distance(200))
+        .force("charge", d3.forceManyBody().strength(-1200))
         .force("center", d3.forceCenter(width / 2, height / 2));
 
-    // Render links
     svg.append("g")
         .attr("stroke", "#aaa")
         .selectAll("line")
@@ -188,33 +75,47 @@ function renderGraph(nodes, links) {
         .join("line")
         .attr("stroke-width", 1);
 
-    // Render nodes
     const node = svg.append("g")
         .attr("stroke", "#fff")
-        .attr("stroke-width", 1.5)
+        .attr("stroke-width", 1)
         .selectAll("circle")
         .data(nodes)
         .join("circle")
         .attr("r", d => {
-            // Calculate radius based on number of connections (degree)
             const degree = links.filter(link => link.source.id === d.id || link.target.id === d.id).length;
-            return 5 + degree * 4; // Base size 10, increased with degree
-        })        .attr("fill", d => (staticNodes.find(n => n.id === d.id) ? "#69b3a2" : "#ff7f0e"))
+            return 2 + degree * 4;
+        })
+        .attr("fill", d => d.human === "true" ? "#69b3a2" : "#964c5d")
         .call(drag(simulation))
-        .on("click", handleNodeClick);
+        .on("click", (event, d) => {
+            if (addEdgeMode) {
+                handleNodeClickForEdge(event, d);
+            } else if (removeEdgeMode) {
+                handleNodeClickForRemoveEdge(event, d);
+            } else {
+                handleNodeClick(event, d);
+            }
+        });
 
-    // Render labels
     svg.append("g")
         .selectAll("text")
         .data(nodes)
         .join("text")
         .attr("text-anchor", "middle")
-        .attr("dy", -1)
-        .attr("font-size", "12px")
-        .attr("fill", "white")
-        .text(d => d.label);
+        .attr("dy", 1)
+        .attr("font-size", "16px")
+        .attr("fill", "#f9f9f9")
+        .text(d => d.label)
+        .on("click", (event, d) => {
+            if (addEdgeMode) {
+                handleNodeClickForEdge(event, d);
+            } else if (removeEdgeMode) {
+                handleNodeClickForRemoveEdge(event, d);
+            } else {
+                handleNodeClick(event, d);
+            }
+        });
 
-    // Update positions on each tick
     simulation.on("tick", () => {
         svg.selectAll("line")
             .attr("x1", d => d.source.x)
@@ -232,33 +133,88 @@ function renderGraph(nodes, links) {
     });
 }
 
-// Handle node click
 async function handleNodeClick(event, d) {
-    const staticNode = staticNodes.find(node => node.id === d.id);
+    if (addEdgeMode || removeEdgeMode) return;
 
-    // Static node: ask the predefined question
-    const question = staticNode ? staticNode.question : `What do you want to add about ${d.label}?`;
-    const answer = prompt(question);
+    try {
+        const nodeDoc = await getDoc(doc(collection(db, "nodes"), d.id));
 
-    if (answer) {
-        try {
-            // Add new document to Firestore
-            const newDoc = {};
-            newDoc[d.id] = answer;
-
-            await addDoc(collection(db, "answers"), newDoc);
-            alert("Answer saved!");
-
-            // Refresh the graph after adding the answer
-            await fetchFirebaseData();
-        } catch (error) {
-            console.error("Error saving answer:", error);
-            alert("Failed to save answer. Check console for details.");
+        if (nodeDoc.exists()) {
+            const data = nodeDoc.data();
+            const question = data.question || `No question available for ${d.label}.`;
+            openCustomPopup(d.id, question);
+        } else {
+            alert(`Node data not found for ${d.label}.`);
         }
+    } catch (error) {
+        console.error("Error handling node click:", error);
+        alert("An error occurred while processing the node. Check the console for details.");
     }
 }
 
-// Drag behavior
+function openCustomPopup(nodeId, question) {
+    const popup = document.createElement("div");
+    popup.id = "custom-popup";
+    popup.style.position = "fixed";
+    popup.style.top = "50%";
+    popup.style.left = "50%";
+    popup.style.transform = "translate(-50%, -50%)";
+    popup.style.padding = "30px";
+    popup.style.backgroundColor = "#191919";
+    popup.style.color = "#f9f9f9";
+    popup.style.borderRadius = "10px";
+    popup.style.boxShadow = "0px 4px 10px rgba(0, 0, 0, 0.5)";
+    popup.style.zIndex = "1000";
+
+    popup.innerHTML = `
+        <h3>${question}</h3>
+        <form id="popup-form">
+            <input type="text" id="node-name" placeholder="Your answer will become a new node." required />
+            <div style="margin: 10px 0;">
+                <label><input type="radio" name="human" value="true" required /> Human</label>
+                <label style="margin-left: 10px;"><input type="radio" name="human" value="false" required /> Non-Human</label>
+            </div>
+            <button type="submit">Submit</button>
+            <button type="button" id="close-popup">Cancel</button>
+        </form>
+    `;
+
+    document.body.appendChild(popup);
+
+    document.getElementById("close-popup").addEventListener("click", () => {
+        document.body.removeChild(popup);
+    });
+
+    document.getElementById("popup-form").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const nodeName = document.getElementById("node-name").value.trim();
+        const humanValue = document.querySelector("input[name='human']:checked").value;
+
+        if (nodeName.split(" ").length > 2) {
+            alert("Your answer is limited to two words.");
+            return;
+        }
+
+        try {
+            const newNodeRef = await addDoc(collection(db, "nodes"), {
+                name: nodeName,
+                human: humanValue
+            });
+
+            await updateDoc(doc(collection(db, "nodes"), nodeId), {
+                [newNodeRef.id]: "edge"
+            });
+
+            alert("Node and edge created successfully!");
+            document.body.removeChild(popup);
+            fetchFirebaseData();
+        } catch (error) {
+            console.error("Error adding node:", error);
+            alert("Failed to add node. Check the console for details.");
+        }
+    });
+}
+
 function drag(simulation) {
     function dragstarted(event, d) {
         if (!event.active) simulation.alphaTarget(0.3).restart();
@@ -282,6 +238,21 @@ function drag(simulation) {
         .on("drag", dragged)
         .on("end", dragended);
 }
+
+// Add Edge Button
+document.getElementById("addEdgeButton").addEventListener("click", () => {
+    addEdgeMode = true;
+    removeEdgeMode = false;
+    firstNode = null;
+    alert("Edge-adding mode activated. Click two nodes to connect them.");
+});
+
+// Remove Edge Button
+document.getElementById("removeEdgeButton").addEventListener("click", () => {
+    removeEdgeMode = true;
+    addEdgeMode = false;
+    alert("Edge-removal mode activated. Select an edge to remove.");
+});
 
 // Initialize graph with Firebase data
 fetchFirebaseData();

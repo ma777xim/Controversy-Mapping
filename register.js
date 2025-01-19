@@ -28,6 +28,7 @@ form.addEventListener('submit', async (event) => {
     const email = document.getElementById('email').value;
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
+    const gender = document.getElementById('gender').value;
 
     try {
         // Create user with email and password
@@ -40,14 +41,15 @@ form.addEventListener('submit', async (event) => {
         const userData = {
             email: email,
             username: username,
+            gender: gender,
             createdAt: new Date().toISOString() // Track account creation time
         };
         await setDoc(doc(db, "mappers", user.uid), userData);
 
         // Redirect to another page
         localStorage.setItem('username', username);
-        alert("Cool. Log in pls");
-        window.location.href = "login.html";
+        alert("Hey," username,". Please complete signup.");
+        window.location.href = "dashboard.html";
     } catch (error) {
         console.error("Error creating user:", error.code, error.message);
         alert(`Error: ${error.message}`);
