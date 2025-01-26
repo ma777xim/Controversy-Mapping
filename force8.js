@@ -1,6 +1,6 @@
 // Firebase configuration
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js";
-import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, addDoc } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
+import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, addDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
 
 // Firebase setup
 const firebaseConfig = {
@@ -30,6 +30,7 @@ let links = [];
 let addEdgeMode = false;
 let removeEdgeMode = false;
 let firstNode = null;
+let secondNode = null;
 
 // Fetch data from Firestore
 async function fetchFirebaseData() {
@@ -40,7 +41,7 @@ async function fetchFirebaseData() {
         nodes = nodesSnapshot.docs.map(doc => {
             const data = doc.data();
             nodeMap[doc.id] = { id: doc.id, label: data.name };
-            return { id: doc.id, label: data.name, human: data.human };
+            return { id: doc.id, label: data.name, question: data.question };
         });
 
         links = [];
@@ -73,7 +74,7 @@ function renderGraph() {
         .selectAll("line")
         .data(links)
         .join("line")
-        .attr("stroke-width", 1);
+        .attr("stroke-width", 1.5);
 
     const node = svg.append("g")
         .attr("stroke", "#fff")
@@ -85,7 +86,7 @@ function renderGraph() {
             const degree = links.filter(link => link.source.id === d.id || link.target.id === d.id).length;
             return 2 + degree * 4;
         })
-        .attr("fill", d => d.human === "true" ? "#69b3a2" : "#964c5d")
+        .attr("fill", d => d.question ? "#69b3a2" : "#964c5d") // Color based on question field
         .call(drag(simulation))
         .on("click", (event, d) => {
             if (addEdgeMode) {
@@ -103,7 +104,7 @@ function renderGraph() {
         .join("text")
         .attr("text-anchor", "middle")
         .attr("dy", 1)
-        .attr("font-size", "16px")
+        .attr("font-size", "14px")
         .attr("fill", "#f9f9f9")
         .text(d => d.label)
         .on("click", (event, d) => {
@@ -133,6 +134,7 @@ function renderGraph() {
     });
 }
 
+// Handle node click when not in edge mode
 async function handleNodeClick(event, d) {
     if (addEdgeMode || removeEdgeMode) return;
 
@@ -141,7 +143,7 @@ async function handleNodeClick(event, d) {
 
         if (nodeDoc.exists()) {
             const data = nodeDoc.data();
-            const question = data.question || `No question available for ${d.label}.`;
+            const question = data.question || `What do you think about ${d.label}?`;
             openCustomPopup(d.id, question);
         } else {
             alert(`Node data not found for ${d.label}.`);
@@ -152,6 +154,63 @@ async function handleNodeClick(event, d) {
     }
 }
 
+// Handle adding an edge
+async function handleNodeClickForEdge(event, d) {
+    if (!firstNode) {
+        firstNode = d;
+        alert(`First node selected: ${firstNode.label}. Now select the second node.`);
+    } else {
+        secondNode = d;
+        alert(`Second node selected: ${secondNode.label}. Connecting the nodes...`);
+        try {
+            await updateDoc(doc(db, "nodes", firstNode.id), {
+                [secondNode.id]: "edge"
+            });
+            await updateDoc(doc(db, "nodes", secondNode.id), {
+                [firstNode.id]: "edge"
+            });
+
+            alert("Edge created between nodes.");
+            firstNode = null;
+            secondNode = null;
+            addEdgeMode = false;
+            fetchFirebaseData();
+        } catch (error) {
+            console.error("Error adding edge:", error);
+            alert("Failed to add edge.");
+        }
+    }
+}
+
+// Handle removing an edge
+async function handleNodeClickForRemoveEdge(event, d) {
+    if (!firstNode) {
+        firstNode = d;
+        alert(`First node selected: ${firstNode.label}. Now select the second node.`);
+    } else {
+        secondNode = d;
+        alert(`Second node selected: ${secondNode.label}. Removing the edge...`);
+        try {
+            await updateDoc(doc(db, "nodes", firstNode.id), {
+                [secondNode.id]: null
+            });
+            await updateDoc(doc(db, "nodes", secondNode.id), {
+                [firstNode.id]: null
+            });
+
+            alert("Edge removed between nodes.");
+            firstNode = null;
+            secondNode = null;
+            removeEdgeMode = false;
+            fetchFirebaseData();
+        } catch (error) {
+            console.error("Error removing edge:", error);
+            alert("Failed to remove edge.");
+        }
+    }
+}
+
+// Open the custom popup
 function openCustomPopup(nodeId, question) {
     const popup = document.createElement("div");
     popup.id = "custom-popup";
@@ -168,18 +227,10 @@ function openCustomPopup(nodeId, question) {
 
     popup.innerHTML = `
         <form id="popup-form">
-        <div style="margin-bottom: 50px;">
+            <div style="margin-bottom: 50px;">
                 <h3>${question}</h3>
-                </div><br>
+            </div><br>
             <input type="text" id="node-name" placeholder="Your answer will become a new node." required />
-            <div style="margin: 10px 0;">
-               <div style="display: inline-block; margin-right: 10px;">
-            <label><input type="radio" name="human" value="true" required /> Human</label>
-        </div>
-        <div style="display: inline-block;">
-            <label><input type="radio" name="human" value="false" required /> Non-Human</label>
-        </div>
-            </div>
             <button type="submit">Submit</button>
             <button type="button" id="close-popup">Cancel</button>
         </form>
@@ -194,7 +245,6 @@ function openCustomPopup(nodeId, question) {
     document.getElementById("popup-form").addEventListener("submit", async (event) => {
         event.preventDefault();
         const nodeName = document.getElementById("node-name").value.trim();
-        const humanValue = document.querySelector("input[name='human']:checked").value;
 
         if (nodeName.split(" ").length > 2) {
             alert("Your answer is limited to two words.");
@@ -204,10 +254,9 @@ function openCustomPopup(nodeId, question) {
         try {
             const newNodeRef = await addDoc(collection(db, "nodes"), {
                 name: nodeName,
-                human: humanValue
             });
 
-            await updateDoc(doc(collection(db, "nodes"), nodeId), {
+            await updateDoc(doc(db, "nodes"), {
                 [newNodeRef.id]: "edge"
             });
 
@@ -221,6 +270,7 @@ function openCustomPopup(nodeId, question) {
     });
 }
 
+// Drag functionality
 function drag(simulation) {
     function dragstarted(event, d) {
         if (!event.active) simulation.alphaTarget(0.3).restart();
@@ -257,7 +307,7 @@ document.getElementById("addEdgeButton").addEventListener("click", () => {
 document.getElementById("removeEdgeButton").addEventListener("click", () => {
     removeEdgeMode = true;
     addEdgeMode = false;
-    alert("Edge-removal mode activated. Select an edge to remove.");
+    alert("Edge-removal mode activated. Click two nodes to disconnect them.");
 });
 
 // Initialize graph with Firebase data
