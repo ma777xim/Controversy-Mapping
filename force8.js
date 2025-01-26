@@ -1,12 +1,11 @@
 // Firebase configuration
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js";
-import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, addDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
+import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, addDoc } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
 
 // Firebase setup
 const firebaseConfig = {
     apiKey: "AIzaSyB3Vn9jXSJnQ0XC8JM64OszHpNEkvViBxA",
     authDomain: "mapping-controversies.firebaseapp.com",
-    databaseURL: "https://mapping-controversies-default-rtdb.europe-west1.firebasedatabase.app",
     projectId: "mapping-controversies",
     storageBucket: "mapping-controversies.appspot.com",
     messagingSenderId: "259825186402",
@@ -28,9 +27,7 @@ let links = [];
 
 // Mode variables
 let addEdgeMode = false;
-let removeEdgeMode = false;
 let firstNode = null;
-let secondNode = null;
 
 // Fetch data from Firestore
 async function fetchFirebaseData() {
@@ -69,7 +66,7 @@ function renderGraph() {
         .force("charge", d3.forceManyBody().strength(-1200))
         .force("center", d3.forceCenter(width / 2, height / 2));
 
-    svg.append("g")
+    const link = svg.append("g")
         .attr("stroke", "#aaa")
         .selectAll("line")
         .data(links)
@@ -86,19 +83,17 @@ function renderGraph() {
             const degree = links.filter(link => link.source.id === d.id || link.target.id === d.id).length;
             return 2 + degree * 4;
         })
-        .attr("fill", d => d.question ? "#69b3a2" : "#964c5d") // Color based on question field
+        .attr("fill", d => d.question ? "#69b3a2" : "#964c5d")
         .call(drag(simulation))
         .on("click", (event, d) => {
             if (addEdgeMode) {
-                handleNodeClickForEdge(event, d);
-            } else if (removeEdgeMode) {
-                handleNodeClickForRemoveEdge(event, d);
+                handleNodeClickForEdge(d);
             } else {
-                handleNodeClick(event, d);
+                handleNodeClick(d);
             }
         });
 
-    svg.append("g")
+    const text = svg.append("g")
         .selectAll("text")
         .data(nodes)
         .join("text")
@@ -106,111 +101,56 @@ function renderGraph() {
         .attr("dy", 1)
         .attr("font-size", "14px")
         .attr("fill", "#f9f9f9")
-        .text(d => d.label)
-        .on("click", (event, d) => {
-            if (addEdgeMode) {
-                handleNodeClickForEdge(event, d);
-            } else if (removeEdgeMode) {
-                handleNodeClickForRemoveEdge(event, d);
-            } else {
-                handleNodeClick(event, d);
-            }
-        });
+        .text(d => d.label);
 
     simulation.on("tick", () => {
-        svg.selectAll("line")
+        link
             .attr("x1", d => d.source.x)
             .attr("y1", d => d.source.y)
             .attr("x2", d => d.target.x)
             .attr("y2", d => d.target.y);
 
-        svg.selectAll("circle")
+        node
             .attr("cx", d => d.x)
             .attr("cy", d => d.y);
 
-        svg.selectAll("text")
+        text
             .attr("x", d => d.x)
             .attr("y", d => d.y);
     });
 }
 
-// Handle node click when not in edge mode
-async function handleNodeClick(event, d) {
-    if (addEdgeMode || removeEdgeMode) return;
-
-    try {
-        const nodeDoc = await getDoc(doc(collection(db, "nodes"), d.id));
-
-        if (nodeDoc.exists()) {
-            const data = nodeDoc.data();
-            const question = data.question || `What do you think about ${d.label}?`;
-            openCustomPopup(d.id, question);
-        } else {
-            alert(`Node data not found for ${d.label}.`);
-        }
-    } catch (error) {
-        console.error("Error handling node click:", error);
-        alert("An error occurred while processing the node. Check the console for details.");
-    }
-}
-
-// Handle adding an edge
-async function handleNodeClickForEdge(event, d) {
+// Handle node click for adding an edge
+async function handleNodeClickForEdge(d) {
     if (!firstNode) {
         firstNode = d;
-        alert(`First node selected: ${firstNode.label}. Now select the second node.`);
+        alert(`First node selected: ${d.label}`);
+    } else if (firstNode.id === d.id) {
+        alert("Cannot connect a node to itself.");
     } else {
-        secondNode = d;
-        alert(`Second node selected: ${secondNode.label}. Connecting the nodes...`);
         try {
             await updateDoc(doc(db, "nodes", firstNode.id), {
-                [secondNode.id]: "edge"
+                [d.id]: "edge"
             });
-            await updateDoc(doc(db, "nodes", secondNode.id), {
-                [firstNode.id]: "edge"
-            });
-
-            alert("Edge created between nodes.");
+            alert(`Edge created between ${firstNode.label} and ${d.label}`);
             firstNode = null;
-            secondNode = null;
-            addEdgeMode = false;
+            addEdgeMode = false; // Deactivate after creation
             fetchFirebaseData();
         } catch (error) {
             console.error("Error adding edge:", error);
-            alert("Failed to add edge.");
+            alert("Failed to add edge. Check the console for details.");
         }
     }
 }
 
-// Handle removing an edge
-async function handleNodeClickForRemoveEdge(event, d) {
-    if (!firstNode) {
-        firstNode = d;
-        alert(`First node selected: ${firstNode.label}. Now select the second node.`);
-    } else {
-        secondNode = d;
-        alert(`Second node selected: ${secondNode.label}. Removing the edge...`);
-        try {
-            await updateDoc(doc(db, "nodes", firstNode.id), {
-                [secondNode.id]: null
-            });
-            await updateDoc(doc(db, "nodes", secondNode.id), {
-                [firstNode.id]: null
-            });
+// Handle node click (normal mode)
+function handleNodeClick(d) {
+    if (addEdgeMode) return;
 
-            alert("Edge removed between nodes.");
-            firstNode = null;
-            secondNode = null;
-            removeEdgeMode = false;
-            fetchFirebaseData();
-        } catch (error) {
-            console.error("Error removing edge:", error);
-            alert("Failed to remove edge.");
-        }
-    }
+    openCustomPopup(d.id, d.question || `What do you think about ${d.label}?`);
 }
 
-// Open the custom popup
+// Open custom popup
 function openCustomPopup(nodeId, question) {
     const popup = document.createElement("div");
     popup.id = "custom-popup";
@@ -227,9 +167,7 @@ function openCustomPopup(nodeId, question) {
 
     popup.innerHTML = `
         <form id="popup-form">
-            <div style="margin-bottom: 50px;">
-                <h3>${question}</h3>
-            </div><br>
+            <h3>${question}</h3>
             <input type="text" id="node-name" placeholder="Your answer will become a new node." required />
             <button type="submit">Submit</button>
             <button type="button" id="close-popup">Cancel</button>
@@ -246,23 +184,17 @@ function openCustomPopup(nodeId, question) {
         event.preventDefault();
         const nodeName = document.getElementById("node-name").value.trim();
 
-        if (nodeName.split(" ").length > 2) {
-            alert("Your answer is limited to two words.");
-            return;
-        }
-
         try {
-            const newNodeRef = await addDoc(collection(db, "nodes"), {
-                name: nodeName,
-            });
+            // Create a new node document
+            const newNodeRef = await addDoc(collection(db, "nodes"), { name: nodeName });
+            const newNodeId = newNodeRef.id;
 
-            await updateDoc(doc(db, "nodes"), {
-                [newNodeRef.id]: "edge"
-            });
+            // Update the current node to link to the new node
+            await updateDoc(doc(db, "nodes", nodeId), { [newNodeId]: "edge" });
 
-            alert("Node and edge created successfully!");
+            alert("Node and edge added successfully!");
             document.body.removeChild(popup);
-            fetchFirebaseData();
+            fetchFirebaseData(); // Reload data to include new node
         } catch (error) {
             console.error("Error adding node:", error);
             alert("Failed to add node. Check the console for details.");
@@ -295,20 +227,12 @@ function drag(simulation) {
         .on("end", dragended);
 }
 
-// Add Edge Button
+// Add Edge Button Listener
 document.getElementById("addEdgeButton").addEventListener("click", () => {
-    addEdgeMode = true;
-    removeEdgeMode = false;
-    firstNode = null;
-    alert("Edge-adding mode activated. Click two nodes to connect them.");
+    addEdgeMode = !addEdgeMode;
+    firstNode = null; // Reset first node
+    alert(addEdgeMode ? "Add Edge Mode Activated" : "Add Edge Mode Deactivated");
 });
 
-// Remove Edge Button
-document.getElementById("removeEdgeButton").addEventListener("click", () => {
-    removeEdgeMode = true;
-    addEdgeMode = false;
-    alert("Edge-removal mode activated. Click two nodes to disconnect them.");
-});
-
-// Initialize graph with Firebase data
+// Fetch data on load
 fetchFirebaseData();
