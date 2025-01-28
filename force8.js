@@ -1,6 +1,6 @@
 // Firebase configuration
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js";
-import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, addDoc } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
+import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, addDoc, deleteField } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
 
 // Firebase setup
 const firebaseConfig = {
@@ -27,6 +27,7 @@ let links = [];
 
 // Mode variables
 let addEdgeMode = false;
+let removeEdgeMode = false;
 let firstNode = null;
 
 // Fetch data from Firestore
@@ -62,7 +63,7 @@ function renderGraph() {
     svg.selectAll("*").remove();
 
     const simulation = d3.forceSimulation(nodes)
-        .force("link", d3.forceLink(links).id(d => d.id).distance(200))
+        .force("link", d3.forceLink(links).id(d => d.id).distance(50))
         .force("charge", d3.forceManyBody().strength(-1200))
         .force("center", d3.forceCenter(width / 2, height / 2));
 
@@ -81,13 +82,15 @@ function renderGraph() {
         .join("circle")
         .attr("r", d => {
             const degree = links.filter(link => link.source.id === d.id || link.target.id === d.id).length;
-            return 2 + degree * 4;
+            return 4 + degree * 3;
         })
         .attr("fill", d => d.question ? "#69b3a2" : "#964c5d")
         .call(drag(simulation))
         .on("click", (event, d) => {
             if (addEdgeMode) {
                 handleNodeClickForEdge(d);
+            } else if (removeEdgeMode) {
+                handleNodeClickForEdgeRemoval(d);
             } else {
                 handleNodeClick(d);
             }
@@ -98,10 +101,20 @@ function renderGraph() {
         .data(nodes)
         .join("text")
         .attr("text-anchor", "middle")
-        .attr("dy", 1)
+        .attr("dy", 3)
         .attr("font-size", "14px")
         .attr("fill", "#f9f9f9")
-        .text(d => d.label);
+        .text(d => d.label)
+        .on("click", (event, d) => {
+            // Ensure label clicks behave like node clicks
+            if (addEdgeMode) {
+                handleNodeClickForEdge(d);
+            } else if (removeEdgeMode) {
+                handleNodeClickForEdgeRemoval(d);
+            } else {
+                handleNodeClick(d);
+            }
+        });
 
     simulation.on("tick", () => {
         link
@@ -143,10 +156,38 @@ async function handleNodeClickForEdge(d) {
     }
 }
 
+// Handle node click for removing an edge
+async function handleNodeClickForEdgeRemoval(d) {
+    if (!firstNode) {
+        firstNode = d;
+        alert(`First node selected: ${d.label}`);
+    } else if (firstNode.id === d.id) {
+        alert("Cannot remove an edge to itself.");
+    } else {
+        try {
+            const firstNodeDoc = doc(db, "nodes", firstNode.id);
+            const firstNodeData = (await getDoc(firstNodeDoc)).data();
+
+            if (firstNodeData[d.id] === "edge") {
+                // Remove the edge from the Firestore document
+                await updateDoc(firstNodeDoc, { [d.id]: deleteField() });
+                alert(`Edge removed between ${firstNode.label} and ${d.label}`);
+                firstNode = null;
+                removeEdgeMode = false; // Deactivate after removal
+                fetchFirebaseData();
+            } else {
+                alert("No edge exists between the selected nodes.");
+                firstNode = null;
+            }
+        } catch (error) {
+            console.error("Error removing edge:", error);
+            alert("Failed to remove edge. Check the console for details.");
+        }
+    }
+}
+
 // Handle node click (normal mode)
 function handleNodeClick(d) {
-    if (addEdgeMode) return;
-
     openCustomPopup(d.id, d.question || `What do you think about ${d.label}?`);
 }
 
@@ -232,6 +273,13 @@ document.getElementById("addEdgeButton").addEventListener("click", () => {
     addEdgeMode = !addEdgeMode;
     firstNode = null; // Reset first node
     alert(addEdgeMode ? "Add Edge Mode Activated" : "Add Edge Mode Deactivated");
+});
+
+// Add Remove Edge Button Listener
+document.getElementById("removeEdgeButton").addEventListener("click", () => {
+    removeEdgeMode = !removeEdgeMode;
+    firstNode = null; // Reset first node
+    alert(removeEdgeMode ? "Remove Edge Mode Activated" : "Remove Edge Mode Deactivated");
 });
 
 // Fetch data on load

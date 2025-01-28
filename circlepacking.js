@@ -120,7 +120,7 @@ async function renderCirclePacking() {
         focus = d;
 
         const transition = svg.transition()
-            .duration(1000)
+            .duration(1400)
             .tween("zoom", (d) => {
                 const i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2]);
                 return (t) => zoomTo(i(t));

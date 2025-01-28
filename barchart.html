@@ -23,6 +23,10 @@
         font-weight: 500;
 }
 
+svg {
+            display: block;
+        }
+
 
     </style>
     <script src="https://d3js.org/d3.v7.min.js"></script>
@@ -33,12 +37,12 @@
         <div>
             <h1>What do you think about department stores?</h1>
             <br>
-            <h2>Hey, <b><span id="username"></span></b>. </h2>
+            <h2>Hey, <b><span id="username"></span></b>.</h2>
             <br>
         </div>
         <div>
-            <a href="signup.html">
-                <button>Signup</button>
+            <a href="index.html">
+                <button id="logoutButton">Logout</button>
             </a>
             <br>
         </div>
@@ -54,131 +58,21 @@
     </div>
 
 <main>
-    <div style="margin: 10px;">
-        <button style="margin: 10px; position: relative; horizontal-align: right;" id="addEdgeButton">Add Edge</button>
-        <button style="margin: 10px; position: relative; horizontal-align: right;" id="removeEdgeButton">Remove Edge</button>
+
+    <div>
+        <button style="position: absolute; top: 300px; z-index: 1000;left: 50px; horizontal-align: right;" id="sort-asc">Ascending edges</button>
+        <button style="position: absolute; top: 400px; z-index: 1000;left: 50px; horizontal-align: right;" id="sort-desc">Descending edges</button>
+        <button style="position: absolute; top: 500px; z-index: 1000; left: 50px; horizontal-align: right;" id="sort-alpha">Alphabetical</button>
     </div>
-    <div class="content">
-        <svg id="contromap" width="1100" height="1200"></svg>
+    <div class="content" style="margin-top: 50px;">
+        <svg id="barchart" width="1100" height="1200"></svg>
     </div>
 </main>
     <footer>
         <h4> <b> &copy; 2025 Controversy Mapping.</b> <br> Technical University of Munich, Chair of Architectural Informatics, Prof. Dipl.-Ing. Frank Petzold. <br><br> Gustave Lahon, Maxim Yurin.<br><br>All Rights Reserved.</h4>
     </footer>
 
-<script type="module" src="force8.js"></script>
-<script>
-let addEdgeMode = false; // To track edge-adding mode
-let removeEdgeMode = false; // To track edge-removing mode
-let firstNode = null; // To store the first selected node
-
-// Button click event to activate edge-adding mode
-document.getElementById("addEdgeButton").addEventListener("click", () => {
-    addEdgeMode = true;
-    removeEdgeMode = false; // Disable remove mode if active
-    firstNode = null; // Reset selection
-    alert("Edge-adding mode activated. Click two nodes to connect them.");
-});
-
-// Button click event to activate edge-removing mode
-document.getElementById("removeEdgeButton").addEventListener("click", () => {
-    removeEdgeMode = true;
-    addEdgeMode = false; // Disable add mode if active
-    firstNode = null; // Reset selection
-    alert("Edge-removal mode activated. Click two nodes to disconnect them.");
-});
-
-// Modify handleNodeClick to support both add and remove edge modes
-async function handleNodeClick(event, d) {
-    try {
-        if (addEdgeMode || removeEdgeMode) {
-            // Edge creation or removal logic
-            if (!firstNode) {
-                // First node selected
-                firstNode = d;
-                alert(`First node selected: ${d.label}. Now select the second node.`);
-            } else {
-                // Second node selected
-                const secondNode = d;
-
-                if (addEdgeMode) {
-                    // Add a new edge in Firestore
-                    await updateDoc(doc(collection(db, "nodes"), firstNode.id), {
-                        [secondNode.id]: "edge", // Add field with "edge" value
-                    });
-
-                    alert(`Edge created between ${firstNode.label} and ${secondNode.label}.`);
-                } else if (removeEdgeMode) {
-                    // Remove an edge in Firestore
-                    await updateDoc(doc(collection(db, "nodes"), firstNode.id), {
-                        [secondNode.id]: deleteField(), // Remove field
-                    });
-
-                    alert(`Edge removed between ${firstNode.label} and ${secondNode.label}.`);
-                }
-
-                // Reset mode and selection
-                addEdgeMode = false;
-                removeEdgeMode = false;
-                firstNode = null;
-
-                // Fetch updated data and re-render the graph
-                fetchFirebaseData();
-            }
-        } else {
-            // Normal node click behavior (question handling)
-            const nodeDoc = await getDoc(doc(collection(db, "nodes"), d.id));
-
-            if (nodeDoc.exists()) {
-                const data = nodeDoc.data();
-                const question = data.question || `What do you think about ${d.label}.`;
-
-                // Display the question in a prompt popup
-                const answer = prompt(question);
-
-                if (answer) {
-                    // Update the document with the user's response
-                    await updateDoc(doc(collection(db, "nodes"), d.id), {
-                        response: answer, // Save the response under a "response" field
-                    });
-                    alert("Answer saved!");
-                }
-            } else {
-                alert(`Node data not found for ${d.label}.`);
-            }
-        }
-    } catch (error) {
-        console.error("Error handling node click:", error);
-        alert("An error occurred while processing the node. Check the console for details.");
-    }
-}
-
-// Drag behavior
-function drag(simulation) {
-    function dragstarted(event, d) {
-        if (!event.active) simulation.alphaTarget(0.3).restart();
-        d.fx = d.x;
-        d.fy = d.y;
-    }
-
-    function dragged(event, d) {
-        d.fx = event.x;
-        d.fy = event.y;
-    }
-
-    function dragended(event, d) {
-        if (!event.active) simulation.alphaTarget(0);
-        d.fx = null;
-        d.fy = null;
-    }
-
-    return d3.drag()
-        .on("start", dragstarted)
-        .on("drag", dragged)
-        .on("end", dragended);
-}
-
-</script>
+<script type="module" src="barchart.js"></script>
 <script type="module"> //Username
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
@@ -338,9 +232,7 @@ popupSubmit.addEventListener("click", async () => {
     }
 });
 
-
 </script>
-
 
 </body>
 
