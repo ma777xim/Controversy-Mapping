@@ -21,6 +21,8 @@ header {
     display: flex;
     justify-content: space-between; /* Space out elements to left and right */
     align-items: center; /* Vertically center the items */
+    position: sticky;
+    top: 0;
     padding: 20px;
     width: 100%;
     background-color: #191919;
@@ -176,6 +178,7 @@ h3 {
     font-size: 20px;
     font-weight: 300;
     margin: auto;
+    margin-bottom: 50px;
 }
 
 h4 {

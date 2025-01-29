@@ -59,9 +59,9 @@ async function fetchCirclePackingData() {
 async function renderCirclePacking() {
     const data = await fetchCirclePackingData();
 
-    const width = 600;
-    const height = 600;
-    const color = d3.scaleOrdinal(["#69b3a2", "#964c5d", "#69b3a2", "#964c5d"]);
+    const width = 1400;
+    const height = 1400;
+    const color = d3.scaleOrdinal(["purple", "purple", "red", "purple"]);
 
     const svg = d3.select("#circlepacking")
         .attr("viewBox", `0 0 ${width} ${height}`)
@@ -87,7 +87,7 @@ async function renderCirclePacking() {
         .selectAll("circle")
         .data(root.descendants())
         .join("circle")
-        .attr("fill", (d) => (d.children ? color(d.depth) : "#b3d2ff"))
+        .attr("fill", (d) => (d.children ? color(d.depth) : "#0000ff"))
         .attr("pointer-events", (d) => (!d.children ? "none" : null))
         .on("click", (event, d) => focus !== d && (zoom(event, d), event.stopPropagation()));
 

@@ -18,8 +18,8 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // Chart dimensions
-const width = 1100;  // Updated width
-const height = 1200; // Updated height
+const width = 1400;
+const height = 400;
 const marginTop = 20;
 const marginRight = 0;
 const marginBottom = 30;
@@ -35,28 +35,20 @@ async function fetchEdgeCounts() {
             data: doc.data()
         }));
 
-        // Prepare a map to store frequencies
         const frequencyMap = new Map();
 
-        // Helper to get the name by ID
         const getNodeNameById = (id) => {
             const node = nodesData.find(n => n.id === id);
             return node ? node.name : null;
         };
 
         nodesData.forEach(({ name, data }) => {
-            // Initialize frequency for the current node
             if (!frequencyMap.has(name)) {
                 frequencyMap.set(name, 0);
             }
-
-            // Process edges and update frequencies
             Object.entries(data).forEach(([key, value]) => {
                 if (value === "edge") {
-                    // Increment frequency for the current node
                     frequencyMap.set(name, frequencyMap.get(name) + 1);
-
-                    // Increment frequency for the referenced node (key of the "edge")
                     const referencedNodeName = getNodeNameById(key);
                     if (referencedNodeName) {
                         if (!frequencyMap.has(referencedNodeName)) {
@@ -68,7 +60,6 @@ async function fetchEdgeCounts() {
             });
         });
 
-        // Convert the map to an array for charting
         const data = Array.from(frequencyMap.entries()).map(([name, frequency]) => ({
             name,
             frequency
@@ -86,7 +77,6 @@ async function fetchEdgeCounts() {
 
 // D3 bar chart
 function createBarChart(data) {
-    // Create scales
     const x = d3.scaleBand()
         .domain(data.map(d => d.name))
         .range([marginLeft, width - marginRight])
@@ -96,21 +86,18 @@ function createBarChart(data) {
         .domain([0, d3.max(data, d => d.frequency)]).nice()
         .range([height - marginBottom, marginTop]);
 
-    // Create axes
     const xAxis = d3.axisBottom(x).tickSizeOuter(0);
     const yAxis = d3.axisLeft(y);
 
-    // Select SVG container (Updated to target the new SVG id)
-    const svg = d3.select("#barchart")  // Use the existing SVG element
+    const svg = d3.select("#barchart")
         .attr("viewBox", `0 0 ${width} ${height}`)
         .style("max-width", `${width}px`)
         .style("height", `${height}px`)
-        .style("font", "10px Inter")
+        .style("font", "30px Inter")
         .style("overflow", "visible");
 
-    // Draw bars
     const bars = svg.append("g")
-        .attr("fill", "steelblue")
+        .attr("fill", "#0000ff")
         .selectAll("rect")
         .data(data)
         .join("rect")
@@ -119,41 +106,35 @@ function createBarChart(data) {
         .attr("height", d => y(0) - y(d.frequency))
         .attr("width", x.bandwidth());
 
-    // Draw X-axis
+    const labels = svg.append("g")
+        .selectAll("text")
+        .data(data)
+        .join("text")
+        .attr("x", d => x(d.name) + x.bandwidth() / 2)
+        .attr("y", d => y(d.frequency) - 5)
+        .attr("text-anchor", "middle")
+        .style("font", "15px Inter")
+        .style("fill", "white")
+        .text(d => d.frequency);
+
     const gx = svg.append("g")
-        .attr("transform", `translate(15,${height - marginBottom})`)
+        .attr("transform", `translate(0,${height - marginBottom})`)
         .call(xAxis);
 
-    // Draw Y-axis
     svg.append("g")
         .attr("transform", `translate(${marginLeft},0)`)
         .call(yAxis)
         .call(g => g.select(".domain").remove());
 
-    // Rotate X-axis labels by 90 degrees to avoid overlap
     gx.selectAll("text")
-        .style("text-anchor", "middle")
-        .attr("transform", "rotate(90)");
+        .style("text-anchor", "end")
+        .attr("transform", "rotate(-45)");
 
-    // Sorting functionality
-    d3.select("#sort-asc").on("click", () => {
-        sortBars((a, b) => a.frequency - b.frequency);
-    });
-
-    d3.select("#sort-desc").on("click", () => {
-        sortBars((a, b) => b.frequency - a.frequency);
-    });
-
-    d3.select("#sort-alpha").on("click", () => {
-        sortBars((a, b) => d3.ascending(a.name, b.name)); // Sort alphabetically
-    });
-
-    // Function to sort bars
     function sortBars(order) {
         data.sort(order);
         x.domain(data.map(d => d.name));
 
-        const t = svg.transition().duration(750);
+        const t = svg.transition().duration(1250);
 
         bars.data(data, d => d.name)
             .order()
@@ -161,9 +142,18 @@ function createBarChart(data) {
             .delay((d, i) => i * 20)
             .attr("x", d => x(d.name));
 
+        labels.data(data, d => d.name)
+            .order()
+            .transition(t)
+            .delay((d, i) => i * 20)
+            .attr("x", d => x(d.name) + x.bandwidth() / 2);
+
         gx.transition(t).call(xAxis).selectAll(".tick").delay((d, i) => i * 20);
     }
+
+    d3.select("#sort-asc").on("click", () => sortBars((a, b) => a.frequency - b.frequency));
+    d3.select("#sort-desc").on("click", () => sortBars((a, b) => b.frequency - a.frequency));
+    d3.select("#sort-alpha").on("click", () => sortBars((a, b) => d3.ascending(a.name, b.name)));
 }
 
-// Fetch data and render the chart
 document.addEventListener("DOMContentLoaded", fetchEdgeCounts);

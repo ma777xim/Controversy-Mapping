@@ -19,7 +19,7 @@ const db = getFirestore(app);
 
 // Ensure the DOM is fully loaded before rendering
 window.addEventListener("DOMContentLoaded", () => {
-    const width = 954;
+    const width = 1400;
     const radius = width / 2;
 
     const svg = d3.select("#radial-chart")
@@ -45,7 +45,7 @@ window.addEventListener("DOMContentLoaded", () => {
                     console.warn(`Node with ID ${doc.id} is missing a 'name' field.`);
                     return null;
                 }
-                nodeMap[doc.id] = { id: doc.id, name: data.name, human: data.human || null };
+                nodeMap[doc.id] = { id: doc.id, name: data.name, question: data.question || null };
                 return nodeMap[doc.id];
             }).filter(Boolean);
 
@@ -88,8 +88,8 @@ window.addEventListener("DOMContentLoaded", () => {
                 if (sourceNode && targetNode) {
                     return {
                         path: sourceNode.path(targetNode),
-                        sourceHuman: link.source.human,
-                        targetHuman: link.target.human
+                        sourceQuestion: link.source.question,
+                        targetQuestion: link.target.question
                     };
                 }
                 return null;
@@ -97,12 +97,12 @@ window.addEventListener("DOMContentLoaded", () => {
             .join("path")
             .attr("d", d => d.path ? line(d.path) : null)
             .attr("stroke", d => {
-                if (d.sourceHuman === "true" && d.targetHuman === "true") {
+                if (d.sourceQuestion && d.targetQuestion) {
                     return "blue";
-                } else if (d.sourceHuman === "false" && d.targetHuman === "false") {
-                    return "red";
-                } else {
+                } else if ((d.sourceQuestion && !d.targetQuestion) || (!d.sourceQuestion && d.targetQuestion)) {
                     return "purple";
+                } else {
+                    return "red";
                 }
             })
             .attr("fill", "none")

@@ -72,19 +72,19 @@ function renderGraph() {
         .selectAll("line")
         .data(links)
         .join("line")
-        .attr("stroke-width", 1.5);
+        .attr("stroke-width", 2);
 
     const node = svg.append("g")
         .attr("stroke", "#fff")
-        .attr("stroke-width", 1)
+        .attr("stroke-width", 0)
         .selectAll("circle")
         .data(nodes)
         .join("circle")
         .attr("r", d => {
             const degree = links.filter(link => link.source.id === d.id || link.target.id === d.id).length;
-            return 4 + degree * 3;
+            return 5 + degree * 3;
         })
-        .attr("fill", d => d.question ? "#69b3a2" : "#964c5d")
+        .attr("fill", d => d.question ? "blue" : "red")
         .call(drag(simulation))
         .on("click", (event, d) => {
             if (addEdgeMode) {
@@ -209,6 +209,7 @@ function openCustomPopup(nodeId, question) {
     popup.innerHTML = `
         <form id="popup-form">
             <h3>${question}</h3>
+            <br>
             <input type="text" id="node-name" placeholder="Your answer will become a new node." required />
             <button type="submit">Submit</button>
             <button type="button" id="close-popup">Cancel</button>

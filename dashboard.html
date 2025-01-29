@@ -44,25 +44,28 @@
         </div>
         <br>
     </header>
-    <div style="width: 100%; text-align: center; vertical-align: bottom; display: inline; background-color: transparent; height: 105px;">
-            <a href="dashboard.html" style="margin: 5%; color: white;">Actor-Network</a>
-            <a href="barchart.html" style="margin: 5%; color: white;">Bar-chart</a>
-            <a href="circlepacking.html" style="margin: 5%; color: white;">Circle-Packing</a>
-            <a href="radial.html" style="margin: 5%; color: white;">Radial-Connection</a>
-            <a href="map.html" style="margin: 5%; color: white;">Map</a>
-            <a href="signup2.html" style="margin: 5%;color: white;">Profile</a>
+
+    <div style="z-index: 1000; position: sticky; top: 150px; width: 100%; text-align: center; vertical-align: bottom; display: inline; background-color: transparent; height: 105px; margin-bottom: 20px;">
+            <button href="dashboard.html" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Actor-Network</button>
+            <button href="barchart.html" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Most-Interacted-With</button>
+            <button href="circlepacking.html" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Circle-Packing</button>
+            <button href="radial.html" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Radial-Connection</button>
+            <button href="map.html" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Map</button>
+            <button href="signup2.html" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Profile</button>
     </div>
 
 <main>
     <div style="margin: 10px;">
-        <button style="margin: 5px; position: absolute; top: 300px; left: 50px; horizontal-align: right;" id="addEdgeButton">Add Edge</button>
-        <button style="margin: 5px; position: absolute; top: 400px; left: 50px; horizontal-align: right;" id="removeEdgeButton">Remove Edge</button>
+        <button style="transform: translateX(20px); translateY(10px); margin: 5px; position: sticky; top: 275px; left: -50px; horizontal-align: left;" id="addEdgeButton">Add Connection</button>
+        <button style="transform: translateX(20px); translateY(10px); margin: 5px; position: sticky; top: 375px; left: -50px; horizontal-align: left;" id="removeEdgeButton">Remove Connection</button>
     </div>
-    <div class="content" style="margin-top: 50px;">
+    <div class="content" style="margin-top: 50px; z-index: 1">
         <svg id="contromap" width="1100" height="1200"></svg>
     </div>
+
 </main>
     <footer>
+
         <h4> <b> &copy; 2025 Controversy Mapping.</b> <br> Technical University of Munich, Chair of Architectural Informatics, Prof. Dipl.-Ing. Frank Petzold. <br><br> Gustave Lahon, Maxim Yurin.<br><br>All Rights Reserved.</h4>
     </footer>
 
