@@ -31,7 +31,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7); /* Black background with transparency */
+    background-color: rgba(0, 0, 0, 0.5); /* Black background with transparency */
+    border-color: #f9f9f9;
     z-index: 1000; /* Ensures the modal is on top */
     justify-content: center;
     align-items: center;
@@ -41,24 +42,25 @@
 /* Modal content box */
 #commentModalContent {
     background-color: #191919;
+    border-color: white;
     border-radius: 12px;
     padding: 25px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
     max-width: 800px;
     width: 90%;
     overflow-y: auto;
     align-content: center;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
     position: relative;
-    font-family: Arial, sans-serif;
+    font-family: Inter, sans-serif;
     color: #f9f9f9; /* Change text color to light */
 }
 
 /* Modal header */
 #commentModal h3 {
-    font-size: 22px;
+    font-size: 25px;
     font-weight: 600;
     margin-bottom: 15px;
     color: #f1f1f1;
@@ -69,7 +71,7 @@
     width: 100%;
     padding: 16px;
     margin-bottom: 15px;
-    border: 1px solid #191919;
+    border: #f9f9f9;
     border-radius: 8px;
     font-size: 16px;
     resize: none;
@@ -89,21 +91,6 @@
     font-size: 14px;
 }
 
-/* Button Styling */
-button {
-    padding: 10px 20px;
-    border-radius: 8px;
-    background-color: #191919;
-    color: #f9f9f9;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    transition-duration: .5s;
-}
-
-button:hover {
-    background-color: #f9f9f9;
-}
 
 button:active {
     background-color: #f9f9f9;
@@ -120,17 +107,17 @@ button:active {
 #commentList div {
     margin-bottom: 15px;
     padding: 12px;
-    background-color: #333;
+    background-color: #191919;
     border-radius: 8px;
-    border: 1px solid #444;
+    border: 1px solid #f9f9f9;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    color: #bbb;
+    gap: 12px;
+    color: #f9f9f9;
 }
 
 #commentList div strong {
-    font-weight: 700;
+    font-weight: 600;
     color: #ffffff;
 }
 
@@ -193,6 +180,14 @@ button:active {
 
 
 <main>
+
+<div style="height: 2px;">
+             <div style="">
+                <svg style="background-color: transparent; position: sticky; top: 0;" width="2000px" height="2px" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="0" y1="0" x2="100%" y2="0" stroke="white" stroke-width="2px"/>
+                </svg>
+             </div>
+</div>
     <div class="content">
   <!-- Main SVG Map with Dots -->
   <svg style="position: relative;" xmlns="http://www.w3.org/2000/svg" baseprofile="tiny" fill="transparent" height="1500" stroke="#f9f9f9" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" version=".5" viewbox="0 0 1000 1000" width="1500">
@@ -261,13 +256,13 @@ button:active {
  </g>
   </svg>
 
-<div id="commentModal" style="display:none; position:fixed; border-color: white; background:#191919; width:600px; height:800px; overflow-y:auto; padding:25px; top:50%; left:50%; transform:translate(-50%, -50%); border-radius:10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); z-index:1000;">
+<div id="commentModal" style="display:none; position:fixed; stroke-color: #f9f9f9; background:#191919; width:600px; height:600px; overflow-y:auto; padding:25px; top:50%; left:50%; transform:translate(-50%, -50%); border-radius:10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); z-index:1000;">
     <h3>Comments for <span id="dotTitle"></span></h3>
         <textarea id="commentInput" placeholder="Enter a comment"></textarea><br>
             <input type="file" id="photoInput" /><br>
                 <button style="vertical-align: center;"id="submitCommentBtn">Submit</button>
 
-    <h4>Comments:</h4>
+    <h4></h4>
     <div id="commentList">
       <!-- Dynamically loaded comments will go here -->
     </div>

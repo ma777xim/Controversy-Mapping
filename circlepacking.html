@@ -30,7 +30,7 @@
         </div>
         <br>
     </header>
-   <div style="z-index: 1000; position: sticky; top: 150px; width: 100%; text-align: center; vertical-align: bottom; display: inline; background-color: transparent; height: 105px; margin-bottom: 20px;">
+   <div style="z-index: 1000; position: sticky; top: 150px; width: 100%; text-align: center; vertical-align: bottom; display: inline; background-color: transparent; height: 105px; margin-bottom: 0;">
             <button onclick="window.location.href='dashboard.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Actor-Network</button>
             <button onclick="window.location.href='barchart.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Most-Interacted-With</button>
             <button onclick="window.location.href='circlepacking.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Circle-Packing</button>
@@ -40,11 +40,18 @@
     </div>
 
 <main>
+    <div style="height: 10px;">
+             <div style="position: sticky; top: 275px;">
+                <svg style="background-color: transparent;" width="2000px" height="2px" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="0" y1="0" x2="100%" y2="0" stroke="white" stroke-width="2px"/>
+                </svg>
+             </div>
+              </div>
 
-    <div class="content" style="margin-top: 50px;">
+</main>
+<div class="content" style="margin-top: 0; height: 1000px;">
     <svg id="circlepacking" width="1000" height="1000"></svg>
     </div>
-</main>
     <footer>
         <h4> <b> &copy; 2025 Controversy Mapping.</b> <br> Technical University of Munich, Chair of Architectural Informatics, Prof. Dipl.-Ing. Frank Petzold. <br><br> Gustave Lahon, Maxim Yurin.<br><br>All Rights Reserved.</h4>
     </footer>

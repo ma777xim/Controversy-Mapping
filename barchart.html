@@ -56,17 +56,24 @@ svg {
             <button onclick="window.location.href='map.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Map</button>
             <button onclick="window.location.href='signup2.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Profile</button>
     </div>
-    <main style="display: flex; flex-direction: column">
-    <div style="margin: 10px; width: 1000px; position: sticky; top: 275px;">
-        <button style="transform: translateX(-120px); translateY(10px); margin: 5px; position: sticky; top: 0px; left: -50px; horizontal-align: left;" id="sort-asc">Ascending edges</button>
-        <button style="transform: translateX(-120px); translateY(10px); margin: 5px; position: sticky; top: 0px; left: -50px; horizontal-align: left;" id="sort-desc">Descending edges</button>
-        <button style="transform: translateX(-120px); translateY(10px); margin: 5px; position: sticky; top: 0px; left: -50px; horizontal-align: left;" id="sort-alpha">Alphabetical</button>
+    <main>
+        <div style="height: 150px;">
+            <div style="position: sticky; top: 0; background-color: transparent;">
+                <svg style="background-color: transparent;" width="2000px" height="2px" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="0" y1="0" x2="100%" y2="0" stroke="white" stroke-width="2px"/>
+                </svg>
+            </div>
+        <div style="margin: 10px;">
+            <div style="z-index: 1; transform: translateX(30px)">
+                <button style="margin: 10px; left: 0px;" id="sort-asc">Ascending edges</button>
+                <button style="margin: 10px; left: 0px;" id="sort-desc">Descending edges</button>
+                <button style="margin: 10px; left: 0px;" id="sort-alpha">Alphabetical</button>
+            </div>
+        </div>
     </div>
 
-
-
-    <div class="content" style="position: relative; margin-top: 300px; z-index: -1;">
-        <svg id="barchart" width="1900" height="500"></svg>
+    <div class="content" style="position: relative; margin-top:0; z-index: 1;">
+        <svg id="barchart" width="2200" height="600"></svg>
     </div>
 </main>
     <footer>

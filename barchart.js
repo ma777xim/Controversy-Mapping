@@ -18,7 +18,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // Chart dimensions
-const width = 1400;
+const width = 1800;
 const height = 400;
 const marginTop = 20;
 const marginRight = 0;
@@ -93,7 +93,8 @@ function createBarChart(data) {
         .attr("viewBox", `0 0 ${width} ${height}`)
         .style("max-width", `${width}px`)
         .style("height", `${height}px`)
-        .style("font", "30px Inter")
+        .style("font", "Inter")
+        .style("font-size", "30px")
         .style("overflow", "visible");
 
     const bars = svg.append("g")
@@ -113,7 +114,7 @@ function createBarChart(data) {
         .attr("x", d => x(d.name) + x.bandwidth() / 2)
         .attr("y", d => y(d.frequency) - 5)
         .attr("text-anchor", "middle")
-        .style("font", "15px Inter")
+        .style("font", "20px Inter")
         .style("fill", "white")
         .text(d => d.frequency);
 
@@ -121,20 +122,30 @@ function createBarChart(data) {
         .attr("transform", `translate(0,${height - marginBottom})`)
         .call(xAxis);
 
+    // Only append Y-axis once here
     svg.append("g")
         .attr("transform", `translate(${marginLeft},0)`)
         .call(yAxis)
-        .call(g => g.select(".domain").remove());
+        .call(g => g.select(".domain").remove())
+        .attr("class", "y-axis");  // Add class for targeting
 
     gx.selectAll("text")
         .style("text-anchor", "end")
+        .style("font-size", "20px")
+        .style("font-weight", "400")
         .attr("transform", "rotate(-45)");
+
+    // Apply styles to the Y-axis labels (only once, after it has been appended)
+    svg.selectAll(".y-axis text")
+        .style("font-size", "20px")  // Set font size
+        .style("font-weight", "400")  // Set font weight
+        .style("transform", "translateX(-10px)");  // Apply translation
 
     function sortBars(order) {
         data.sort(order);
         x.domain(data.map(d => d.name));
 
-        const t = svg.transition().duration(1250);
+        const t = svg.transition().duration(1500);
 
         bars.data(data, d => d.name)
             .order()

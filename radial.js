@@ -106,7 +106,7 @@ window.addEventListener("DOMContentLoaded", () => {
                 }
             })
             .attr("fill", "none")
-            .attr("stroke-width", 1);
+            .attr("stroke-width", 3);
 
         const node = svg.append("g")
             .selectAll("g")

@@ -83,16 +83,18 @@ async function renderCirclePacking() {
     let focus = root;
     let view;
 
+    // Create circles for nodes
     const node = svg.append("g")
         .selectAll("circle")
         .data(root.descendants())
         .join("circle")
         .attr("fill", (d) => (d.children ? color(d.depth) : "blue"))
         .attr("stroke", "#ffffff") // Change this to any color you want
-        .attr("stroke-width", 2) // Adjust stroke width if needed
+        .attr("stroke-width", 0) // Adjust stroke width if needed
         .attr("pointer-events", (d) => (!d.children ? "none" : null))
         .on("click", (event, d) => focus !== d && (zoom(event, d), event.stopPropagation()));
 
+    // Create labels, initially hidden for all except the first level (children of root)
     const label = svg.append("g")
         .style("font", "14px sans-serif")
         .attr("pointer-events", "none")
@@ -100,9 +102,10 @@ async function renderCirclePacking() {
         .selectAll("text")
         .data(root.descendants())
         .join("text")
-        .style("fill", "white")  // Make labels visible
+        .style("fill", "white")
         .text((d) => d.data.name)
-        .attr("transform", (d) => `translate(${d.x},${d.y})`);
+        .attr("transform", (d) => `translate(${d.x},${d.y})`)
+        .style("display", (d) => (d.depth === 1 ? "inline" : "none")); // Show only the children of the root by default
 
     svg.on("click", (event) => zoom(event, root));
 
