@@ -202,8 +202,7 @@ label {
 }
 
 main {
-    display: flex;
-    flex: 1;
+    display: inline-block;
     margin: auto;
     gap: 20px;
     font-family: Inter, Google Sans, sans-serif;

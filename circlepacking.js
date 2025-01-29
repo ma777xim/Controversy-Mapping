@@ -61,7 +61,7 @@ async function renderCirclePacking() {
 
     const width = 1400;
     const height = 1400;
-    const color = d3.scaleOrdinal(["purple", "purple", "red", "purple"]);
+    const color = d3.scaleOrdinal(["red", "#191919", "red", "blue"]);
 
     const svg = d3.select("#circlepacking")
         .attr("viewBox", `0 0 ${width} ${height}`)
@@ -87,12 +87,14 @@ async function renderCirclePacking() {
         .selectAll("circle")
         .data(root.descendants())
         .join("circle")
-        .attr("fill", (d) => (d.children ? color(d.depth) : "#0000ff"))
+        .attr("fill", (d) => (d.children ? color(d.depth) : "blue"))
+        .attr("stroke", "#ffffff") // Change this to any color you want
+        .attr("stroke-width", 2) // Adjust stroke width if needed
         .attr("pointer-events", (d) => (!d.children ? "none" : null))
         .on("click", (event, d) => focus !== d && (zoom(event, d), event.stopPropagation()));
 
     const label = svg.append("g")
-        .style("font", "12px sans-serif")
+        .style("font", "14px sans-serif")
         .attr("pointer-events", "none")
         .attr("text-anchor", "middle")
         .selectAll("text")
