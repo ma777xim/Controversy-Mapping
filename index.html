@@ -29,7 +29,7 @@
 </head>
 
 <body>
-    <header>
+    <header sytle="">
         <div>
             <h1>What do you think about department stores?</h1>
             <br>
@@ -44,7 +44,7 @@
         </div>
         <br>
     </header>
-    <div style="z-index: 1000; position: sticky; top: 150px; width: 100%; text-align: center; vertical-align: bottom; display: inline; background-color: transparent; height: 105px; margin-bottom: 20px;">
+    <div style="z-index: 1000; position: sticky; top: 250px; width: 100%; text-align: center; vertical-align: bottom; display: inline; background-color: transparent; height: 105px; margin-bottom: 20px;">
             <button onclick="window.location.href='dashboard.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Actor-Network</button>
             <button onclick="window.location.href='barchart.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Most-Interacted-With</button>
             <button onclick="window.location.href='circlepacking.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Circle-Packing</button>
@@ -55,14 +55,22 @@
 
 
 <main>
-    <div style="margin: 10px;">
-        <button style="margin: 10px; position: relative; horizontal-align: right;" id="addEdgeButton">Add Edge</button>
-        <button style="margin: 10px; position: relative; horizontal-align: right;" id="removeEdgeButton">Remove Edge</button>
-    </div>
-    <div class="content">
-        <svg id="contromap" width="1100" height="1200"></svg>
-    </div>
-</main>
+        <div style="height: 1000px;">
+             <div style="position: sticky; top: 375px;">
+                <svg style="background-color: transparent;" width="2000px" height="2px" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="0" y1="0" x2="100%" y2="0" stroke="white" stroke-width="2px"/>
+                </svg>
+             </div>
+            <div style="margin: 10px; width: 200px; position: sticky; top: 300px; transform: translateX(150px); gap: 90px; display: flex; flex-direction: column;">
+                <button style="position: sticky; top: 400px; margin: 10px; left: -200px; horizontal-align: left;" id="addEdgeButton">Add Connection</button>
+                <button style="position: sticky; top: 400px; margin: 10px; left: -200px; horizontal-align: left;" id="removeEdgeButton">Remove Connection</button>
+            </div>
+            <div class="content" style="margin-top: 50px; z-index: 1">
+                <svg id="contromap" width="1700" height="1000px"></svg>
+            </div>
+        </div>
+
+    </main>
     <footer>
         <h4> <b> &copy; 2025 Controversy Mapping.</b> <br> Technical University of Munich, Chair of Architectural Informatics, Prof. Dipl.-Ing. Frank Petzold. <br><br> Gustave Lahon, Maxim Yurin.<br><br>All Rights Reserved.</h4>
     </footer>
