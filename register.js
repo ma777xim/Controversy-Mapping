@@ -49,7 +49,7 @@ form.addEventListener('submit', async (event) => {
         // Redirect to another page
         localStorage.setItem('username', username);
         alert("Hey," username,". Please complete signup.");
-        window.location.href = "dashboard.html";
+        window.location.href = "signup2.html";
     } catch (error) {
         console.error("Error creating user:", error.code, error.message);
         alert(`Error: ${error.message}`);
