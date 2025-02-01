@@ -21,41 +21,49 @@ const db = getFirestore();
 
 // Form submission logic
 const form = document.getElementById('form');
-form.addEventListener('submit', async (event) => {
-    event.preventDefault(); // Prevent page reload
+if (form) {
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault(); // Prevent page reload
 
-    // Get user input
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value;
+        // Get user input
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
 
-    // Clear error message
-    const errorMessage = document.getElementById('error-message');
-    errorMessage.textContent = "";
+        // Get error message element (clear any previous messages)
+        const errorMessage = document.getElementById('error-message');
+        if (errorMessage) errorMessage.textContent = "";
 
-    try {
-        // Firebase sign-in
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        try {
+            // Firebase sign-in
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+            console.log("Signed-in user:", user);
 
-        // Get user info
-        const user = userCredential.user;
+            // Fetch username from Firestore (if stored)
+            const userDoc = doc(db, "mappers", user.uid);
+            const userSnapshot = await getDoc(userDoc);
 
-        // Fetch username from Firestore (if stored)
-        const userDoc = doc(db, "mappers", user.uid);
-        const userSnapshot = await getDoc(userDoc);
+            let username = "username";
+            if (userSnapshot.exists()) {
+                username = userSnapshot.data().username || username;
+                localStorage.setItem('username', username);
+                alert(`Welcome, ${username}!`);
+            } else {
+                console.warn("No username found in Firestore. Storing default.");
+                localStorage.setItem('username', username);
+            }
 
-        if (userSnapshot.exists()) {
-            const username = userSnapshot.data().username || "username";
-            localStorage.setItem('username', username); // Store username locally
-            alert(`Welcome, ${username}!`);
-        } else {
-            console.warn("No username found in Firestore. Storing default.");
-            localStorage.setItem('username', "username");
+            // Redirect to dashboard
+            window.location.href = "dashboard.html";
+        } catch (error) {
+            console.error("Login error:", error.code, error.message);
+            if (errorMessage) {
+                errorMessage.textContent = `Error: ${error.message}`;
+            } else {
+                alert(`Error: ${error.message}`);
+            }
         }
-
-        // Redirect to dashboard
-        window.location.href = "dashboard2.html";
-    } catch (error) {
-        console.error("Login error:", error.code, error.message);
-        errorMessage.textContent = `Error: ${error.message}`;
-    }
-});
+    });
+} else {
+    console.error("Form element with id 'form' not found.");
+}
