@@ -50,10 +50,7 @@ if (form) {
             localStorage.setItem('username', username);
             alert("Hey " + username + ". You are ready to make controversies.");
             window.location.href = "dashboard.html";
-        } catch (error) {
-            console.error("Error creating user:", error.code, error.message);
-            alert(`Error: ${error.message}`);
-        }
+
     });
 } else {
     console.error("Form element with id 'form' not found.");
