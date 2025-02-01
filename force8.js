@@ -137,21 +137,21 @@ function renderGraph() {
 async function handleNodeClickForEdge(d) {
     if (!firstNode) {
         firstNode = d;
-        alert(`First node selected: ${d.label}`);
+        alert(`${d.label} selected`);
     } else if (firstNode.id === d.id) {
-        alert("Cannot connect a node to itself.");
+        alert("Cannot connect a topic to itself");
     } else {
         try {
             await updateDoc(doc(db, "nodes", firstNode.id), {
                 [d.id]: "edge"
             });
-            alert(`Edge created between ${firstNode.label} and ${d.label}`);
+            alert(`${firstNode.label} and ${d.label} connected`);
             firstNode = null;
             addEdgeMode = false; // Deactivate after creation
             fetchFirebaseData();
         } catch (error) {
-            console.error("Error adding edge:", error);
-            alert("Failed to add edge. Check the console for details.");
+            console.error("Error adding connection:", error);
+            alert("Failed to add connection. Check the console for details.");
         }
     }
 }
@@ -160,9 +160,9 @@ async function handleNodeClickForEdge(d) {
 async function handleNodeClickForEdgeRemoval(d) {
     if (!firstNode) {
         firstNode = d;
-        alert(`First node selected: ${d.label}`);
+        alert(` ${d.label} selected`);
     } else if (firstNode.id === d.id) {
-        alert("Cannot remove an edge to itself.");
+        alert("Cannot remove a connection to itself");
     } else {
         try {
             const firstNodeDoc = doc(db, "nodes", firstNode.id);
@@ -171,24 +171,24 @@ async function handleNodeClickForEdgeRemoval(d) {
             if (firstNodeData[d.id] === "edge") {
                 // Remove the edge from the Firestore document
                 await updateDoc(firstNodeDoc, { [d.id]: deleteField() });
-                alert(`Edge removed between ${firstNode.label} and ${d.label}`);
+                alert(`${firstNode.label} and ${d.label} disconnected`);
                 firstNode = null;
                 removeEdgeMode = false; // Deactivate after removal
                 fetchFirebaseData();
             } else {
-                alert("No edge exists between the selected nodes.");
+                alert("No connection exists between the selected topics");
                 firstNode = null;
             }
         } catch (error) {
-            console.error("Error removing edge:", error);
-            alert("Failed to remove edge. Check the console for details.");
+            console.error("Error removing connection:", error);
+            alert("Failed to remove connection. Check the console for details.");
         }
     }
 }
 
 // Handle node click (normal mode)
 function handleNodeClick(d) {
-    openCustomPopup(d.id, d.question || `What do you think about ${d.label}?`);
+    openCustomPopup(d.id, d.question || `What would you like to say about ${d.label}?`);
 }
 
 // Open custom popup
@@ -199,20 +199,20 @@ function openCustomPopup(nodeId, question) {
     popup.style.top = "50%";
     popup.style.left = "50%";
     popup.style.transform = "translate(-50%, -50%)";
-    popup.style.padding = "30px";
+    popup.style.padding = "35px";
     popup.style.backgroundColor = "#191919";
     popup.style.color = "#f9f9f9";
     popup.style.borderRadius = "10px";
     popup.style.boxShadow = "0px 4px 10px rgba(0, 0, 0, 0.5)";
-    popup.style.zIndex = "1000";
+    popup.style.zIndex = "9999";
 
     popup.innerHTML = `
-        <form id="popup-form">
+        <form style="z-index: 9999;" id="popup-form">
             <h3>${question}</h3>
             <br>
-            <input type="text" id="node-name" placeholder="Your answer will become a new node." required />
+            <input type="text" id="node-name" placeholder="Type what you think" required />
             <button type="submit">Submit</button>
-            <button type="button" id="close-popup">Cancel</button>
+            <button type="button" id="close-popup">cancel</button>
         </form>
     `;
 
@@ -234,12 +234,12 @@ function openCustomPopup(nodeId, question) {
             // Update the current node to link to the new node
             await updateDoc(doc(db, "nodes", nodeId), { [newNodeId]: "edge" });
 
-            alert("Node and edge added successfully!");
+            alert("Topic added successfully!");
             document.body.removeChild(popup);
             fetchFirebaseData(); // Reload data to include new node
         } catch (error) {
-            console.error("Error adding node:", error);
-            alert("Failed to add node. Check the console for details.");
+            console.error("Error adding topic:", error);
+            alert("Failed to add topic. Check the console for details.");
         }
     });
 }
@@ -273,14 +273,14 @@ function drag(simulation) {
 document.getElementById("addEdgeButton").addEventListener("click", () => {
     addEdgeMode = !addEdgeMode;
     firstNode = null; // Reset first node
-    alert(addEdgeMode ? "Add Edge Mode Activated" : "Add Edge Mode Deactivated");
+    alert(addEdgeMode ? "Connection mode activated - Select topics to connect" : "Connection Mode Deactivated");
 });
 
 // Add Remove Edge Button Listener
 document.getElementById("removeEdgeButton").addEventListener("click", () => {
     removeEdgeMode = !removeEdgeMode;
     firstNode = null; // Reset first node
-    alert(removeEdgeMode ? "Remove Edge Mode Activated" : "Remove Edge Mode Deactivated");
+    alert(removeEdgeMode ? "Disconnection mode activated - Select topics to connect" : "Disconnection mode deactivated");
 });
 
 // Fetch data on load
