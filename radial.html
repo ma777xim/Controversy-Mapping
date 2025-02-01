@@ -15,7 +15,7 @@
 </head>
 
 <body>
-    <header>
+    <header style="background-color: transparent;">
         <div>
             <h1>What do you think about department stores?</h1>
             <br>
@@ -30,23 +30,25 @@
         </div>
         <br>
     </header>
-   <div style="z-index: 1000; position: sticky; top: 150px; width: 100%; text-align: center; vertical-align: bottom; display: inline; background-color: transparent; height: 105px; margin-bottom: 20px;">
+   <div style="z-index: 1000; position: sticky; top: 260px; width: 100%; text-align: center; vertical-align: bottom; display: inline; background-color: transparent; height: 105px; margin-bottom: 20px;">
             <button onclick="window.location.href='dashboard.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Actor-Network</button>
             <button onclick="window.location.href='barchart.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Most-Interacted-With</button>
-            <button onclick="window.location.href='circlepacking.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Circle-Packing</button>
-            <button onclick="window.location.href='radial.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Radial-Connection</button>
+            <button onclick="window.location.href='circlepacking.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Topics</button>
+            <button onclick="window.location.href='radial.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Connections</button>
             <button onclick="window.location.href='map.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Map</button>
             <button onclick="window.location.href='signup2.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Profile</button>
     </div>
 
 
     <main>
-        <div class="content" style="display: flex; flex-direction: column; height: 1450px;">
-            <div style="position: sticky; top: 275px;">
-                <svg style="background-color: transparent;" width="2000px" height="2px" xmlns="http://www.w3.org/2000/svg">
-                    <line x1="0" y1="0" x2="100%" y2="0" stroke="white" stroke-width="2px"/>
+       <div style="height: 5px; z-index: 1;">
+             <div style="position: sticky; top: 300px;">
+                <svg style="background-color: transparent;" width="4000px" height="2px" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="0" y1="0" x2="4000px" y2="0" stroke="white" stroke-width="2px"/>
                 </svg>
+             </div>
             </div>
+            <div style="z-index: 9999; height: 75%; width: 75%; margin: auto; horizontal-align: center;">
             <div style="margin-top: 50px" id="radial-chart"></div>
         </div>
     </main>

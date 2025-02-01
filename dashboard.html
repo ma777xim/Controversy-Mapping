@@ -46,28 +46,28 @@
     </header>
 
 
-    <div style="z-index: 1000; position: sticky; top: 150px; width: 100%; text-align: center; vertical-align: bottom; display: inline; background-color: transparent; height: 105px; margin-bottom: 20px;">
+    <div style="z-index: 1000; position: sticky; top: 170px; width: 100%; text-align: center; vertical-align: bottom; display: inline; background-color: transparent; height: 105px; margin-bottom: 20px;">
             <button onclick="window.location.href='dashboard.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Actor-Network</button>
             <button onclick="window.location.href='barchart.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Most-Interacted-With</button>
-            <button onclick="window.location.href='circlepacking.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Circle-Packing</button>
-            <button onclick="window.location.href='radial.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Radial-Connection</button>
+            <button onclick="window.location.href='circlepacking.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Topics</button>
+            <button onclick="window.location.href='radial.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Connections</button>
             <button onclick="window.location.href='map.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Map</button>
             <button onclick="window.location.href='signup2.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Profile</button>
     </div>
 
     <main>
-        <div style="height: 3000px;">
-             <div style="position: sticky; top: 275px;">
-                <svg style="background-color: transparent;" width="2000px" height="2px" xmlns="http://www.w3.org/2000/svg">
-                    <line x1="0" y1="0" x2="100%" y2="0" stroke="white" stroke-width="2px"/>
+        <div style="height: 1700px;">
+             <div style="position: sticky; top: 300px;">
+                <svg style="background-color: transparent;" width="4000px" height="2px" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="0" y1="0" x2="4000px" y2="0" stroke="white" stroke-width="2px"/>
                 </svg>
              </div>
-            <div style="z-index: 1002; margin: 10px; width: 200px; position: sticky; top: 300px; transform: translateX(150px); display: flex; flex-direction: column;">
-                <button style="margin: 10px; left: -200px; horizontal-align: left;" id="addEdgeButton">Add Connection</button>
-                <button style="margin: 10px; left: -200px; horizontal-align: left;" id="removeEdgeButton">Remove Connection</button>
+            <div style="margin: 10px; width: 200px; position: sticky; top: 320px; transform: translateX(10px); display: flex; flex-direction: column;">
+                <button style="margin: 10px; horizontal-align: left;" id="addEdgeButton">Add Connection</button>
+                <button style="margin: 10px; horizontal-align: left;" id="removeEdgeButton">Remove Connection</button>
             </div>
             <div class="content" style="margin-top: 50px; z-index: 1">
-                <svg id="contromap" width="1700" height="1200"></svg>
+                <svg id="contromap" width="1920" height="1200"></svg>
             </div>
         </div>
 

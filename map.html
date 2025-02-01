@@ -31,7 +31,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Black background with transparency */
+    background-color: #f9f9f9; /* Black background with transparency */
     border-color: #f9f9f9;
     z-index: 1000; /* Ensures the modal is on top */
     justify-content: center;
@@ -41,7 +41,7 @@
 
 /* Modal content box */
 #commentModalContent {
-    background-color: #191919;
+    background-color: #f9f9f9;
     border-color: white;
     border-radius: 12px;
     padding: 25px;
@@ -91,7 +91,9 @@
     font-size: 14px;
 }
 
-
+#commentModal input[type="file"]:hover {
+    border-color: white;
+}
 button:active {
     background-color: #f9f9f9;
     color: #191919;
@@ -106,19 +108,21 @@ button:active {
 
 #commentList div {
     margin-bottom: 15px;
+    margin-right: 10px;
     padding: 12px;
-    background-color: #191919;
+    background-color: #f9f9f9;
     border-radius: 8px;
     border: 1px solid #f9f9f9;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    color: #f9f9f9;
+    gap: 6px;
+    color: #191919;
+    font-weight: 300;
 }
 
 #commentList div strong {
-    font-weight: 600;
-    color: #ffffff;
+    font-weight: 700;
+    color: #191919;
 }
 
 #commentList img {
@@ -141,6 +145,10 @@ button:active {
     transition: color 0.3s ease;
 }
 
+.depStoLocation {
+    border: none;
+}
+
 #closeModalBtn:hover {
     color: #f44336;
 }
@@ -148,7 +156,18 @@ button:active {
 #closeModalBtn:active {
     color: #d32f2f;
 }
+                .depStoLocation:hover
+    {
+        height: 120%;
+        width: 120%;
+    }
 
+         .depStoLocation
+    {
+        height: 100%;
+        width: 100%;
+        transition-duration: 1s;
+    }
     </style>
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
@@ -169,11 +188,11 @@ button:active {
         </div>
         <br>
     </header>
-  <div style="z-index: 1000; position: sticky; top: 150px; width: 100%; text-align: center; vertical-align: bottom; display: inline; background-color: transparent; height: 105px; margin-bottom: 20px;">
+  <div style="z-index: 1002; position: sticky; top: 150px; width: 100%; text-align: center; vertical-align: bottom; display: inline; background-color: transparent; height: 105px; margin-bottom: 20px;">
             <button onclick="window.location.href='dashboard.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Actor-Network</button>
             <button onclick="window.location.href='barchart.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Most-Interacted-With</button>
-            <button onclick="window.location.href='circlepacking.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Circle-Packing</button>
-            <button onclick="window.location.href='radial.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Radial-Connection</button>
+            <button onclick="window.location.href='circlepacking.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Topics</button>
+            <button onclick="window.location.href='radial.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Connections</button>
             <button onclick="window.location.href='map.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Map</button>
             <button onclick="window.location.href='signup2.html';" style="margin: 1%; float: center; font-family: Inter, Google Sans, sans-serif; font-size: 30px; font-weight: 700;">Profile</button>
     </div>
@@ -181,18 +200,19 @@ button:active {
 
 <main>
 
-<div style="height: 2px;">
-             <div style="">
-                <svg style="background-color: transparent; position: sticky; top: 0;" width="2000px" height="2px" xmlns="http://www.w3.org/2000/svg">
-                    <line x1="0" y1="0" x2="100%" y2="0" stroke="white" stroke-width="2px"/>
+<div style="height: 5px; z-index: 1;">
+             <div style="position: sticky; top: 300px;">
+                <svg style="background-color: transparent;" width="4000px" height="2px" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="0" y1="0" x2="4000px" y2="0" stroke="white" stroke-width="2px"/>
                 </svg>
              </div>
-</div>
-    <div class="content">
+             </div>
+<div>
+    <div class="content" style="border: none;">
   <!-- Main SVG Map with Dots -->
   <svg style="position: relative;" xmlns="http://www.w3.org/2000/svg" baseprofile="tiny" fill="transparent" height="1500" stroke="#f9f9f9" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" version=".5" viewbox="0 0 1000 1000" width="1500">
     <!-- Features Group -->
-    <g id="features">
+    <g id="features" class="depStoLocation">
 
       <circle class="depStoLocation" id="Goeppingen" r="10" cx="425" cy="800" fill="red" />
       <circle class="depStoLocation" id="Mannheim" r="10" cx="370" cy="700" fill="red" />
@@ -217,7 +237,6 @@ button:active {
       <circle class="depStoLocation" id="Hanover" r="10" cx="450" cy="360" fill="red" />
       <circle class="depStoLocation" id="BadKreuznach" r="10" cx="250" cy="660" fill="red" />
       <circle class="depStoLocation" id="Freiburg" r="10" cx="350" cy="850" fill="green" />
-
 
       <!-- Add your path element here (if any) -->
       <g xmlns="http://www.w3.org/2000/svg" id="features" fill="none">
@@ -255,6 +274,7 @@ button:active {
     </path>
  </g>
   </svg>
+                    </div>
 
 <div id="commentModal" style="display:none; position:fixed; stroke-color: #f9f9f9; background:#191919; width:600px; height:600px; overflow-y:auto; padding:25px; top:50%; left:50%; transform:translate(-50%, -50%); border-radius:10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); z-index:1000;">
     <h3>Comments for <span id="dotTitle"></span></h3>

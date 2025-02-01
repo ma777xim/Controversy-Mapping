@@ -18,8 +18,8 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // Chart dimensions
-const width = 1800;
-const height = 400;
+const width = 2000;
+const height = 500;
 const marginTop = 20;
 const marginRight = 0;
 const marginBottom = 30;
