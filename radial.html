@@ -230,7 +230,7 @@ document.getElementById("logoutButton").addEventListener("click", async () => {
     try {
         await signOut(auth);
         console.log("User signed out.");
-        window.location.href = "index4.html"; // Redirect after logout
+        window.location.href = "index.html"; // Redirect after logout
     } catch (error) {
         console.error("Sign-out error:", error);
     }
