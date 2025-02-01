@@ -25,11 +25,26 @@ if (form) {
     form.addEventListener('submit', async (event) => {
         event.preventDefault(); // Prevent form refresh
 
-        // Get inputs
-        const email = document.getElementById('email').value;
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-        const gender = document.getElementById('gender').value;
+        // Get inputs safely
+        const emailInput = document.getElementById('email');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const genderInput = document.getElementById('gender');
+
+        if (!emailInput || !usernameInput || !passwordInput || !genderInput) {
+            console.error("One or more form elements are missing.");
+            return;
+        }
+
+        const email = emailInput.value.trim();
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value;
+        const gender = genderInput.value;
+
+        if (!email || !username || !password || !gender) {
+            alert("All fields are required!");
+            return;
+        }
 
         try {
             // Create user with email and password
@@ -48,9 +63,13 @@ if (form) {
 
             // Redirect to another page
             localStorage.setItem('username', username);
-            alert("Hey " + username + ". You are ready to make controversies.");
+            alert("Hey " + username + ", you are ready to make controversies!");
             window.location.href = "dashboard.html";
 
+        } catch (error) {
+            console.error("Error creating user:", error.code, error.message);
+            alert(`Error: ${error.message}`);
+        }
     });
 } else {
     console.error("Form element with id 'form' not found.");
